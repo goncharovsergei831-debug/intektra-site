@@ -3,404 +3,591 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Intektra — Системы безопасности, слаботочные сети и инженерное оборудование</title>
+  <title>Intektra — Инженерная дистрибуция систем безопасности и ГО</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #c92127;
-      --primary-hover: #a8171c;
-      --dark: #1e252b;
-      --dark-light: #2c363f;
-      --gray-bg: #f4f6f8;
-      --border: #e2e8f0;
-      --text: #2d3748;
-      --text-muted: #718096;
-      --green: #2ecc71;
+      --bg: #0b0f14;
+      --bg-card: rgba(18, 24, 33, 0.75);
+      --bg-card-hover: rgba(26, 35, 48, 0.85);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(230, 57, 70, 0.35);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --red-accent: #e63946;
+      --red-glow: rgba(230, 57, 70, 0.25);
+      --cyan-accent: #38bdf8;
+      --green-stock: #10b981;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; color: var(--text); background-color: #fff; line-height: 1.5; position: relative; }
-
-    .top-bar {
-      background: var(--dark);
-      color: #cbd5e0;
-      font-size: 13px;
-      padding: 7px 0;
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(230, 57, 70, 0.15), transparent 70%),
+        radial-gradient(circle at 100% 40%, rgba(56, 189, 248, 0.06), transparent 50%);
+      background-attachment: fixed;
     }
+
     .container {
-      max-width: 1240px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 0 16px;
+      padding: 0 24px;
+    }
+
+    /* Верхняя сервисная строка */
+    .top-bar {
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 8px 0;
+      backdrop-filter: blur(12px);
+      background: rgba(11, 15, 20, 0.6);
     }
     .top-bar-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
-    .top-bar-links a {
-      color: #cbd5e0;
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--green-stock);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--green-stock);
+    }
+    .top-contacts {
+      display: flex;
+      gap: 20px;
+    }
+    .top-contacts a {
+      color: var(--text-main);
       text-decoration: none;
-      margin-right: 18px;
+      font-weight: 600;
       transition: color 0.2s;
     }
-    .top-bar-links a:hover { color: #fff; }
-    .top-bar-contacts { display: flex; gap: 20px; align-items: center; }
-    .top-bar-contacts a { color: #fff; text-decoration: none; font-weight: 600; }
-    .top-bar-contacts a:hover { color: #cbd5e0; }
+    .top-contacts a:hover { color: var(--red-accent); }
 
-    .header-main {
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
-      background: #fff;
+    /* Шапка сайта */
+    header {
       position: sticky;
       top: 0;
       z-index: 1000;
+      backdrop-filter: blur(20px);
+      background: rgba(11, 15, 20, 0.85);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
     }
-    .header-grid {
+    .header-inner {
       display: grid;
-      grid-template-columns: 220px 140px 1fr 180px;
+      grid-template-columns: 200px 140px 1fr auto;
       gap: 20px;
       align-items: center;
     }
-    .brand-logo {
-      font-size: 26px;
+    .logo {
+      font-size: 24px;
       font-weight: 800;
-      color: var(--dark);
-      text-decoration: none;
       letter-spacing: -0.5px;
-      display: flex;
-      align-items: center;
-      gap: 3px;
-    }
-    .brand-logo span { color: var(--primary); }
-    .brand-tagline {
-      font-size: 10px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-top: -4px;
-    }
-
-    .catalog-btn {
-      background: var(--primary);
       color: #fff;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 15px;
-      cursor: pointer;
+      text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 8px;
-      transition: background 0.2s;
+      gap: 4px;
     }
-    .catalog-btn:hover { background: var(--primary-hover); }
+    .logo span { color: var(--red-accent); }
+    .logo-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      background: rgba(255,255,255,0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      border: 1px solid var(--border);
+      color: var(--cyan-accent);
+    }
 
-    .search-box {
-      display: flex;
-      width: 100%;
-      border: 2px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      position: relative;
-    }
-    .search-box:focus-within { border-color: var(--primary); }
-    .search-box input {
-      flex: 1;
-      padding: 10px 16px;
-      border: none;
-      outline: none;
+    .btn-catalog {
+      background: linear-gradient(135deg, var(--red-accent), #c1121f);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-weight: 700;
       font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px var(--red-glow);
+      transition: all 0.2s ease;
     }
-    .search-clear-btn {
-      display: none;
+    .btn-catalog:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 25px rgba(230, 57, 70, 0.4);
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .search-input {
+      width: 100%;
+      background: rgba(18, 24, 33, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 44px 12px 18px;
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .search-input:focus {
+      border-color: var(--cyan-accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+    .search-clear {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
       background: none;
       border: none;
-      font-size: 16px;
       color: var(--text-muted);
       cursor: pointer;
-      padding: 0 12px;
-    }
-    .search-box button.search-submit-btn {
-      background: var(--gray-bg);
-      border: none;
-      padding: 0 20px;
-      cursor: pointer;
-      font-weight: 600;
-      color: var(--dark);
+      font-size: 16px;
+      display: none;
     }
 
-    .header-actions {
+    .header-tools {
       display: flex;
-      justify-content: flex-end;
+      align-items: center;
       gap: 12px;
     }
-    .action-btn {
-      background: none;
+    .cart-btn {
+      background: rgba(18, 24, 33, 0.9);
       border: 1px solid var(--border);
-      padding: 8px 12px;
-      border-radius: 6px;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
       cursor: pointer;
       display: flex;
-      flex-direction: column;
       align-items: center;
+      gap: 10px;
+      transition: border-color 0.2s;
+    }
+    .cart-btn:hover { border-color: rgba(255,255,255,0.25); }
+    .cart-badge {
+      background: var(--red-accent);
+      color: #fff;
+      font-family: var(--font-mono);
       font-size: 11px;
-      color: var(--dark);
-      text-decoration: none;
+      padding: 2px 7px;
+      border-radius: 12px;
     }
-    .action-btn span { font-weight: 600; font-size: 13px; }
 
-    .catalog-overlay, .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1050;
+    /* Hero-секция */
+    .hero {
+      padding: 60px 0 40px;
     }
-    .catalog-overlay.active, .modal-overlay.active { display: block; }
-
-    .mega-menu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      background: #fff;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.18);
-      border-top: 1px solid var(--border);
-      border-bottom: 2px solid var(--primary);
-      z-index: 1001;
-    }
-    .mega-menu.active { display: block; }
-
-    .mega-menu-grid {
+    .hero-grid {
       display: grid;
-      grid-template-columns: 320px 1fr;
-      min-height: 440px;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 32px;
     }
-    .mega-nav-left {
-      background: #fbfcfd;
-      border-right: 1px solid var(--border);
-      padding: 16px 0;
+    .hero-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 44px;
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
     }
-    .mega-nav-item {
-      padding: 12px 24px;
-      font-size: 14px;
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, var(--red-glow), transparent 70%);
+      pointer-events: none;
+    }
+    .hero-card h1 {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+    .hero-card h1 span {
+      background: linear-gradient(135deg, #fff 30%, var(--text-muted) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-card p {
+      color: var(--text-muted);
+      font-size: 16px;
+      max-width: 540px;
+      margin-bottom: 32px;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 36px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .stat-val {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .stat-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Блок спецификации */
+    .spec-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-accent);
+      border-radius: 20px;
+      padding: 36px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    }
+    .spec-card h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .spec-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12px;
       font-weight: 600;
-      color: var(--dark);
+      margin-bottom: 6px;
+      color: #cbd5e1;
+    }
+    .form-ctrl {
+      width: 100%;
+      background: rgba(11, 15, 20, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      outline: none;
+    }
+    .form-ctrl:focus {
+      border-color: var(--cyan-accent);
+    }
+    .file-upload {
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      transition: all 0.2s;
+    }
+    .file-upload:hover {
+      border-color: var(--cyan-accent);
+      color: #fff;
+    }
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--red-accent), #c1121f);
+      border: none;
+      color: #fff;
+      padding: 13px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px var(--red-glow);
+    }
+
+    /* Навигация категорий (Chips) */
+    .filter-chips {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 20px 0;
+      margin-bottom: 20px;
+    }
+    .chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .chip:hover, .chip.active {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .chip.active {
+      border-color: var(--red-accent);
+      color: #fff;
+    }
+
+    /* Каталог товаров */
+    .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      cursor: pointer;
-      border-left: 3px solid transparent;
-      transition: all 0.15s ease;
+      margin-bottom: 24px;
     }
-    .mega-nav-item:hover, .mega-nav-item.selected {
-      background: #fff;
-      color: var(--primary);
-      border-left-color: var(--primary);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    .section-header h2 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
     }
-    .mega-nav-item span { font-size: 12px; color: var(--text-muted); }
-
-    .mega-nav-content { padding: 24px 32px; background: #fff; }
-    .mega-tab-panel { display: none; }
-    .mega-tab-panel.active { display: block; }
-
-    .panel-header {
-      font-size: 18px;
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 24px;
+    }
+    .product-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .product-card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .sku-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .stock-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green-stock);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .product-title {
+      font-size: 16px;
       font-weight: 700;
-      color: var(--dark);
+      line-height: 1.4;
+      color: #fff;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+    .card-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    .price-value {
+      font-family: var(--font-mono);
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .price-sub {
+      font-size: 11px;
+      color: var(--text-muted);
       margin-bottom: 16px;
-      padding-bottom: 10px;
+    }
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .btn-card {
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .btn-add {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: #fff;
+    }
+    .btn-add:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .btn-buy-one {
+      background: var(--red-accent);
+      border: 1px solid transparent;
+      color: #fff;
+    }
+    .btn-buy-one:hover {
+      background: #c1121f;
+    }
+
+    /* Модальные окна и боковая шторка корзины */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: none;
+    }
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -480px;
+      width: 100%;
+      max-width: 480px;
+      height: 100vh;
+      background: #111720;
+      border-left: 1px solid var(--border);
+      z-index: 2001;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .drawer.open { right: 0; }
+    .drawer-header {
+      padding: 24px;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
-    .panel-header a { font-size: 13px; color: var(--primary); text-decoration: none; cursor: pointer; }
-
-    .subcat-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .subcat-group h5 {
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--dark-light);
-      margin-bottom: 10px;
-    }
-    .subcat-group ul { list-style: none; }
-    .subcat-group li { margin-bottom: 7px; }
-    .subcat-group a { font-size: 13px; color: var(--text); text-decoration: none; cursor: pointer; }
-    .subcat-group a:hover { color: var(--primary); text-decoration: underline; }
-
-    .nav-bar { border-bottom: 1px solid var(--border); background: #fafbfc; }
-    .nav-list { display: flex; list-style: none; gap: 25px; padding: 10px 0; font-size: 14px; font-weight: 500; overflow-x: auto; white-space: nowrap; }
-    .nav-list a { color: var(--dark); text-decoration: none; }
-    .nav-list a:hover { color: var(--primary); }
-
-    .hero-section { padding: 24px 0; }
-    .hero-grid { display: grid; grid-template-columns: 2fr 1.2fr; gap: 20px; }
-    .hero-main {
-      background: linear-gradient(135deg, var(--dark-light), var(--dark));
-      color: #fff;
-      padding: 36px;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .hero-main h1 { font-size: 30px; margin-bottom: 12px; line-height: 1.2; font-weight: 800; }
-    .hero-main p { color: #a0aec0; margin-bottom: 24px; font-size: 15px; }
-
-    .hero-b2b {
-      background: var(--gray-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+    .drawer-body {
+      flex: 1;
       padding: 24px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+      overflow-y: auto;
     }
-    .hero-b2b h3 { font-size: 18px; margin-bottom: 6px; color: var(--dark); }
-    .form-group { margin-bottom: 12px; text-align: left; }
-    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
-    .form-input {
-      width: 100%;
-      padding: 9px 12px;
-      border: 1px solid #cbd5e0;
-      border-radius: 5px;
-      font-size: 13px;
-      font-family: inherit;
+    .drawer-footer {
+      padding: 24px;
+      border-top: 1px solid var(--border);
+      background: rgba(11, 15, 20, 0.5);
     }
-    .form-input:focus { outline: none; border-color: var(--primary); }
-    .btn-submit {
-      width: 100%;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-submit:hover { background: var(--primary-hover); }
-
-    .section-title {
-      font-size: 22px;
-      font-weight: 700;
-      margin: 30px 0 16px 0;
+    .cart-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
     }
-    .categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
-    .category-card {
-      background: var(--gray-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px;
-      text-decoration: none;
-      color: var(--dark);
-      transition: all 0.2s;
-      cursor: pointer;
-    }
-    .category-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    .category-card strong { display: block; font-size: 14px; margin-bottom: 4px; }
-    .category-card span { font-size: 12px; color: var(--text-muted); }
-
-    .search-status-bar {
-      display: none;
-      background: #edf2f7;
-      padding: 12px 18px;
-      border-radius: 6px;
-      margin-top: 16px;
-      font-size: 13px;
-      justify-content: space-between;
+    .cart-item-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .cart-item-price { font-family: var(--font-mono); font-size: 13px; color: var(--cyan-accent); }
+    .cart-qty-ctrl {
+      display: flex;
       align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 4px 8px;
     }
-    .search-status-bar button {
+    .cart-qty-btn {
       background: none;
       border: none;
-      color: var(--primary);
-      font-weight: 600;
+      color: #fff;
       cursor: pointer;
-      text-decoration: underline;
+      font-size: 16px;
     }
 
-    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 16px; }
-    .product-card {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      transition: box-shadow 0.2s;
+    /* Подвал */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 60px 0 30px;
+      margin-top: 80px;
+      background: rgba(11, 15, 20, 0.7);
     }
-    .product-card:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
-    .product-sku { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
-    .product-stock { font-size: 12px; color: var(--green); font-weight: 600; margin-bottom: 8px; }
-    .product-title { font-size: 14px; font-weight: 600; color: var(--dark); text-decoration: none; margin-bottom: 12px; flex-grow: 1; line-height: 1.4; }
-    .product-prices { margin-bottom: 12px; padding-top: 8px; border-top: 1px solid var(--border); }
-    .price-main { font-size: 18px; font-weight: 700; color: var(--dark); }
-    .price-vat { font-size: 11px; color: var(--text-muted); }
-    .product-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .btn-buy { background: var(--primary); color: #fff; border: none; padding: 8px; border-radius: 4px; font-weight: 600; font-size: 13px; cursor: pointer; }
-    .btn-quick { background: #fff; border: 1px solid var(--border); color: var(--dark); padding: 8px; border-radius: 4px; font-size: 12px; cursor: pointer; }
-
-    .no-results-box {
-      display: none;
-      grid-column: 1 / -1;
-      background: var(--gray-bg);
-      border: 2px dashed #cbd5e0;
-      border-radius: 8px;
-      padding: 36px 20px;
-      text-align: center;
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 40px;
+      margin-bottom: 40px;
     }
-    .no-results-box h4 { font-size: 17px; margin-bottom: 8px; color: var(--dark); }
-    .no-results-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
-
-    .modal-box {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #fff;
-      width: 90%;
-      max-width: 460px;
-      border-radius: 10px;
-      padding: 28px;
-      z-index: 1100;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    .footer-col h5 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 16px;
+      color: #cbd5e1;
     }
-    .modal-box.active { display: block; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-    .modal-header h3 { font-size: 18px; color: var(--dark); }
-    .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); }
-
-    footer { background: var(--dark); color: #a0aec0; padding: 40px 0 20px 0; margin-top: 60px; font-size: 13px; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 30px; margin-bottom: 30px; }
-    .footer-col h4 { color: #fff; font-size: 15px; margin-bottom: 12px; }
     .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 8px; }
-    .footer-col a { color: #a0aec0; text-decoration: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
     .footer-col a:hover { color: #fff; }
-    .copyright { border-top: 1px solid var(--dark-light); padding-top: 20px; text-align: center; font-size: 12px; }
 
-    @media (max-width: 900px) {
-      .header-grid { grid-template-columns: 1fr; gap: 12px; }
-      .mega-menu-grid { grid-template-columns: 1fr; }
-      .subcat-columns { grid-template-columns: 1fr; }
+    @media (max-width: 960px) {
+      .header-inner { grid-template-columns: 1fr auto; }
+      .search-wrapper, .btn-catalog { display: none; }
       .hero-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
     }
@@ -408,618 +595,386 @@
 </head>
 <body>
 
-  <div class="catalog-overlay" id="catalogOverlay" onclick="closeCatalog()"></div>
-  <div class="modal-overlay" id="modalOverlay" onclick="closeOrderModal()"></div>
-
-  <div class="modal-box" id="orderModal">
-    <div class="modal-header">
-      <h3 id="modalTitle">Запрос счета / КП</h3>
-      <button class="modal-close" onclick="closeOrderModal()">✕</button>
-    </div>
-    <form id="quickOrderForm" onsubmit="handleLocalQuickOrder(event, this)">
-      <input type="hidden" id="modalProductInput">
-      <div class="form-group">
-        <label>Выбранное оборудование:</label>
-        <div id="modalProductName" style="font-weight: 600; font-size: 13px; color: var(--primary); margin-bottom: 8px;">—</div>
-      </div>
-      <div class="form-group">
-        <label>Компания или ИНН (для счета с НДС):</label>
-        <input type="text" id="orderCompany" class="form-input" placeholder="ООО 'Монтаж-Сервис' или ИНН" required>
-      </div>
-      <div class="form-group">
-        <label>Контактный телефон:</label>
-        <input type="tel" id="orderPhone" class="form-input" placeholder="+7 (999) 000-00-00" required>
-      </div>
-      <div class="form-group">
-        <label>Email для отправки КП:</label>
-        <input type="email" id="orderEmail" class="form-input" placeholder="zakaz@company.ru" required>
-      </div>
-      <button type="submit" class="btn-submit">Получить расчет и счет</button>
-    </form>
-  </div>
-
+  <!-- Верхняя полоса -->
   <div class="top-bar">
     <div class="container top-bar-inner">
-      <div class="top-bar-links">
-        <a href="#">О компании</a>
-        <a href="#">Доставка и оплата</a>
-        <a href="#">Проектировщикам</a>
-        <a href="#">Сертификаты</a>
-        <a href="#">Контакты</a>
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span>СПБ ЛОГИСТИЧЕСКИЙ ХАБ: ОТГРУЗКА 24/7</span>
       </div>
-      <div class="top-bar-contacts">
+      <div class="top-contacts">
         <span>Санкт-Петербург</span>
-        <span>Пн-Пт: 9:00 - 18:00</span>
         <a href="tel:+79117655484">8 (911) 765-54-84</a>
         <a href="mailto:logist@tradeatm.ru">logist@tradeatm.ru</a>
       </div>
     </div>
   </div>
 
-  <header class="header-main">
-    <div class="container header-grid">
-      <div>
-        <a href="/" class="brand-logo">INTEK<span>TRA</span></a>
-        <div class="brand-tagline">Инженерные системы и безопасность</div>
-      </div>
+  <!-- Шапка -->
+  <header>
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        INTEK<span>TRA</span>
+        <span class="logo-badge">ENGINEERING</span>
+      </a>
 
-      <button class="catalog-btn" id="catalogToggleBtn" onclick="toggleCatalog()">
-        ☰ Каталог
+      <button class="btn-catalog" onclick="filterCategory('all')">
+        <span>☰</span> Каталог
       </button>
 
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Поиск по артикулу (01482), названию (РИП, кабель) или ГОСТ..." oninput="handleSearch(this.value)">
-        <button type="button" class="search-clear-btn" id="searchClearBtn" onclick="clearSearch()">✕</button>
-        <button type="button" class="search-submit-btn" onclick="scrollToCatalog()">Найти</button>
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" class="search-input" placeholder="Артикул (01482), ГОСТ или название..." oninput="handleSearch(this.value)">
+        <button class="search-clear" id="searchClear" onclick="resetSearch()">✕</button>
       </div>
 
-      <div class="header-actions">
-        <a href="#spec-form-block" class="action-btn">
+      <div class="header-tools">
+        <button class="cart-btn" onclick="toggleCart(true)">
           <span>Спецификация</span>
-          Загрузить
-        </a>
-        <a href="#" class="action-btn">
-          <span>0 ₽</span>
-          Корзина (0)
-        </a>
-      </div>
-    </div>
-
-    <div class="mega-menu" id="megaMenu">
-      <div class="container">
-        <div class="mega-menu-grid">
-          <div class="mega-nav-left">
-            <div class="mega-nav-item selected" onmouseenter="showTab('tab-ops')">ОПС и СОУЭ <span>→</span></div>
-            <div class="mega-nav-item" onmouseenter="showTab('tab-cctv')">Видеонаблюдение (CCTV) <span>→</span></div>
-            <div class="mega-nav-item" onmouseenter="showTab('tab-skud')">СКУД и автоматика <span>→</span></div>
-            <div class="mega-nav-item" onmouseenter="showTab('tab-go')">Оборудование ГО и ЧС <span>→</span></div>
-            <div class="mega-nav-item" onmouseenter="showTab('tab-cable')">Кабельная продукция <span>→</span></div>
-            <div class="mega-nav-item" onmouseenter="showTab('tab-power')">Источники питания и АКБ <span>→</span></div>
-          </div>
-
-          <div class="mega-nav-content">
-            <div class="mega-tab-panel active" id="tab-ops">
-              <div class="panel-header"><span>Охранно-пожарная сигнализация</span><a onclick="filterByKeyword('ППКОП')">Все приборы ОПС →</a></div>
-              <div class="subcat-columns">
-                <div class="subcat-group">
-                  <h5>Приборы и панели</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('ППКОП')">Приборы приемно-контрольные (ППКОП)</a></li>
-                    <li><a onclick="filterByKeyword('ОПС')">Адресные радиоканальные системы</a></li>
-                    <li><a onclick="filterByKeyword('пульт')">Пульты управления и клавиатуры</a></li>
-                  </ul>
-                </div>
-                <div class="subcat-group">
-                  <h5>Извещатели</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('ИП')">Дымовые оптико-электронные (ИП 212)</a></li>
-                    <li><a onclick="filterByKeyword('пламени')">Извещатели пламени</a></li>
-                    <li><a onclick="filterByKeyword('ИПР')">Ручные пожарные извещатели (ИПР)</a></li>
-                  </ul>
-                </div>
-                <div class="subcat-group">
-                  <h5>Оповещение СОУЭ</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('Выход')">Световые табло («Выход», стрелки)</a></li>
-                    <li><a onclick="filterByKeyword('оповещатель')">Звуковые и речевые оповещатели</a></li>
-                    <li><a onclick="filterByKeyword('усилитель')">Трансляционные усилители</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="mega-tab-panel" id="tab-cctv">
-              <div class="panel-header"><span>Системы видеонаблюдения</span><a onclick="filterByKeyword('камера')">Все камеры и NVR →</a></div>
-              <div class="subcat-columns">
-                <div class="subcat-group">
-                  <h5>IP-камеры</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('камера')">Купольные IP-камеры</a></li>
-                    <li><a onclick="filterByKeyword('камера')">Цилиндрические уличные камеры</a></li>
-                    <li><a onclick="filterByKeyword('PTZ')">Поворотные скоростные PTZ</a></li>
-                  </ul>
-                </div>
-                <div class="subcat-group">
-                  <h5>Регистрация и архив</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('NVR')">Сетевые NVR видеорегистраторы</a></li>
-                    <li><a onclick="filterByKeyword('XVR')">Гибридные XVR видеорегистраторы</a></li>
-                  </ul>
-                </div>
-                <div class="subcat-group">
-                  <h5>Сетевое оборудование</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('PoE')">PoE-коммутаторы 4/8/16/24 портов</a></li>
-                    <li><a onclick="filterByKeyword('коммутатор')">Управляемые L2/L3 коммутаторы</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="mega-tab-panel" id="tab-skud">
-              <div class="panel-header"><span>Контроль доступа (СКУД)</span><a onclick="filterByKeyword('СКУД')">Все товары СКУД →</a></div>
-              <div class="subcat-columns">
-                <div class="subcat-group">
-                  <h5>Исполнительные узлы</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('турникет')">Турникеты-триподы и калитки</a></li>
-                    <li><a onclick="filterByKeyword('замок')">Электромагнитные замки</a></li>
-                    <li><a onclick="filterByKeyword('доводчик')">Дверные доводчики усиленные</a></li>
-                  </ul>
-                </div>
-                <div class="subcat-group">
-                  <h5>Идентификаторы</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('считыватель')">Считыватели Mifare / EM-Marin</a></li>
-                    <li><a onclick="filterByKeyword('терминал')">Терминалы распознавания лиц</a></li>
-                  </ul>
-                </div>
-                <div class="subcat-group">
-                  <h5>Контроллеры</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('контроллер')">Сетевые контроллеры доступа</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="mega-tab-panel" id="tab-go">
-              <div class="panel-header"><span>Оборудование ГО и ЧС</span><a onclick="filterByKeyword('А-ТТ')">Защитные сооружения →</a></div>
-              <div class="subcat-columns">
-                <div class="subcat-group">
-                  <h5>Транспортное оборудование</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('А-ТТ')">Тележки транспортные специальные А-ТТ-01</a></li>
-                    <li><a onclick="filterByKeyword('тележка')">Складские настилы и тележки</a></li>
-                  </ul>
-                </div>
-                <div class="subcat-group">
-                  <h5>Оповещение ЧС</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('сирена')">Электросирены оповещения С-40, С-28</a></li>
-                    <li><a onclick="filterByKeyword('запуск')">Блоки запуска сирен</a></li>
-                  </ul>
-                </div>
-                <div class="subcat-group">
-                  <h5>Защитные сооружения</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('дверь')">Герметические двери и люки</a></li>
-                    <li><a onclick="filterByKeyword('фильтр')">Фильтровентиляция</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="mega-tab-panel" id="tab-cable">
-              <div class="panel-header"><span>Кабельная продукция</span><a onclick="filterByKeyword('кабель')">Кабельный каталог →</a></div>
-              <div class="subcat-columns">
-                <div class="subcat-group">
-                  <h5>Огнестойкий кабель</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('КПСЭнг')">КПСЭнг(А)-FRLS</a></li>
-                    <li><a onclick="filterByKeyword('кабель')">КПСнг(А)-FRLS</a></li>
-                  </ul>
-                </div>
-                <div class="subcat-group">
-                  <h5>Витая пара и ЛВС</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('UTP')">Витая пара UTP Cat 5e</a></li>
-                    <li><a onclick="filterByKeyword('FTP')">Витая пара FTP уличная</a></li>
-                  </ul>
-                </div>
-                <div class="subcat-group">
-                  <h5>Крепеж</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('клипса')">Огнестойкие металлические клипсы</a></li>
-                    <li><a onclick="filterByKeyword('гофра')">Гофра негорючая</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="mega-tab-panel" id="tab-power">
-              <div class="panel-header"><span>Питание и АКБ</span><a onclick="filterByKeyword('РИП')">Каталог электропитания →</a></div>
-              <div class="subcat-columns">
-                <div class="subcat-group">
-                  <h5>Источники питания</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('РИП')">РИП 12В (1.5А, 3А, 5А)</a></li>
-                    <li><a onclick="filterByKeyword('РИП')">РИП 24В</a></li>
-                  </ul>
-                </div>
-                <div class="subcat-group">
-                  <h5>Аккумуляторы AGM</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('АКБ')">АКБ 12В 7Ач (для ОПС и РИП)</a></li>
-                    <li><a onclick="filterByKeyword('АКБ')">АКБ 12В 12Ач / 17Ач</a></li>
-                  </ul>
-                </div>
-                <div class="subcat-group">
-                  <h5>Защита</h5>
-                  <ul>
-                    <li><a onclick="filterByKeyword('УЗИП')">Устройства грозозащиты (УЗИП)</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          <span class="cart-badge" id="cartCount">0</span>
+        </button>
       </div>
     </div>
   </header>
 
-  <nav class="nav-bar">
-    <div class="container">
-      <ul class="nav-list">
-        <li><a href="#" onclick="openCatalogTab('tab-ops'); return false;">Охранно-пожарная сигнализация</a></li>
-        <li><a href="#" onclick="openCatalogTab('tab-cctv'); return false;">Видеонаблюдение</a></li>
-        <li><a href="#" onclick="openCatalogTab('tab-skud'); return false;">СКУД и автоматика</a></li>
-        <li><a href="#" onclick="openCatalogTab('tab-go'); return false;">Оборудование ГО и ЧС</a></li>
-        <li><a href="#" onclick="openCatalogTab('tab-cable'); return false;">Кабель и монтаж</a></li>
-        <li><a href="#" onclick="openCatalogTab('tab-power'); return false;">Источники питания</a></li>
-      </ul>
-    </div>
-  </nav>
-
+  <!-- Hero секция -->
   <main class="container">
-    <section class="hero-section">
+    <section class="hero">
       <div class="hero-grid">
-        <div class="hero-main">
-          <h1>Комплексные поставки систем безопасности и слаботочных сетей</h1>
-          <p>Оптовые поставки сертифицированного оборудования для монтажных организаций, интеграторов и объектов гражданской обороны в Санкт-Петербурге и по всей России.</p>
+        <div class="hero-card">
           <div>
-            <button class="catalog-btn" onclick="toggleCatalog()" style="display: inline-flex; width: auto;">Перейти в каталог продукции</button>
+            <h1>Инженерная дистрибуция <span>нового поколения.</span></h1>
+            <p>Оптовые поставки слаботочных систем, комплексов пожаротушения, СКУД и сертифицированного оборудования защитных сооружений ГО и ЧС по всей России.</p>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <div class="stat-val">15 000+</div>
+              <div class="stat-lbl">Номенклатура</div>
+            </div>
+            <div>
+              <div class="stat-val">24/7</div>
+              <div class="stat-lbl">Складской хаб СПб</div>
+            </div>
+            <div>
+              <div class="stat-val">НДС 20%</div>
+              <div class="stat-lbl">Безналичный расчет</div>
+            </div>
           </div>
         </div>
 
-        <div class="hero-b2b" id="spec-form-block">
-          <h3>Оптовый расчет спецификации</h3>
-          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Прикрепите ведомость или файл проекта (Excel, PDF) — инженер подготовит счет со скидкой.</p>
-          
-          <form id="specForm" onsubmit="handleLocalSpecSubmit(event, this)">
+        <div class="spec-card">
+          <h3>Быстрый расчет сметы</h3>
+          <p>Прикрепите ведомость проекта или файл спецификации (Excel / PDF) для оптового расчета со скидкой до 22%.</p>
+          <form onsubmit="handleSpecUpload(event)">
             <div class="form-group">
-              <label>Организация / ИНН:</label>
-              <input type="text" id="specCompany" class="form-input" placeholder="ООО 'Инженерные сети' или ИНН" required>
+              <label>Компания / ИНН:</label>
+              <input type="text" id="specCompany" class="form-ctrl" placeholder="ООО 'СпецМонтаж' или ИНН" required>
             </div>
             <div class="form-group">
-              <label>Телефон снабженца / инженера:</label>
-              <input type="tel" id="specPhone" class="form-input" placeholder="+7 (911) 000-00-00" required>
+              <label>Телефон снабжения:</label>
+              <input type="tel" id="specPhone" class="form-ctrl" placeholder="+7 (911) 000-00-00" required>
             </div>
-            <div class="form-group">
-              <label>Email для выставления счета:</label>
-              <input type="email" id="specEmail" class="form-input" placeholder="snab@company.ru" required>
+            <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+              <input type="file" id="fileInput" style="display:none" onchange="fileChosen(this)">
+              <span id="fileNameDisplay">📎 Прикрепить ведомость (XLSX, PDF)</span>
             </div>
-            <div class="form-group">
-              <label>Файл спецификации (XLSX, PDF, DOC):</label>
-              <input type="file" id="specFileInput" class="form-input" style="padding: 5px;" required>
-            </div>
-            <button type="submit" class="btn-submit">Отправить спецификацию на расчет</button>
+            <button type="submit" class="btn-submit">Отправить на экспресс-расчет</button>
           </form>
         </div>
       </div>
     </section>
 
-    <div class="section-title">
-      <h2>Популярные направления каталога</h2>
-      <a href="javascript:void(0)" onclick="toggleCatalog()" style="font-size: 14px; color: var(--primary); text-decoration: none;">Открыть полный каталог →</a>
+    <!-- Категории фильтрации -->
+    <div class="filter-chips">
+      <button class="chip active" onclick="filterCategory('all', this)">Все категории</button>
+      <button class="chip" onclick="filterCategory('ops', this)">ОПС и СОУЭ</button>
+      <button class="chip" onclick="filterCategory('power', this)">Источники питания / АКБ</button>
+      <button class="chip" onclick="filterCategory('cable', this)">Кабельные трассы</button>
+      <button class="chip" onclick="filterCategory('go', this)">Оборудование ГО и ЧС</button>
     </div>
 
-    <div class="categories-grid">
-      <a onclick="openCatalogTab('tab-ops')" class="category-card">
-        <strong>ОПС и СОУЭ</strong>
-        <span>Извещатели, приборы, оповещатели</span>
-      </a>
-      <a onclick="openCatalogTab('tab-cctv')" class="category-card">
-        <strong>Видеонаблюдение</strong>
-        <span>IP-камеры, NVR, коммутаторы PoE</span>
-      </a>
-      <a onclick="openCatalogTab('tab-skud')" class="category-card">
-        <strong>СКУД</strong>
-        <span>Турникеты, контроллеры, считыватели</span>
-      </a>
-      <a onclick="openCatalogTab('tab-go')" class="category-card">
-        <strong>Оборудование ГО и ЧС</strong>
-        <span>Средства защиты, сирены, тележки А-ТТ</span>
-      </a>
-      <a onclick="openCatalogTab('tab-cable')" class="category-card">
-        <strong>Кабельная продукция</strong>
-        <span>КПСЭнг, витая пара UTP/FTP, силовой</span>
-      </a>
-      <a onclick="openCatalogTab('tab-power')" class="category-card">
-        <strong>Электропитание</strong>
-        <span>РИП, ИБП 12В/24В/220В, аккумуляторы</span>
-      </a>
+    <!-- Каталог товаров -->
+    <div class="section-header">
+      <h2>Складская матрица оборудования</h2>
+      <span style="font-size: 13px; color: var(--text-muted);">Прямые контракты заводов-изготовителей</span>
     </div>
 
-    <div class="search-status-bar" id="searchStatusBar">
-      <span id="searchStatusText">Найдено позиций: 0</span>
-      <button type="button" onclick="clearSearch()">✕ Сбросить поиск</button>
-    </div>
-
-    <div class="section-title" id="catalog-anchor">
-      <h2>Складская программа Intektra</h2>
-      <span style="font-size: 13px; color: var(--text-muted);">Цены с НДС 20%</span>
-    </div>
-
-    <div class="products-grid" id="productsContainer">
-      <div class="product-card" data-keywords="ппкоп прибор приемно контрольный опс инк-01482 01482 сигнализация 8 шлейфов">
-        <div class="product-sku">Артикул: ИНК-01482</div>
-        <div class="product-stock">● В наличии на складе в СПб (142 шт.)</div>
-        <a href="#" class="product-title">Прибор приемно-контрольный охранно-пожарный (ППКОП) 8 шлейфов</a>
-        <div class="product-prices">
-          <div class="price-main">4 850 ₽</div>
-          <div class="price-vat">Оптовая цена: по запросу в счете</div>
+    <div class="products-grid" id="productsGrid">
+      <!-- Товар 1 -->
+      <div class="product-card" data-cat="ops" data-keywords="ппкоп приемно контрольный опс инк-01482 01482 8 шлейфов">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ИНК-01482</span>
+          <span class="stock-tag">● В наличии (142 шт.)</span>
         </div>
-        <div class="product-actions">
-          <button class="btn-buy" onclick="openOrderModal('ППКОП 8 шлейфов (ИНК-01482)')">В корзину</button>
-          <button class="btn-quick" onclick="openOrderModal('ППКОП 8 шлейфов (ИНК-01482)')">В 1 клик</button>
+        <div class="product-title">Прибор приемно-контрольный охранно-пожарный (ППКОП) 8 шлейфов</div>
+        <div class="card-bottom">
+          <div class="price-value">4 850 ₽</div>
+          <div class="price-sub">Цена с НДС 20% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('ППКОП 8 шлейфов', 4850, 'ИНК-01482')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="quickBuy('ППКОП 8 шлейфов', 'ИНК-01482')">В 1 клик</button>
+          </div>
         </div>
       </div>
 
-      <div class="product-card" data-keywords="рип источник питания ибп резервированный 12в 3а акб 7ач инк-02319 02319 питание">
-        <div class="product-sku">Артикул: ИНК-02319</div>
-        <div class="product-stock">● В наличии на складе в СПб (85 шт.)</div>
-        <a href="#" class="product-title">Резервированный источник питания РИП-12 RS (12В, 3А, под АКБ 7Ач)</a>
-        <div class="product-prices">
-          <div class="price-main">3 420 ₽</div>
-          <div class="price-vat">Оптовая цена: по запросу в счете</div>
+      <!-- Товар 2 -->
+      <div class="product-card" data-cat="power" data-keywords="рип источник питания ибп инк-02319 02319 12в 3а 7ач">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ИНК-02319</span>
+          <span class="stock-tag">● В наличии (85 шт.)</span>
         </div>
-        <div class="product-actions">
-          <button class="btn-buy" onclick="openOrderModal('РИП-12 RS 3А (ИНК-02319)')">В корзину</button>
-          <button class="btn-quick" onclick="openOrderModal('РИП-12 RS 3А (ИНК-02319)')">В 1 клик</button>
-        </div>
-      </div>
-
-      <div class="product-card" data-keywords="кабель огнестойкий кпсэнг кпснг frls 1х2х0.75 инк-08910 08910 слаботочка провод бухта">
-        <div class="product-sku">Артикул: ИНК-08910</div>
-        <div class="product-stock">● В наличии на складе в СПб (2 400 м)</div>
-        <a href="#" class="product-title">Кабель огнестойкий КПСЭнг(А)-FRLS 1х2х0.75 мм² (бухта 200м)</a>
-        <div class="product-prices">
-          <div class="price-main">48.50 ₽ / м</div>
-          <div class="price-vat">Цена с НДС за метр</div>
-        </div>
-        <div class="product-actions">
-          <button class="btn-buy" onclick="openOrderModal('Кабель КПСЭнг(А)-FRLS 1х2х0.75 (ИНК-08910)')">В корзину</button>
-          <button class="btn-quick" onclick="openOrderModal('Кабель КПСЭнг(А)-FRLS 1х2х0.75 (ИНК-08910)')">В 1 клик</button>
+        <div class="product-title">Резервированный источник питания РИП-12 RS (12В, 3А, под АКБ 7Ач)</div>
+        <div class="card-bottom">
+          <div class="price-value">3 420 ₽</div>
+          <div class="price-sub">Цена с НДС 20% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('РИП-12 RS (12В, 3А)', 3420, 'ИНК-02319')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="quickBuy('РИП-12 RS', 'ИНК-02319')">В 1 клик</button>
+          </div>
         </div>
       </div>
 
-      <div class="product-card" data-keywords="тележка а-тт-01 атт01 а-тт го чс защитные сооружения убежища инк-го-001 спецсерия транспортная">
-        <div class="product-sku">Артикул: ИНК-ГО-001</div>
-        <div class="product-stock">● Под заказ (3-5 дней)</div>
-        <a href="#" class="product-title">Транспортная тележка специальная А-ТТ-01 (усиленная рама)</a>
-        <div class="product-prices">
-          <div class="price-main">18 900 ₽</div>
-          <div class="price-vat">Спецсерия для защитных сооружений</div>
+      <!-- Товар 3 -->
+      <div class="product-card" data-cat="cable" data-keywords="кабель огнестойкий кпсэнг frls 1х2х0.75 инк-08910 08910 бухта">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ИНК-08910</span>
+          <span class="stock-tag">● На складе (2 400 м)</span>
         </div>
-        <div class="product-actions">
-          <button class="btn-buy" onclick="openOrderModal('Тележка специальная А-ТТ-01 (ИНК-ГО-001)')">Заказать</button>
-          <button class="btn-quick" onclick="openOrderModal('Тележка специальная А-ТТ-01 (ИНК-ГО-001)')">КП на юрлицо</button>
+        <div class="product-title">Кабель огнестойкий КПСЭнг(А)-FRLS 1х2х0.75 мм² (бухта 200м)</div>
+        <div class="card-bottom">
+          <div class="price-value">48.50 ₽</div>
+          <div class="price-sub">Цена с НДС 20% за метр</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Кабель КПСЭнг(А)-FRLS (1м)', 48.5, 'ИНК-08910')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="quickBuy('Кабель КПСЭнг(А)-FRLS', 'ИНК-08910')">В 1 клик</button>
+          </div>
         </div>
       </div>
 
-      <div class="no-results-box" id="noResultsBox">
-        <h4>По вашему запросу оборудование не найдено на витрине</h4>
-        <p>Каталог Intektra насчитывает свыше 15 000 позиций. Прикрепите проектную ведомость в форму выше, и мы выставим счет с оптовой скидкой.</p>
-        <a href="#spec-form-block" class="btn-submit" style="display:inline-block; width:auto; text-decoration:none; padding:10px 20px;">Перейти к расчету спецификации</a>
+      <!-- Товар 4 -->
+      <div class="product-card" data-cat="go" data-keywords="тележка а-тт-01 атт01 а-тт го чс убежища инк-го-001">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ИНК-ГО-001</span>
+          <span class="stock-tag" style="color:var(--cyan-accent)">● Резерв завода (3-5 дн.)</span>
+        </div>
+        <div class="product-title">Транспортная тележка специальная А-ТТ-01 (усиленная рама)</div>
+        <div class="card-bottom">
+          <div class="price-value">18 900 ₽</div>
+          <div class="price-sub">Серия ЗС ГО / спецтехника</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Тележка специальная А-ТТ-01', 18900, 'ИНК-ГО-001')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="quickBuy('Тележка А-ТТ-01', 'ИНК-ГО-001')">В 1 клик</button>
+          </div>
+        </div>
       </div>
     </div>
   </main>
 
+  <!-- Боковая шторка Сметы / Корзины -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="toggleCart(false)"></div>
+  <div class="drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <h3>Спецификация заказа</h3>
+      <button onclick="toggleCart(false)" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div class="drawer-body" id="cartItemsContainer">
+      <p style="color:var(--text-muted);font-size:14px;">Ваша проектная спецификация пуста.</p>
+    </div>
+    <div class="drawer-footer">
+      <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
+        <span style="color:var(--text-muted);">Итого с НДС:</span>
+        <span style="font-family:var(--font-mono);font-size:20px;font-weight:700;" id="cartTotalSum">0 ₽</span>
+      </div>
+      <button class="btn-submit" onclick="checkoutCart()">Сформировать счет на оплату</button>
+    </div>
+  </div>
+
+  <!-- Подвал -->
   <footer>
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
-          <h4 style="color:#fff;">INTEKTRA</h4>
-          <p>Комплексный поставщик оборудования систем безопасности, связи, слаботочных систем и средств гражданской обороны.</p>
-          <p style="margin-top: 10px;">Работаем с юридическими лицами по безналичному расчету с НДС.</p>
+          <div class="logo" style="margin-bottom:14px;">INTEK<span>TRA</span></div>
+          <p style="font-size:13px;color:var(--text-muted);max-width:300px;">
+            Федеральные поставки оборудования слаботочных сетей, комплексов безопасности и ГО. Работа по безналичному расчету с НДС 20%.
+          </p>
         </div>
         <div class="footer-col">
-          <h4>Оборудование</h4>
+          <h5>Каталог</h5>
           <ul>
-            <li><a href="#" onclick="openCatalogTab('tab-ops'); return false;">ОПС и пожаротушение</a></li>
-            <li><a href="#" onclick="openCatalogTab('tab-cctv'); return false;">Видеонаблюдение</a></li>
-            <li><a href="#" onclick="openCatalogTab('tab-skud'); return false;">Контроль доступа</a></li>
-            <li><a href="#" onclick="openCatalogTab('tab-go'); return false;">Оборудование ГО и ЧС</a></li>
+            <li><a onclick="filterCategory('ops')">ОПС и СОУЭ</a></li>
+            <li><a onclick="filterCategory('power')">Источники питания РИП</a></li>
+            <li><a onclick="filterCategory('cable')">Огнестойкие кабели</a></li>
+            <li><a onclick="filterCategory('go')">Оборудование ГО и ЧС</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Клиентам</h4>
+          <h5>Клиентам</h5>
           <ul>
-            <li><a href="#spec-form-block">Загрузка спецификаций</a></li>
-            <li><a href="#">Доставка по России</a></li>
-            <li><a href="#">Гарантия и возврат</a></li>
-            <li><a href="#">Реквизиты компании</a></li>
+            <li><a href="mailto:logist@tradeatm.ru">Запрос прайс-листа</a></li>
+            <li><a href="mailto:logist@tradeatm.ru">Договор поставки</a></li>
+            <li><a href="mailto:logist@tradeatm.ru">Реквизиты компании</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Отдел продаж</h4>
-          <p><a href="tel:+79117655484" style="color:#fff; font-weight:700; font-size:16px;">8 (911) 765-54-84</a></p>
-          <p><a href="mailto:logist@tradeatm.ru" style="color:#fff;">logist@tradeatm.ru</a></p>
-          <p style="margin-top: 10px;">Склад и офис: г. Санкт-Петербург.<br>Пн-Пт: 9:00 - 18:00.<br>Отгрузка ТК по всей России.</p>
+          <h5>Отдел продаж</h5>
+          <p style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;">
+            <a href="tel:+79117655484" style="color:#fff;text-decoration:none;">8 (911) 765-54-84</a>
+          </p>
+          <p style="font-size:14px;color:var(--text-muted);margin-bottom:12px;">logist@tradeatm.ru</p>
+          <p style="font-size:12px;color:var(--text-muted);">г. Санкт-Петербург, складской терминал Пн-Пт с 9:00 до 18:00</p>
         </div>
       </div>
-      <div class="copyright">
-        © 2026 INTEKTRA. Все права защищены. Информация на сайте не является публичной офертой.
+      <div style="border-top:1px solid var(--border);padding-top:20px;font-size:12px;color:var(--text-muted);text-align:center;">
+        © 2026 INTEKTRA ENGINEERING. Все права защищены.
       </div>
     </div>
   </footer>
 
   <script>
-    const megaMenu = document.getElementById('megaMenu');
-    const overlay = document.getElementById('catalogOverlay');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const orderModal = document.getElementById('orderModal');
-    const catalogBtn = document.getElementById('catalogToggleBtn');
-    const searchInput = document.getElementById('searchInput');
-    const searchClearBtn = document.getElementById('searchClearBtn');
-    const searchStatusBar = document.getElementById('searchStatusBar');
-    const searchStatusText = document.getElementById('searchStatusText');
-    const noResultsBox = document.getElementById('noResultsBox');
+    let cart = [];
 
-    function toggleCatalog() {
-      const isOpen = megaMenu.classList.contains('active');
-      if (isOpen) closeCatalog();
-      else openCatalog();
-    }
-
-    function openCatalog() {
-      megaMenu.classList.add('active');
-      overlay.classList.add('active');
-      catalogBtn.innerHTML = '✕ Закрыть';
-    }
-
-    function closeCatalog() {
-      megaMenu.classList.remove('active');
-      overlay.classList.remove('active');
-      catalogBtn.innerHTML = '☰ Каталог';
-    }
-
-    function showTab(tabId) {
-      document.querySelectorAll('.mega-nav-item').forEach(item => item.classList.remove('selected'));
-      document.querySelectorAll('.mega-tab-panel').forEach(panel => panel.classList.remove('active'));
-      if (window.event && window.event.currentTarget) window.event.currentTarget.classList.add('selected');
-      const targetPanel = document.getElementById(tabId);
-      if (targetPanel) targetPanel.classList.add('active');
-    }
-
-    function openCatalogTab(tabId) {
-      openCatalog();
-      const tabTrigger = Array.from(document.querySelectorAll('.mega-nav-item')).find(item => 
-        item.getAttribute('onmouseenter') && item.getAttribute('onmouseenter').includes(tabId)
-      );
-      if (tabTrigger) {
-        document.querySelectorAll('.mega-nav-item').forEach(item => item.classList.remove('selected'));
-        tabTrigger.classList.add('selected');
-      }
-      document.querySelectorAll('.mega-tab-panel').forEach(panel => panel.classList.remove('active'));
-      const targetPanel = document.getElementById(tabId);
-      if (targetPanel) targetPanel.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function handleSearch(query) {
-      const q = query.trim().toLowerCase();
-      const cards = document.querySelectorAll('.products-grid .product-card');
-
-      if (q.length > 0) {
-        searchClearBtn.style.display = 'block';
-        searchStatusBar.style.display = 'flex';
+    // Корзина
+    function toggleCart(open) {
+      const drawer = document.getElementById('cartDrawer');
+      const overlay = document.getElementById('drawerOverlay');
+      if (open) {
+        drawer.classList.add('open');
+        overlay.style.display = 'block';
       } else {
-        searchClearBtn.style.display = 'none';
-        searchStatusBar.style.display = 'none';
+        drawer.classList.remove('open');
+        overlay.style.display = 'none';
+      }
+    }
+
+    function addToCart(title, price, sku) {
+      const existing = cart.find(i => i.sku === sku);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ title, price, sku, qty: 1 });
+      }
+      renderCart();
+      toggleCart(true);
+    }
+
+    function changeQty(sku, delta) {
+      const item = cart.find(i => i.sku === sku);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.sku !== sku);
+      }
+      renderCart();
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cartItemsContainer');
+      const countBadge = document.getElementById('cartCount');
+      const totalSum = document.getElementById('cartTotalSum');
+      
+      const totalItems = cart.reduce((acc, i) => acc + i.qty, 0);
+      countBadge.innerText = totalItems;
+
+      if (cart.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);font-size:14px;">Ваша проектная спецификация пуста.</p>';
+        totalSum.innerText = '0 ₽';
+        return;
       }
 
-      let matches = 0;
-      cards.forEach(card => {
+      let sum = 0;
+      container.innerHTML = cart.map(item => {
+        const itemTotal = item.price * item.qty;
+        sum += itemTotal;
+        return `
+          <div class="cart-item">
+            <div>
+              <div class="cart-item-title">${item.title}</div>
+              <div class="cart-item-price">${item.price} ₽ × ${item.qty} = ${itemTotal.toLocaleString('ru-RU')} ₽</div>
+            </div>
+            <div class="cart-qty-ctrl">
+              <button class="cart-qty-btn" onclick="changeQty('${item.sku}', -1)">-</button>
+              <span style="font-family:var(--font-mono);font-size:13px;">${item.qty}</span>
+              <button class="cart-qty-btn" onclick="changeQty('${item.sku}', 1)">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      totalSum.innerText = sum.toLocaleString('ru-RU') + ' ₽';
+    }
+
+    function checkoutCart() {
+      if (cart.length === 0) return;
+      const itemsList = cart.map(i => `${i.title} (${i.sku}) — ${i.qty} шт. на ${i.price * i.qty} ₽`).join('\n');
+      const total = document.getElementById('cartTotalSum').innerText;
+      
+      const subject = encodeURIComponent('Заказ спецификации с сайта Intektra');
+      const body = encodeURIComponent(`Сформированная спецификация:\n\n${itemsList}\n\nИТОГО С НДС: ${total}\n\nРеквизиты нашей компании (ИНН, Название): `);
+      window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
+    }
+
+    function quickBuy(title, sku) {
+      const company = prompt('Введите название компании или ИНН для выставления счета:');
+      if (!company) return;
+      const phone = prompt('Контактный телефон:');
+      if (!phone) return;
+
+      const subject = encodeURIComponent(`Быстрый заказ: ${title} (${sku})`);
+      const body = encodeURIComponent(`Товар: ${title}\nАртикул: ${sku}\nОрганизация: ${company}\nТелефон: ${phone}`);
+      window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
+    }
+
+    // Живой поиск
+    function handleSearch(val) {
+      const q = val.trim().toLowerCase();
+      const clearBtn = document.getElementById('searchClear');
+      clearBtn.style.display = q.length > 0 ? 'block' : 'none';
+
+      document.querySelectorAll('.product-card').forEach(card => {
         const text = (card.getAttribute('data-keywords') + ' ' + card.innerText).toLowerCase();
-        if (text.includes(q)) {
+        card.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+    }
+
+    function resetSearch() {
+      const input = document.getElementById('searchInput');
+      input.value = '';
+      handleSearch('');
+    }
+
+    // Фильтрация по категориям
+    function filterCategory(cat, btn) {
+      if (btn) {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      document.querySelectorAll('.product-card').forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-cat') === cat) {
           card.style.display = 'flex';
-          matches++;
         } else {
           card.style.display = 'none';
         }
       });
+    }
 
-      searchStatusText.innerText = `Найдено позиций по запросу "${query}": ${matches}`;
-      if (matches === 0) {
-        noResultsBox.style.display = 'block';
-      } else {
-        noResultsBox.style.display = 'none';
+    // Загрузка спецификации
+    function fileChosen(input) {
+      if (input.files.length > 0) {
+        document.getElementById('fileNameDisplay').innerText = '✓ Файл выбран: ' + input.files[0].name;
       }
     }
 
-    function clearSearch() {
-      searchInput.value = '';
-      handleSearch('');
-    }
-
-    function filterByKeyword(keyword) {
-      closeCatalog();
-      searchInput.value = keyword;
-      handleSearch(keyword);
-      scrollToCatalog();
-    }
-
-    function scrollToCatalog() {
-      const anchor = document.getElementById('catalog-anchor');
-      if (anchor) {
-        anchor.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-
-    function openOrderModal(productName) {
-      document.getElementById('modalProductName').innerText = productName;
-      document.getElementById('modalProductInput').value = productName;
-      orderModal.classList.add('active');
-      modalOverlay.classList.add('active');
-    }
-
-    function closeOrderModal() {
-      orderModal.classList.remove('active');
-      modalOverlay.classList.remove('active');
-    }
-
-    function handleLocalQuickOrder(e, form) {
+    function handleSpecUpload(e) {
       e.preventDefault();
-      const product = document.getElementById('modalProductInput').value;
-      const company = document.getElementById('orderCompany').value;
-      const phone = document.getElementById('orderPhone').value;
-      const email = document.getElementById('orderEmail').value;
-
-      alert(`Спасибо! Заявка на ${product} принята.\nКомпания: ${company}\nТелефон: ${phone}\nМы свяжемся с вами в течение 30 минут.`);
-      
-      const subject = encodeURIComponent(`Запрос счета Intektra: ${product}`);
-      const body = encodeURIComponent(`Товар: ${product}\nОрганизация: ${company}\nТелефон: ${phone}\nEmail: ${email}`);
-      window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
-
-      form.reset();
-      closeOrderModal();
-    }
-
-    function handleLocalSpecSubmit(e, form) {
-      e.preventDefault();
-      const company = document.getElementById('specCompany').value;
+      const comp = document.getElementById('specCompany').value;
       const phone = document.getElementById('specPhone').value;
-      const email = document.getElementById('specEmail').value;
-      const fileInput = document.getElementById('specFileInput');
-      const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : 'Файл не выбран';
+      const file = document.getElementById('fileInput').files[0];
+      const fileName = file ? file.name : 'Не прикреплен';
 
-      alert(`Спецификация "${fileName}" принята на расчет!\nКомпания: ${company}\nТелефон: ${phone}\nИнженер Intektra готовит коммерческое предложение.`);
-      
-      const subject = encodeURIComponent(`Спецификация на расчет от ${company}`);
-      const body = encodeURIComponent(`Организация: ${company}\nТелефон: ${phone}\nEmail: ${email}\nПрикрепленный файл: ${fileName}\n\n(Пожалуйста, прикрепите файл спецификации к этому письму)`);
+      const subject = encodeURIComponent(`Спецификация от ${comp}`);
+      const body = encodeURIComponent(`Компания: ${comp}\nТелефон: ${phone}\nФайл: ${fileName}\n\n(Пожалуйста, прикрепите файл спецификации к письму)`);
       window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
-
-      form.reset();
     }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeCatalog();
-        closeOrderModal();
-      }
-    });
   </script>
 </body>
 </html>
