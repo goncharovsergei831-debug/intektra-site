@@ -6,10 +6,10 @@
   <title>Intektra — Системы безопасности, слаботочные сети и инженерное оборудование</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #c92127; /* фирменный акцентный цвет дистрибьютора */
+      --primary: #c92127;
       --primary-hover: #a8171c;
       --dark: #1e252b;
       --dark-light: #2c363f;
@@ -28,7 +28,7 @@
       background: var(--dark);
       color: #cbd5e0;
       font-size: 13px;
-      padding: 6px 0;
+      padding: 7px 0;
     }
     .container {
       max-width: 1240px;
@@ -39,6 +39,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     .top-bar-links a {
       color: #cbd5e0;
@@ -48,7 +50,8 @@
     }
     .top-bar-links a:hover { color: #fff; }
     .top-bar-contacts { display: flex; gap: 20px; align-items: center; }
-    .top-bar-contacts strong { color: #fff; }
+    .top-bar-contacts a { color: #fff; text-decoration: none; font-weight: 600; }
+    .top-bar-contacts a:hover { color: #cbd5e0; }
 
     /* Основная шапка */
     .header-main {
@@ -58,7 +61,7 @@
     }
     .header-grid {
       display: grid;
-      grid-template-columns: 200px 140px 1fr 180px;
+      grid-template-columns: 220px 140px 1fr 180px;
       gap: 20px;
       align-items: center;
     }
@@ -68,8 +71,18 @@
       color: var(--dark);
       text-decoration: none;
       letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
     }
     .brand-logo span { color: var(--primary); }
+    .brand-tagline {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-top: -4px;
+    }
 
     /* Кнопка каталога */
     .catalog-btn {
@@ -117,7 +130,7 @@
     .header-actions {
       display: flex;
       justify-content: flex-end;
-      gap: 15px;
+      gap: 12px;
     }
     .action-btn {
       background: none;
@@ -146,6 +159,8 @@
       padding: 10px 0;
       font-size: 14px;
       font-weight: 500;
+      overflow-x: auto;
+      white-space: nowrap;
     }
     .nav-list a { color: var(--dark); text-decoration: none; }
     .nav-list a:hover { color: var(--primary); }
@@ -168,7 +183,7 @@
       flex-direction: column;
       justify-content: center;
     }
-    .hero-main h1 { font-size: 32px; margin-bottom: 12px; line-height: 1.2; }
+    .hero-main h1 { font-size: 32px; margin-bottom: 12px; line-height: 1.2; font-weight: 800; }
     .hero-main p { color: #a0aec0; margin-bottom: 24px; font-size: 16px; }
     .hero-b2b {
       background: var(--gray-bg);
@@ -191,6 +206,8 @@
       text-decoration: none;
       font-weight: 600;
       font-size: 14px;
+      cursor: pointer;
+      border: none;
     }
 
     /* Категории оборудования */
@@ -323,6 +340,12 @@
     .footer-col a { color: #a0aec0; text-decoration: none; }
     .footer-col a:hover { color: #fff; }
     .copyright { border-top: 1px solid var(--dark-light); padding-top: 20px; text-align: center; font-size: 12px; }
+
+    @media (max-width: 900px) {
+      .header-grid { grid-template-columns: 1fr; gap: 12px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -338,9 +361,10 @@
         <a href="#">Контакты</a>
       </div>
       <div class="top-bar-contacts">
+        <span>Санкт-Петербург</span>
         <span>Пн-Пт: 9:00 - 18:00</span>
-        <strong>+7 (800) 000-00-00</strong>
-        <span>b2b@intektra.ru</span>
+        <a href="tel:+79117655484">8 (911) 765-54-84</a>
+        <a href="mailto:goncharov@intektra.ru">goncharov@intektra.ru</a>
       </div>
     </div>
   </div>
@@ -348,7 +372,10 @@
   <!-- Шапка каталога -->
   <header class="header-main">
     <div class="container header-grid">
-      <a href="/" class="brand-logo">INTEK<span>TRA</span></a>
+      <div>
+        <a href="/" class="brand-logo">INTEK<span>TRA</span></a>
+        <div class="brand-tagline">Инженерные системы и безопасность</div>
+      </div>
 
       <button class="catalog-btn" onclick="toggleCatalog()">
         ☰ Каталог
@@ -360,7 +387,7 @@
       </div>
 
       <div class="header-actions">
-        <a href="#" class="action-btn">
+        <a href="#spec-upload" class="action-btn">
           <span>Спецификация</span>
           Загрузить
         </a>
@@ -393,14 +420,14 @@
       <div class="hero-grid">
         <div class="hero-main">
           <h1>Комплексные поставки систем безопасности и слаботочных сетей</h1>
-          <p>Оптовые поставки сертифицированного оборудования для монтажных организаций, интеграторов и объектов гражданской обороны.</p>
+          <p>Оптовые поставки сертифицированного оборудования для монтажных организаций, интеграторов и объектов гражданской обороны в Санкт-Петербурге и по всей России.</p>
           <div>
             <a href="#" class="catalog-btn" style="display: inline-flex; width: auto;">Перейти в каталог продукции</a>
           </div>
         </div>
-        <div class="hero-b2b">
+        <div class="hero-b2b" id="spec-upload">
           <h3>Быстрый расчет проекта</h3>
-          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Загрузите вашу спецификацию в Excel или PDF для оптового расчета со скидкой до 25%.</p>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Загрузите вашу спецификацию в Excel или PDF для оптового расчета со скидкой.</p>
           <input type="file" id="specFile" style="display:none">
           <button class="btn-b2b" onclick="document.getElementById('specFile').click()">Загрузить файл</button>
         </div>
@@ -440,21 +467,20 @@
       </a>
     </div>
 
-    <!-- Популярные товары / Новинки складской программы -->
+    <!-- Популярные товары -->
     <div class="section-title">
       <h2>Складская программа Intektra</h2>
       <span style="font-size: 13px; color: var(--text-muted);">Цены с НДС 20%</span>
     </div>
 
     <div class="products-grid">
-      <!-- Карточка 1 -->
       <div class="product-card">
         <div class="product-sku">Артикул: ИНК-01482</div>
-        <div class="product-stock">● В наличии (142 шт.)</div>
+        <div class="product-stock">● В наличии на складе в СПб (142 шт.)</div>
         <a href="#" class="product-title">Прибор приемно-контрольный охранно-пожарный (ППКОП) 8 шлейфов</a>
         <div class="product-prices">
           <div class="price-main">4 850 ₽</div>
-          <div class="price-vat">Оптовая: по запросу в счете</div>
+          <div class="price-vat">Оптовая цена: по запросу в счете</div>
         </div>
         <div class="product-actions">
           <button class="btn-buy">В корзину</button>
@@ -462,14 +488,13 @@
         </div>
       </div>
 
-      <!-- Карточка 2 -->
       <div class="product-card">
         <div class="product-sku">Артикул: ИНК-02319</div>
-        <div class="product-stock">● В наличии (85 шт.)</div>
+        <div class="product-stock">● В наличии на складе в СПб (85 шт.)</div>
         <a href="#" class="product-title">Резервированный источник питания РИП-12 RS (12В, 3А, под АКБ 7Ач)</a>
         <div class="product-prices">
           <div class="price-main">3 420 ₽</div>
-          <div class="price-vat">Оптовая: по запросу в счете</div>
+          <div class="price-vat">Оптовая цена: по запросу в счете</div>
         </div>
         <div class="product-actions">
           <button class="btn-buy">В корзину</button>
@@ -477,10 +502,9 @@
         </div>
       </div>
 
-      <!-- Карточка 3 -->
       <div class="product-card">
         <div class="product-sku">Артикул: ИНК-08910</div>
-        <div class="product-stock">● В наличии (2 400 м)</div>
+        <div class="product-stock">● В наличии на складе в СПб (2 400 м)</div>
         <a href="#" class="product-title">Кабель огнестойкий КПСЭнг(А)-FRLS 1х2х0.75 мм² (бухта 200м)</a>
         <div class="product-prices">
           <div class="price-main">48.50 ₽ / м</div>
@@ -492,7 +516,6 @@
         </div>
       </div>
 
-      <!-- Карточка 4 -->
       <div class="product-card">
         <div class="product-sku">Артикул: ИНК-ГО-001</div>
         <div class="product-stock">● Под заказ (3-5 дней)</div>
@@ -509,13 +532,13 @@
     </div>
   </main>
 
-  <!-- Подвал дистрибьютора -->
+  <!-- Подвал компании -->
   <footer>
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
           <h4 style="color:#fff;">INTEKTRA</h4>
-          <p>Комплексный поставщик оборудования систем безопасности, связи, автоматизации и средств гражданской обороны.</p>
+          <p>Комплексный поставщик оборудования систем безопасности, связи, слаботочных систем и средств гражданской обороны.</p>
           <p style="margin-top: 10px;">Работаем с юридическими лицами по безналичному расчету с НДС.</p>
         </div>
         <div class="footer-col">
@@ -538,9 +561,9 @@
         </div>
         <div class="footer-col">
           <h4>Отдел продаж</h4>
-          <p style="color:#fff; font-weight:600; font-size:16px;">+7 (800) 000-00-00</p>
-          <p>zakaz@intektra.ru</p>
-          <p style="margin-top: 10px;">Отгрузка со склада в Санкт-Петербурге и доставка ТК по РФ.</p>
+          <p><a href="tel:+79117655484" style="color:#fff; font-weight:700; font-size:16px;">8 (911) 765-54-84</a></p>
+          <p><a href="mailto:goncharov@intektra.ru" style="color:#fff;">goncharov@intektra.ru</a></p>
+          <p style="margin-top: 10px;">Склад и офис: г. Санкт-Петербург.<br>Пн-Пт: 9:00 - 18:00.<br>Отгрузка ТК по всей России.</p>
         </div>
       </div>
       <div class="copyright">
@@ -551,7 +574,7 @@
 
   <script>
     function toggleCatalog() {
-      alert("Открытие многоуровневого мега-меню каталога Intektra (ОПС, СКУД, Видеонаблюдение, ГО/ЧС)");
+      alert("Каталог Intektra открыт");
     }
   </script>
 </body>
