@@ -11,7 +11,7 @@
     :root {
       --bg: #0b0f14;
       --bg-card: rgba(18, 24, 33, 0.75);
-      --bg-card-hover: rgba(26, 35, 48, 0.85);
+      --bg-card-hover: rgba(26, 35, 48, 0.9);
       --border: rgba(255, 255, 255, 0.08);
       --border-accent: rgba(230, 57, 70, 0.35);
       --text-main: #f1f5f9;
@@ -74,9 +74,20 @@
       border-radius: 50%;
       box-shadow: 0 0 10px var(--green-stock);
     }
+    .top-nav {
+      display: flex;
+      gap: 16px;
+    }
+    .top-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .top-nav a:hover { color: #fff; }
     .top-contacts {
       display: flex;
-      gap: 20px;
+      gap: 18px;
     }
     .top-contacts a {
       color: var(--text-main);
@@ -92,13 +103,13 @@
       top: 0;
       z-index: 1000;
       backdrop-filter: blur(20px);
-      background: rgba(11, 15, 20, 0.85);
+      background: rgba(11, 15, 20, 0.95);
       border-bottom: 1px solid var(--border);
       padding: 14px 0;
     }
     .header-inner {
       display: grid;
-      grid-template-columns: 200px 140px 1fr auto;
+      grid-template-columns: 210px 140px 1fr auto;
       gap: 20px;
       align-items: center;
     }
@@ -207,6 +218,58 @@
       border-radius: 12px;
     }
 
+    /* Выпадающее мега-меню под шапкой */
+    .mega-catalog-menu {
+      display: none;
+      position: fixed;
+      top: 72px;
+      left: 0;
+      width: 100%;
+      background: #0f141c;
+      border-bottom: 2px solid var(--red-accent);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.85);
+      z-index: 1500;
+      padding: 36px 0;
+      animation: menuSlideDown 0.2s ease-out forwards;
+    }
+    .mega-catalog-menu.active { display: block; }
+    
+    @keyframes menuSlideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .mega-catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+    .mega-group h4 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--cyan-accent);
+      margin-bottom: 14px;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mega-group ul { list-style: none; }
+    .mega-group li { margin-bottom: 10px; }
+    .mega-group a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-block;
+      transition: all 0.2s;
+    }
+    .mega-group a:hover {
+      color: #fff;
+      transform: translateX(5px);
+    }
+
     /* Hero-секция */
     .hero {
       padding: 60px 0 40px;
@@ -275,7 +338,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* Блок спецификации */
+    /* Блок расчета спецификации */
     .spec-card {
       background: var(--bg-card);
       border: 1px solid var(--border-accent);
@@ -489,13 +552,13 @@
       background: #c1121f;
     }
 
-    /* Модальные окна и боковая шторка корзины */
+    /* Модальные окна и шторки */
     .drawer-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(8px);
-      z-index: 2000;
+      z-index: 1400;
       display: none;
     }
     .drawer {
@@ -555,6 +618,33 @@
       font-size: 16px;
     }
 
+    /* Инфо-модалка */
+    .info-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #121821;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      width: 90%;
+      max-width: 540px;
+      z-index: 2100;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+    }
+    .info-modal.active { display: block; }
+    .info-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .info-modal-header h3 { font-size: 20px; color: #fff; }
+
     /* Подвал */
     footer {
       border-top: 1px solid var(--border);
@@ -581,6 +671,7 @@
       color: var(--text-muted);
       text-decoration: none;
       font-size: 14px;
+      cursor: pointer;
       transition: color 0.2s;
     }
     .footer-col a:hover { color: #fff; }
@@ -590,17 +681,28 @@
       .search-wrapper, .btn-catalog { display: none; }
       .hero-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
+      .mega-catalog-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Верхняя полоса -->
+  <!-- Затемнение для каталога, корзины и окон -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeAllDrawers()"></div>
+
+  <!-- Верхняя сервисная полоса -->
   <div class="top-bar">
     <div class="container top-bar-inner">
       <div class="status-badge">
         <span class="status-dot"></span>
         <span>СПБ ЛОГИСТИЧЕСКИЙ ХАБ: ОТГРУЗКА 24/7</span>
+      </div>
+      <div class="top-nav">
+        <a onclick="showInfo('about')">О компании</a>
+        <a onclick="showInfo('delivery')">Доставка и оплата</a>
+        <a onclick="showInfo('designers')">Проектировщикам</a>
+        <a onclick="showInfo('certs')">Сертификаты</a>
+        <a onclick="showInfo('contacts')">Контакты</a>
       </div>
       <div class="top-contacts">
         <span>Санкт-Петербург</span>
@@ -611,14 +713,15 @@
   </div>
 
   <!-- Шапка -->
-  <header>
+  <header id="mainHeader">
     <div class="container header-inner">
       <a href="/" class="logo">
         INTEK<span>TRA</span>
         <span class="logo-badge">ENGINEERING</span>
       </a>
 
-      <button class="btn-catalog" onclick="filterCategory('all')">
+      <!-- Кнопка каталога -->
+      <button class="btn-catalog" id="megaCatalogBtn" onclick="toggleMegaCatalog()">
         <span>☰</span> Каталог
       </button>
 
@@ -635,6 +738,44 @@
       </div>
     </div>
   </header>
+
+  <!-- Выпадающее интерактивное Мега-меню (вынесено отдельно с независимым z-index) -->
+  <div class="mega-catalog-menu" id="megaCatalogMenu">
+    <div class="container mega-catalog-grid">
+      <div class="mega-group">
+        <h4>ОПС и СОУЭ</h4>
+        <ul>
+          <li><a onclick="filterByKeyword('ППКОП')">Приборы приемно-контрольные (ППКОП)</a></li>
+          <li><a onclick="filterByKeyword('извещатель')">Извещатели пламени и дымовые</a></li>
+          <li><a onclick="filterByKeyword('оповещатель')">Табло «Выход» и речевое СОУЭ</a></li>
+        </ul>
+      </div>
+      <div class="mega-group">
+        <h4>Электропитание</h4>
+        <ul>
+          <li><a onclick="filterByKeyword('РИП')">Резервированные источники (РИП 12/24В)</a></li>
+          <li><a onclick="filterByKeyword('АКБ')">Аккумуляторные батареи AGM 7-17 Ач</a></li>
+          <li><a onclick="filterByKeyword('УЗИП')">Устройства грозозащиты (УЗИП)</a></li>
+        </ul>
+      </div>
+      <div class="mega-group">
+        <h4>Кабель и монтаж</h4>
+        <ul>
+          <li><a onclick="filterByKeyword('КПСЭнг')">Огнестойкие кабели КПСЭнг(А)-FRLS</a></li>
+          <li><a onclick="filterByKeyword('витая пара')">Витая пара UTP/FTP для ЛВС</a></li>
+          <li><a onclick="filterByKeyword('клипса')">Огнестойкий крепеж и гофра</a></li>
+        </ul>
+      </div>
+      <div class="mega-group">
+        <h4>Оборудование ГО и ЧС</h4>
+        <ul>
+          <li><a onclick="filterByKeyword('А-ТТ')">Тележки транспортные А-ТТ-01</a></li>
+          <li><a onclick="filterByKeyword('сирена')">Сирены оповещения С-40 / С-28</a></li>
+          <li><a onclick="filterByKeyword('фильтр')">Фильтровентиляция убежищ</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   <!-- Hero секция -->
   <main class="container">
@@ -661,7 +802,7 @@
           </div>
         </div>
 
-        <div class="spec-card">
+        <div class="spec-card" id="specBlock">
           <h3>Быстрый расчет сметы</h3>
           <p>Прикрепите ведомость проекта или файл спецификации (Excel / PDF) для оптового расчета со скидкой до 22%.</p>
           <form onsubmit="handleSpecUpload(event)">
@@ -693,7 +834,7 @@
     </div>
 
     <!-- Каталог товаров -->
-    <div class="section-header">
+    <div class="section-header" id="catalogSection">
       <h2>Складская матрица оборудования</h2>
       <span style="font-size: 13px; color: var(--text-muted);">Прямые контракты заводов-изготовителей</span>
     </div>
@@ -711,7 +852,7 @@
           <div class="price-sub">Цена с НДС 20% за шт.</div>
           <div class="card-actions">
             <button class="btn-card btn-add" onclick="addToCart('ППКОП 8 шлейфов', 4850, 'ИНК-01482')">В смету</button>
-            <button class="btn-card btn-buy-one" onclick="quickBuy('ППКОП 8 шлейфов', 'ИНК-01482')">В 1 клик</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('ППКОП 8 шлейфов', 'ИНК-01482')">В 1 клик</button>
           </div>
         </div>
       </div>
@@ -728,7 +869,7 @@
           <div class="price-sub">Цена с НДС 20% за шт.</div>
           <div class="card-actions">
             <button class="btn-card btn-add" onclick="addToCart('РИП-12 RS (12В, 3А)', 3420, 'ИНК-02319')">В смету</button>
-            <button class="btn-card btn-buy-one" onclick="quickBuy('РИП-12 RS', 'ИНК-02319')">В 1 клик</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('РИП-12 RS (12В, 3А)', 'ИНК-02319')">В 1 клик</button>
           </div>
         </div>
       </div>
@@ -745,7 +886,7 @@
           <div class="price-sub">Цена с НДС 20% за метр</div>
           <div class="card-actions">
             <button class="btn-card btn-add" onclick="addToCart('Кабель КПСЭнг(А)-FRLS (1м)', 48.5, 'ИНК-08910')">В смету</button>
-            <button class="btn-card btn-buy-one" onclick="quickBuy('Кабель КПСЭнг(А)-FRLS', 'ИНК-08910')">В 1 клик</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Кабель КПСЭнг(А)-FRLS', 'ИНК-08910')">В 1 клик</button>
           </div>
         </div>
       </div>
@@ -762,7 +903,7 @@
           <div class="price-sub">Серия ЗС ГО / спецтехника</div>
           <div class="card-actions">
             <button class="btn-card btn-add" onclick="addToCart('Тележка специальная А-ТТ-01', 18900, 'ИНК-ГО-001')">В смету</button>
-            <button class="btn-card btn-buy-one" onclick="quickBuy('Тележка А-ТТ-01', 'ИНК-ГО-001')">В 1 клик</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Тележка специальная А-ТТ-01', 'ИНК-ГО-001')">В 1 клик</button>
           </div>
         </div>
       </div>
@@ -770,7 +911,6 @@
   </main>
 
   <!-- Боковая шторка Сметы / Корзины -->
-  <div class="drawer-overlay" id="drawerOverlay" onclick="toggleCart(false)"></div>
   <div class="drawer" id="cartDrawer">
     <div class="drawer-header">
       <h3>Спецификация заказа</h3>
@@ -786,6 +926,38 @@
       </div>
       <button class="btn-submit" onclick="checkoutCart()">Сформировать счет на оплату</button>
     </div>
+  </div>
+
+  <!-- Модальное окно быстрого заказа (В 1 клик) -->
+  <div class="info-modal" id="quickOrderModal">
+    <div class="info-modal-header">
+      <h3 id="orderModalTitle">Быстрый заказ</h3>
+      <button onclick="closeModal('quickOrderModal')" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <form onsubmit="handleQuickOrderSubmit(event)">
+      <div class="form-group">
+        <label>Выбранная позиция:</label>
+        <div id="quickOrderProductLabel" style="color:var(--cyan-accent);font-weight:700;font-size:13px;margin-bottom:8px;">—</div>
+      </div>
+      <div class="form-group">
+        <label>Компания или ИНН (для счета с НДС):</label>
+        <input type="text" id="orderModalCompany" class="form-ctrl" placeholder="ООО 'Инженер-Сервис' или ИНН" required>
+      </div>
+      <div class="form-group">
+        <label>Телефон для связи:</label>
+        <input type="tel" id="orderModalPhone" class="form-ctrl" placeholder="+7 (911) 000-00-00" required>
+      </div>
+      <button type="submit" class="btn-submit" style="margin-top:10px;">Запросить счет</button>
+    </form>
+  </div>
+
+  <!-- Информационное модальное окно для всех служебных ссылок -->
+  <div class="info-modal" id="infoModal">
+    <div class="info-modal-header">
+      <h3 id="infoModalTitle">Информация</h3>
+      <button onclick="closeModal('infoModal')" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div id="infoModalContent" style="color:var(--text-muted);font-size:14px;line-height:1.6;"></div>
   </div>
 
   <!-- Подвал -->
@@ -810,9 +982,9 @@
         <div class="footer-col">
           <h5>Клиентам</h5>
           <ul>
-            <li><a href="mailto:logist@tradeatm.ru">Запрос прайс-листа</a></li>
-            <li><a href="mailto:logist@tradeatm.ru">Договор поставки</a></li>
-            <li><a href="mailto:logist@tradeatm.ru">Реквизиты компании</a></li>
+            <li><a onclick="showInfo('requisites')">Реквизиты компании</a></li>
+            <li><a onclick="showInfo('contract')">Договор поставки</a></li>
+            <li><a onclick="showInfo('price')">Запрос полного прайс-листа</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -832,11 +1004,46 @@
 
   <script>
     let cart = [];
+    let currentOrderProduct = '';
+    let currentOrderSku = '';
+
+    // Мега-меню каталога
+    function toggleMegaCatalog() {
+      const menu = document.getElementById('megaCatalogMenu');
+      const btn = document.getElementById('megaCatalogBtn');
+      const overlay = document.getElementById('drawerOverlay');
+      const header = document.getElementById('mainHeader');
+
+      const isActive = menu.classList.contains('active');
+      if (isActive) {
+        closeMegaCatalog();
+      } else {
+        // Подстраиваем точную высоту шапки
+        menu.style.top = header.offsetHeight + 'px';
+        menu.classList.add('active');
+        btn.innerHTML = '<span>✕</span> Закрыть';
+        overlay.style.display = 'block';
+      }
+    }
+
+    function closeMegaCatalog() {
+      const menu = document.getElementById('megaCatalogMenu');
+      const btn = document.getElementById('megaCatalogBtn');
+      const overlay = document.getElementById('drawerOverlay');
+      menu.classList.remove('active');
+      btn.innerHTML = '<span>☰</span> Каталог';
+      if (!document.getElementById('cartDrawer').classList.contains('open') && 
+          !document.getElementById('quickOrderModal').classList.contains('active') && 
+          !document.getElementById('infoModal').classList.contains('active')) {
+        overlay.style.display = 'none';
+      }
+    }
 
     // Корзина
     function toggleCart(open) {
       const drawer = document.getElementById('cartDrawer');
       const overlay = document.getElementById('drawerOverlay');
+      closeMegaCatalog();
       if (open) {
         drawer.classList.add('open');
         overlay.style.display = 'block';
@@ -913,15 +1120,86 @@
       window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
     }
 
-    function quickBuy(title, sku) {
-      const company = prompt('Введите название компании или ИНН для выставления счета:');
-      if (!company) return;
-      const phone = prompt('Контактный телефон:');
-      if (!phone) return;
+    // Модальное окно заказа в 1 клик
+    function openOrderModal(title, sku) {
+      currentOrderProduct = title;
+      currentOrderSku = sku;
+      document.getElementById('quickOrderProductLabel').innerText = `${title} (${sku})`;
+      document.getElementById('quickOrderModal').classList.add('active');
+      document.getElementById('drawerOverlay').style.display = 'block';
+    }
 
-      const subject = encodeURIComponent(`Быстрый заказ: ${title} (${sku})`);
-      const body = encodeURIComponent(`Товар: ${title}\nАртикул: ${sku}\nОрганизация: ${company}\nТелефон: ${phone}`);
+    function handleQuickOrderSubmit(e) {
+      e.preventDefault();
+      const comp = document.getElementById('orderModalCompany').value;
+      const phone = document.getElementById('orderModalPhone').value;
+      
+      const subject = encodeURIComponent(`Быстрый заказ: ${currentOrderProduct} (${currentOrderSku})`);
+      const body = encodeURIComponent(`Товар: ${currentOrderProduct}\nАртикул: ${currentOrderSku}\nОрганизация: ${comp}\nТелефон: ${phone}`);
       window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
+      
+      closeModal('quickOrderModal');
+    }
+
+    // Модальные окна с информацией
+    function showInfo(type) {
+      const modal = document.getElementById('infoModal');
+      const title = document.getElementById('infoModalTitle');
+      const content = document.getElementById('infoModalContent');
+
+      const data = {
+        about: {
+          t: 'О компании INTEKTRA',
+          c: '<p><strong>INTEKTRA</strong> — инженерный дистрибьютор систем безопасности, слаботочных инженерных сетей, автоматического пожаротушения и оборудования для защитных сооружений ГО и ЧС.</p><p style="margin-top:10px;">Прямые контракты с производителями, логистический хаб в Санкт-Петербурге и отгрузки по безналичному расчету с НДС 20% по всей РФ.</p>'
+        },
+        delivery: {
+          t: 'Доставка и оплата',
+          c: '<p><strong>Оплата:</strong> безналичный расчет для юрлиц (УПД с НДС 20%).</p><p style="margin-top:10px;"><strong>Доставка:</strong> самовывоз со склада в Санкт-Петербурге, адресная доставка по городу и Ленобласти или отправка ведущими транспортными компаниями (Деловые Линии, ПЭК, СДЭК) по всей России.</p>'
+        },
+        designers: {
+          t: 'Проектировщикам и интеграторам',
+          c: '<p>Предоставляем технические паспорта, BIM-семейства оборудования, схемы подключений в DWG и помогаем с пересогласованием проектных спецификаций.</p>'
+        },
+        certs: {
+          t: 'Сертификаты соответствия',
+          c: '<p>Вся поставляемая номенклатура сертифицирована по ТР ТС и ГОСТ Р. Заверенные копии сертификатов и паспорта изделий передаются с каждой отгрузкой.</p>'
+        },
+        contacts: {
+          t: 'Контакты отдела снабжения',
+          c: '<p><strong>Склад и офис:</strong> г. Санкт-Петербург</p><p style="margin-top:8px;"><strong>Телефон отдела продаж:</strong> 8 (911) 765-54-84</p><p style="margin-top:8px;"><strong>Email для заявок и смет:</strong> logist@tradeatm.ru</p><p style="margin-top:8px;">График работы: Пн-Пт с 9:00 до 18:00 (отгрузка по согласованию 24/7).</p>'
+        },
+        requisites: {
+          t: 'Реквизиты компании',
+          c: '<p>Для выставления счета отправьте реквизиты вашей организации на почту <a href="mailto:logist@tradeatm.ru" style="color:var(--cyan-accent)">logist@tradeatm.ru</a> или оформите заявку в корзине сайта.</p>'
+        },
+        contract: {
+          t: 'Типовой договор поставки',
+          c: '<p>Работаем по типовому договору оптовой поставки оборудования с гарантией заводов до 36 месяцев или по форме договора покупателя.</p>'
+        },
+        price: {
+          t: 'Полный прайс-лист',
+          c: '<p>Каталог включает более 15 000 артикулов. Отправьте спецификацию на <a href="mailto:logist@tradeatm.ru" style="color:var(--cyan-accent)">logist@tradeatm.ru</a> для расчета объектной скидки.</p>'
+        }
+      };
+
+      if (data[type]) {
+        title.innerText = data[type].t;
+        content.innerHTML = data[type].c;
+        modal.classList.add('active');
+        document.getElementById('drawerOverlay').style.display = 'block';
+      }
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+      document.getElementById('drawerOverlay').style.display = 'none';
+    }
+
+    function closeAllDrawers() {
+      toggleCart(false);
+      closeModal('quickOrderModal');
+      closeModal('infoModal');
+      closeMegaCatalog();
     }
 
     // Живой поиск
@@ -942,8 +1220,17 @@
       handleSearch('');
     }
 
+    function filterByKeyword(keyword) {
+      closeMegaCatalog();
+      const input = document.getElementById('searchInput');
+      input.value = keyword;
+      handleSearch(keyword);
+      document.getElementById('catalogSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
     // Фильтрация по категориям
     function filterCategory(cat, btn) {
+      closeMegaCatalog();
       if (btn) {
         document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
         btn.classList.add('active');
@@ -955,6 +1242,7 @@
           card.style.display = 'none';
         }
       });
+      document.getElementById('catalogSection').scrollIntoView({ behavior: 'smooth' });
     }
 
     // Загрузка спецификации
@@ -971,10 +1259,15 @@
       const file = document.getElementById('fileInput').files[0];
       const fileName = file ? file.name : 'Не прикреплен';
 
-      const subject = encodeURIComponent(`Спецификация от ${comp}`);
+      const subject = encodeURIComponent(`Спецификация на расчет от ${comp}`);
       const body = encodeURIComponent(`Компания: ${comp}\nТелефон: ${phone}\nФайл: ${fileName}\n\n(Пожалуйста, прикрепите файл спецификации к письму)`);
       window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
     }
+
+    // Закрытие по клавише Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAllDrawers();
+    });
   </script>
 </body>
 </html>
