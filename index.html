@@ -21,7 +21,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; color: var(--text); background-color: #fff; line-height: 1.5; }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background-color: #fff; line-height: 1.5; position: relative; }
 
     /* Верхняя сервисная полоса */
     .top-bar {
@@ -58,6 +58,9 @@
       padding: 16px 0;
       border-bottom: 1px solid var(--border);
       background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
     .header-grid {
       display: grid;
@@ -147,7 +150,121 @@
     }
     .action-btn span { font-weight: 600; font-size: 13px; }
 
-    /* Навигация */
+    /* МЕГА-МЕНЮ КАТАЛОГА (ТИП ТИНКО) */
+    .catalog-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 900;
+    }
+    .catalog-overlay.active { display: block; }
+
+    .mega-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.18);
+      border-top: 1px solid var(--border);
+      border-bottom: 2px solid var(--primary);
+      z-index: 1001;
+    }
+    .mega-menu.active { display: block; }
+
+    .mega-menu-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      min-height: 440px;
+    }
+    .mega-nav-left {
+      background: #fbfcfd;
+      border-right: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    .mega-nav-item {
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .mega-nav-item:hover, .mega-nav-item.selected {
+      background: #fff;
+      color: var(--primary);
+      border-left-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .mega-nav-item span { font-size: 12px; color: var(--text-muted); }
+
+    .mega-nav-content {
+      padding: 24px 32px;
+      background: #fff;
+    }
+    .mega-tab-panel {
+      display: none;
+    }
+    .mega-tab-panel.active {
+      display: block;
+      animation: fadeIn 0.15s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .panel-header {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+    }
+    .panel-header a { font-size: 13px; color: var(--primary); text-decoration: none; }
+
+    .subcat-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .subcat-group h5 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--dark-light);
+      margin-bottom: 10px;
+    }
+    .subcat-group ul {
+      list-style: none;
+    }
+    .subcat-group li {
+      margin-bottom: 7px;
+    }
+    .subcat-group a {
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .subcat-group a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    /* Навигация под шапкой */
     .nav-bar {
       border-bottom: 1px solid var(--border);
       background: #fafbfc;
@@ -320,7 +437,7 @@
       cursor: pointer;
     }
 
-    /* Подвал */
+    /* Подвал компании */
     footer {
       background: var(--dark);
       color: #a0aec0;
@@ -343,12 +460,17 @@
 
     @media (max-width: 900px) {
       .header-grid { grid-template-columns: 1fr; gap: 12px; }
+      .mega-menu-grid { grid-template-columns: 1fr; }
+      .subcat-columns { grid-template-columns: 1fr; }
       .hero-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Затемнение при открытом каталоге -->
+  <div class="catalog-overlay" id="catalogOverlay" onclick="closeCatalog()"></div>
 
   <!-- Сервисная строка -->
   <div class="top-bar">
@@ -364,7 +486,7 @@
         <span>Санкт-Петербург</span>
         <span>Пн-Пт: 9:00 - 18:00</span>
         <a href="tel:+79117655484">8 (911) 765-54-84</a>
-        <a href="mailto:goncharov@intektra.ru">info@intektra.ru</a>
+        <a href="mailto:goncharov@intektra.ru">goncharov@intektra.ru</a>
       </div>
     </div>
   </div>
@@ -377,7 +499,7 @@
         <div class="brand-tagline">Инженерные системы и безопасность</div>
       </div>
 
-      <button class="catalog-btn" onclick="toggleCatalog()">
+      <button class="catalog-btn" id="catalogToggleBtn" onclick="toggleCatalog()">
         ☰ Каталог
       </button>
 
@@ -397,24 +519,264 @@
         </a>
       </div>
     </div>
+
+    <!-- МЕГА-МЕНЮ КАТАЛОГА -->
+    <div class="mega-menu" id="megaMenu">
+      <div class="container">
+        <div class="mega-menu-grid">
+          <!-- Левая колонка категорий -->
+          <div class="mega-nav-left">
+            <div class="mega-nav-item selected" onmouseenter="showTab('tab-ops')">
+              ОПС и СОУЭ <span>→</span>
+            </div>
+            <div class="mega-nav-item" onmouseenter="showTab('tab-cctv')">
+              Видеонаблюдение (CCTV) <span>→</span>
+            </div>
+            <div class="mega-nav-item" onmouseenter="showTab('tab-skud')">
+              СКУД и автоматика <span>→</span>
+            </div>
+            <div class="mega-nav-item" onmouseenter="showTab('tab-go')">
+              Оборудование ГО и ЧС <span>→</span>
+            </div>
+            <div class="mega-nav-item" onmouseenter="showTab('tab-cable')">
+              Кабельная продукция <span>→</span>
+            </div>
+            <div class="mega-nav-item" onmouseenter="showTab('tab-power')">
+              Источники питания и АКБ <span>→</span>
+            </div>
+          </div>
+
+          <!-- Правая колонка с подразделами -->
+          <div class="mega-nav-content">
+            <!-- Вкладка 1: ОПС -->
+            <div class="mega-tab-panel active" id="tab-ops">
+              <div class="panel-header">
+                <span>Охранно-пожарная сигнализация и оповещение</span>
+                <a href="#">Все подразделы ОПС →</a>
+              </div>
+              <div class="subcat-columns">
+                <div class="subcat-group">
+                  <h5>Приборы и панели</h5>
+                  <ul>
+                    <li><a href="#">Приборы приемно-контрольные (ППКОП)</a></li>
+                    <li><a href="#">Адресные радиоканальные системы</a></li>
+                    <li><a href="#">Пульты управления и клавиатуры</a></li>
+                    <li><a href="#">Блоки расширения шлейфов</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Извещатели</h5>
+                  <ul>
+                    <li><a href="#">Дымовые оптико-электронные (ИП 212)</a></li>
+                    <li><a href="#">Тепловые и линейные извещатели</a></li>
+                    <li><a href="#">Извещатели пламени</a></li>
+                    <li><a href="#">Ручные пожарные извещатели (ИПР)</a></li>
+                    <li><a href="#">Охранные объемные и магнитоконтактные</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Оповещение СОУЭ</h5>
+                  <ul>
+                    <li><a href="#">Световые табло («Выход», стрелки)</a></li>
+                    <li><a href="#">Звуковые и речевые оповещатели</a></li>
+                    <li><a href="#">Трансляционные усилители</a></li>
+                    <li><a href="#">Громкоговорители настенные и потолочные</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Вкладка 2: Видеонаблюдение -->
+            <div class="mega-tab-panel" id="tab-cctv">
+              <div class="panel-header">
+                <span>Системы охранного видеонаблюдения</span>
+                <a href="#">Все камеры и видеорегистраторы →</a>
+              </div>
+              <div class="subcat-columns">
+                <div class="subcat-group">
+                  <h5>IP-видеонаблюдение</h5>
+                  <ul>
+                    <li><a href="#">Купольные IP-камеры</a></li>
+                    <li><a href="#">Цилиндрические уличные камеры</a></li>
+                    <li><a href="#">Поворотные скоростные PTZ</a></li>
+                    <li><a href="#">Тепловизионные комплексы</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Регистрация и архив</h5>
+                  <ul>
+                    <li><a href="#">Сетевые NVR видеорегистраторы</a></li>
+                    <li><a href="#">Гибридные XVR видеорегистраторы</a></li>
+                    <li><a href="#">Жесткие диски для видеонаблюдения</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Сетевое оборудование</h5>
+                  <ul>
+                    <li><a href="#">PoE-коммутаторы неуправляемые</a></li>
+                    <li><a href="#">Управляемые L2/L3 коммутаторы</a></li>
+                    <li><a href="#">SFP-модули и оптические патч-корды</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Вкладка 3: СКУД -->
+            <div class="mega-tab-panel" id="tab-skud">
+              <div class="panel-header">
+                <span>Контроль и управление доступом</span>
+                <a href="#">Все товары СКУД →</a>
+              </div>
+              <div class="subcat-columns">
+                <div class="subcat-group">
+                  <h5>Исполнительные устройства</h5>
+                  <ul>
+                    <li><a href="#">Турникеты-триподы и распашные калитки</a></li>
+                    <li><a href="#">Электромагнитные замки</a></li>
+                    <li><a href="#">Электромеханические защелки</a></li>
+                    <li><a href="#">Дверные доводчики усиленные</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Идентификация</h5>
+                  <ul>
+                    <li><a href="#">Считыватели Mifare / EM-Marin</a></li>
+                    <li><a href="#">Терминалы распознавания лиц</a></li>
+                    <li><a href="#">Бесконтактные карты и радиобрелоки</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Контроллеры и ПО</h5>
+                  <ul>
+                    <li><a href="#">Сетевые контроллеры доступа</a></li>
+                    <li><a href="#">Автономные контроллеры</a></li>
+                    <li><a href="#">Программное обеспечение учета времени</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Вкладка 4: ГО и ЧС -->
+            <div class="mega-tab-panel" id="tab-go">
+              <div class="panel-header">
+                <span>Оборудование гражданской обороны и ЧС</span>
+                <a href="#">Оборудование защитных сооружений →</a>
+              </div>
+              <div class="subcat-columns">
+                <div class="subcat-group">
+                  <h5>Транспортное и складское оборудование</h5>
+                  <ul>
+                    <li><a href="#">Тележки транспортные специальные А-ТТ-01</a></li>
+                    <li><a href="#">Тележки грузовые для защитных сооружений</a></li>
+                    <li><a href="#">Настилы и стеллажные системы хранения</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Оповещение ЧС</h5>
+                  <ul>
+                    <li><a href="#">Электросирены оповещения С-40, С-28</a></li>
+                    <li><a href="#">Блоки запуска сирен и радиотрансляции</a></li>
+                    <li><a href="#">Громкоговорящие рупорные системы</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Комплектация убежищ</h5>
+                  <ul>
+                    <li><a href="#">Фильтровентиляционное оборудование</a></li>
+                    <li><a href="#">Герметические двери и люки</a></li>
+                    <li><a href="#">Средства индивидуальной защиты (СИЗ)</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Вкладка 5: Кабель -->
+            <div class="mega-tab-panel" id="tab-cable">
+              <div class="panel-header">
+                <span>Кабельная продукция и монтаж</span>
+                <a href="#">Кабельный каталог →</a>
+              </div>
+              <div class="subcat-columns">
+                <div class="subcat-group">
+                  <h5>Огнестойкий кабель ОПС</h5>
+                  <ul>
+                    <li><a href="#">КПСЭнг(А)-FRLS / КПСнг(А)-FRLS</a></li>
+                    <li><a href="#">КПСЭнг(А)-FRHF (безгалогенный)</a></li>
+                    <li><a href="#">Кабель с броней для наружной прокладки</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Связь и ЛВС</h5>
+                  <ul>
+                    <li><a href="#">Витая пара UTP Cat 5e / Cat 6 (для помещений)</a></li>
+                    <li><a href="#">Витая пара FTP уличная с тросом</a></li>
+                    <li><a href="#">Коаксиальный кабель комбинированный (КВК)</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Крепеж и лотки</h5>
+                  <ul>
+                    <li><a href="#">Кабель-каналы не поддерживающие горение</a></li>
+                    <li><a href="#">Гофротруба ПВХ / ПНД с зондом</a></li>
+                    <li><a href="#">Огнестойкие крепежные металлические клипсы</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Вкладка 6: Питание -->
+            <div class="mega-tab-panel" id="tab-power">
+              <div class="panel-header">
+                <span>Источники бесперебойного питания и АКБ</span>
+                <a href="#">Каталог электропитания →</a>
+              </div>
+              <div class="subcat-columns">
+                <div class="subcat-group">
+                  <h5>Источники питания 12В / 24В</h5>
+                  <ul>
+                    <li><a href="#">РИП 12В (1.5А, 3А, 5А) под АКБ</a></li>
+                    <li><a href="#">РИП 24В для систем пожаротушения</a></li>
+                    <li><a href="#">Уличные термобоксы с подогревом</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Аккумуляторные батареи</h5>
+                  <ul>
+                    <li><a href="#">Свинцово-кислотные AGM 12В (1.2Ач, 7Ач, 12Ач)</a></li>
+                    <li><a href="#">Тяговые и гелевые АКБ повышенной емкости</a></li>
+                    <li><a href="#">Тестеры и балансиры емкости аккумуляторов</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Защита электросети</h5>
+                  <ul>
+                    <li><a href="#">УЗИП (устройства защиты от импульсных перенапряжений)</a></li>
+                    <li><a href="#">Сетевые фильтры и стабилизаторы 220В</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <!-- Горизонтальное меню -->
+  <!-- Горизонтальное меню быстрых ссылок -->
   <nav class="nav-bar">
     <div class="container">
       <ul class="nav-list">
-        <li><a href="#">Охранно-пожарная сигнализация</a></li>
-        <li><a href="#">Видеонаблюдение</a></li>
-        <li><a href="#">СКУД и автоматика</a></li>
-        <li><a href="#">Оборудование ГО и ЧС</a></li>
-        <li><a href="#">Кабель и монтаж</a></li>
-        <li><a href="#">Источники питания</a></li>
-        <li><a href="#">Бренды</a></li>
+        <li><a href="#" onclick="openCatalogTab('tab-ops'); return false;">Охранно-пожарная сигнализация</a></li>
+        <li><a href="#" onclick="openCatalogTab('tab-cctv'); return false;">Видеонаблюдение</a></li>
+        <li><a href="#" onclick="openCatalogTab('tab-skud'); return false;">СКУД и автоматика</a></li>
+        <li><a href="#" onclick="openCatalogTab('tab-go'); return false;">Оборудование ГО и ЧС</a></li>
+        <li><a href="#" onclick="openCatalogTab('tab-cable'); return false;">Кабель и монтаж</a></li>
+        <li><a href="#" onclick="openCatalogTab('tab-power'); return false;">Источники питания</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- Главный баннер и быстрая загрузка спецификации -->
+  <!-- Главный баннер и спецификация -->
   <main class="container">
     <section class="hero-section">
       <div class="hero-grid">
@@ -422,13 +784,13 @@
           <h1>Комплексные поставки систем безопасности и слаботочных сетей</h1>
           <p>Оптовые поставки сертифицированного оборудования для монтажных организаций, интеграторов и объектов гражданской обороны в Санкт-Петербурге и по всей России.</p>
           <div>
-            <a href="#" class="catalog-btn" style="display: inline-flex; width: auto;">Перейти в каталог продукции</a>
+            <button class="catalog-btn" onclick="toggleCatalog()" style="display: inline-flex; width: auto;">Перейти в каталог продукции</button>
           </div>
         </div>
         <div class="hero-b2b" id="spec-upload">
           <h3>Быстрый расчет проекта</h3>
           <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Загрузите вашу спецификацию в Excel или PDF для оптового расчета со скидкой.</p>
-          <input type="file" id="specFile" style="display:none">
+          <input type="file" id="specFile" style="display:none" onchange="alert('Файл спецификации выбран: ' + this.files[0].name + '. На шаге 3 мы подключим его отправку на почту!')">
           <button class="btn-b2b" onclick="document.getElementById('specFile').click()">Загрузить файл</button>
         </div>
       </div>
@@ -436,38 +798,38 @@
 
     <!-- Основные разделы -->
     <div class="section-title">
-      <h2>Каталог оборудования</h2>
-      <a href="#" style="font-size: 14px; color: var(--primary); text-decoration: none;">Все категории →</a>
+      <h2>Популярные направления каталога</h2>
+      <a href="javascript:void(0)" onclick="toggleCatalog()" style="font-size: 14px; color: var(--primary); text-decoration: none;">Открыть полный каталог →</a>
     </div>
 
     <div class="categories-grid">
-      <a href="#" class="category-card">
+      <a href="javascript:void(0)" onclick="openCatalogTab('tab-ops')" class="category-card">
         <strong>ОПС и СОУЭ</strong>
         <span>Извещатели, приборы, оповещатели</span>
       </a>
-      <a href="#" class="category-card">
+      <a href="javascript:void(0)" onclick="openCatalogTab('tab-cctv')" class="category-card">
         <strong>Видеонаблюдение</strong>
         <span>IP-камеры, NVR, коммутаторы PoE</span>
       </a>
-      <a href="#" class="category-card">
+      <a href="javascript:void(0)" onclick="openCatalogTab('tab-skud')" class="category-card">
         <strong>СКУД</strong>
         <span>Турникеты, контроллеры, считыватели</span>
       </a>
-      <a href="#" class="category-card">
+      <a href="javascript:void(0)" onclick="openCatalogTab('tab-go')" class="category-card">
         <strong>Оборудование ГО и ЧС</strong>
         <span>Средства защиты, сирены, тележки А-ТТ</span>
       </a>
-      <a href="#" class="category-card">
+      <a href="javascript:void(0)" onclick="openCatalogTab('tab-cable')" class="category-card">
         <strong>Кабельная продукция</strong>
         <span>КПСЭнг, витая пара UTP/FTP, силовой</span>
       </a>
-      <a href="#" class="category-card">
+      <a href="javascript:void(0)" onclick="openCatalogTab('tab-power')" class="category-card">
         <strong>Электропитание</strong>
         <span>РИП, ИБП 12В/24В/220В, аккумуляторы</span>
       </a>
     </div>
 
-    <!-- Популярные товары -->
+    <!-- Популярные товары складской программы -->
     <div class="section-title">
       <h2>Складская программа Intektra</h2>
       <span style="font-size: 13px; color: var(--text-muted);">Цены с НДС 20%</span>
@@ -544,16 +906,16 @@
         <div class="footer-col">
           <h4>Оборудование</h4>
           <ul>
-            <li><a href="#">ОПС и пожаротушение</a></li>
-            <li><a href="#">Видеонаблюдение</a></li>
-            <li><a href="#">Контроль доступа</a></li>
-            <li><a href="#">Оборудование ГО и ЧС</a></li>
+            <li><a href="#" onclick="openCatalogTab('tab-ops'); return false;">ОПС и пожаротушение</a></li>
+            <li><a href="#" onclick="openCatalogTab('tab-cctv'); return false;">Видеонаблюдение</a></li>
+            <li><a href="#" onclick="openCatalogTab('tab-skud'); return false;">Контроль доступа</a></li>
+            <li><a href="#" onclick="openCatalogTab('tab-go'); return false;">Оборудование ГО и ЧС</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Клиентам</h4>
           <ul>
-            <li><a href="#">Загрузка спецификаций</a></li>
+            <li><a href="#spec-upload">Загрузка спецификаций</a></li>
             <li><a href="#">Доставка по России</a></li>
             <li><a href="#">Гарантия и возврат</a></li>
             <li><a href="#">Реквизиты компании</a></li>
@@ -573,9 +935,67 @@
   </footer>
 
   <script>
+    const megaMenu = document.getElementById('megaMenu');
+    const overlay = document.getElementById('catalogOverlay');
+    const catalogBtn = document.getElementById('catalogToggleBtn');
+
     function toggleCatalog() {
-      alert("Каталог Intektra открыт");
+      const isOpen = megaMenu.classList.contains('active');
+      if (isOpen) {
+        closeCatalog();
+      } else {
+        openCatalog();
+      }
     }
+
+    function openCatalog() {
+      megaMenu.classList.add('active');
+      overlay.classList.add('active');
+      catalogBtn.innerHTML = '✕ Закрыть';
+    }
+
+    function closeCatalog() {
+      megaMenu.classList.remove('active');
+      overlay.classList.remove('active');
+      catalogBtn.innerHTML = '☰ Каталог';
+    }
+
+    // Переключение вкладок при наведении мыши
+    function showTab(tabId) {
+      document.querySelectorAll('.mega-nav-item').forEach(item => item.classList.remove('selected'));
+      document.querySelectorAll('.mega-tab-panel').forEach(panel => panel.classList.remove('active'));
+
+      if (event && event.currentTarget) {
+        event.currentTarget.classList.add('selected');
+      }
+      const targetPanel = document.getElementById(tabId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+    }
+
+    // Открытие конкретной вкладки каталога по клику на карточки или ссылки
+    function openCatalogTab(tabId) {
+      openCatalog();
+      const tabTrigger = Array.from(document.querySelectorAll('.mega-nav-item')).find(item => 
+        item.getAttribute('onmouseenter') && item.getAttribute('onmouseenter').includes(tabId)
+      );
+      if (tabTrigger) {
+        document.querySelectorAll('.mega-nav-item').forEach(item => item.classList.remove('selected'));
+        tabTrigger.classList.add('selected');
+      }
+      document.querySelectorAll('.mega-tab-panel').forEach(panel => panel.classList.remove('active'));
+      const targetPanel = document.getElementById(tabId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Закрытие по клавише Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeCatalog();
+    });
   </script>
 </body>
 </html>
