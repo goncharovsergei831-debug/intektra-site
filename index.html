@@ -43,7 +43,7 @@
       padding: 0 24px;
     }
 
-    /* Верхняя сервисная строка */
+    /* Верхняя сервисная полоса */
     .top-bar {
       border-bottom: 1px solid var(--border);
       font-size: 13px;
@@ -218,7 +218,7 @@
       border-radius: 12px;
     }
 
-    /* Выпадающее мега-меню под шапкой */
+    /* Выпадающее мега-меню */
     .mega-catalog-menu {
       display: none;
       position: fixed;
@@ -739,7 +739,7 @@
     </div>
   </header>
 
-  <!-- Выпадающее интерактивное Мега-меню (вынесено отдельно с независимым z-index) -->
+  <!-- Выпадающее интерактивное Мега-меню -->
   <div class="mega-catalog-menu" id="megaCatalogMenu">
     <div class="container mega-catalog-grid">
       <div class="mega-group">
@@ -796,7 +796,7 @@
               <div class="stat-lbl">Складской хаб СПб</div>
             </div>
             <div>
-              <div class="stat-val">НДС 20%</div>
+              <div class="stat-val">НДС 22%</div>
               <div class="stat-lbl">Безналичный расчет</div>
             </div>
           </div>
@@ -849,7 +849,7 @@
         <div class="product-title">Прибор приемно-контрольный охранно-пожарный (ППКОП) 8 шлейфов</div>
         <div class="card-bottom">
           <div class="price-value">4 850 ₽</div>
-          <div class="price-sub">Цена с НДС 20% за шт.</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
           <div class="card-actions">
             <button class="btn-card btn-add" onclick="addToCart('ППКОП 8 шлейфов', 4850, 'ИНК-01482')">В смету</button>
             <button class="btn-card btn-buy-one" onclick="openOrderModal('ППКОП 8 шлейфов', 'ИНК-01482')">В 1 клик</button>
@@ -866,7 +866,7 @@
         <div class="product-title">Резервированный источник питания РИП-12 RS (12В, 3А, под АКБ 7Ач)</div>
         <div class="card-bottom">
           <div class="price-value">3 420 ₽</div>
-          <div class="price-sub">Цена с НДС 20% за шт.</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
           <div class="card-actions">
             <button class="btn-card btn-add" onclick="addToCart('РИП-12 RS (12В, 3А)', 3420, 'ИНК-02319')">В смету</button>
             <button class="btn-card btn-buy-one" onclick="openOrderModal('РИП-12 RS (12В, 3А)', 'ИНК-02319')">В 1 клик</button>
@@ -883,7 +883,7 @@
         <div class="product-title">Кабель огнестойкий КПСЭнг(А)-FRLS 1х2х0.75 мм² (бухта 200м)</div>
         <div class="card-bottom">
           <div class="price-value">48.50 ₽</div>
-          <div class="price-sub">Цена с НДС 20% за метр</div>
+          <div class="price-sub">Цена с НДС 22% за метр</div>
           <div class="card-actions">
             <button class="btn-card btn-add" onclick="addToCart('Кабель КПСЭнг(А)-FRLS (1м)', 48.5, 'ИНК-08910')">В смету</button>
             <button class="btn-card btn-buy-one" onclick="openOrderModal('Кабель КПСЭнг(А)-FRLS', 'ИНК-08910')">В 1 клик</button>
@@ -921,7 +921,7 @@
     </div>
     <div class="drawer-footer">
       <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
-        <span style="color:var(--text-muted);">Итого с НДС:</span>
+        <span style="color:var(--text-muted);">Итого с НДС 22%:</span>
         <span style="font-family:var(--font-mono);font-size:20px;font-weight:700;" id="cartTotalSum">0 ₽</span>
       </div>
       <button class="btn-submit" onclick="checkoutCart()">Сформировать счет на оплату</button>
@@ -940,7 +940,7 @@
         <div id="quickOrderProductLabel" style="color:var(--cyan-accent);font-weight:700;font-size:13px;margin-bottom:8px;">—</div>
       </div>
       <div class="form-group">
-        <label>Компания или ИНН (для счета с НДС):</label>
+        <label>Компания или ИНН (для счета с НДС 22%):</label>
         <input type="text" id="orderModalCompany" class="form-ctrl" placeholder="ООО 'Инженер-Сервис' или ИНН" required>
       </div>
       <div class="form-group">
@@ -967,7 +967,7 @@
         <div class="footer-col">
           <div class="logo" style="margin-bottom:14px;">INTEK<span>TRA</span></div>
           <p style="font-size:13px;color:var(--text-muted);max-width:300px;">
-            Федеральные поставки оборудования слаботочных сетей, комплексов безопасности и ГО. Работа по безналичному расчету с НДС 20%.
+            Федеральные поставки оборудования слаботочных сетей, комплексов безопасности и ГО. Работа по безналичному расчету с НДС 22%.
           </p>
         </div>
         <div class="footer-col">
@@ -1018,7 +1018,6 @@
       if (isActive) {
         closeMegaCatalog();
       } else {
-        // Подстраиваем точную высоту шапки
         menu.style.top = header.offsetHeight + 'px';
         menu.classList.add('active');
         btn.innerHTML = '<span>✕</span> Закрыть';
@@ -1116,7 +1115,7 @@
       const total = document.getElementById('cartTotalSum').innerText;
       
       const subject = encodeURIComponent('Заказ спецификации с сайта Intektra');
-      const body = encodeURIComponent(`Сформированная спецификация:\n\n${itemsList}\n\nИТОГО С НДС: ${total}\n\nРеквизиты нашей компании (ИНН, Название): `);
+      const body = encodeURIComponent(`Сформированная спецификация:\n\n${itemsList}\n\nИТОГО С НДС 22%: ${total}\n\nРеквизиты нашей компании (ИНН, Название): `);
       window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
     }
 
@@ -1150,35 +1149,35 @@
       const data = {
         about: {
           t: 'О компании INTEKTRA',
-          c: '<p><strong>INTEKTRA</strong> — инженерный дистрибьютор систем безопасности, слаботочных инженерных сетей, автоматического пожаротушения и оборудования для защитных сооружений ГО и ЧС.</p><p style="margin-top:10px;">Прямые контракты с производителями, логистический хаб в Санкт-Петербурге и отгрузки по безналичному расчету с НДС 20% по всей РФ.</p>'
+          c: '<p><strong>INTEKTRA</strong> — ведущий поставщик оборудования систем безопасности, слаботочных инженерных систем, оборудования пожаротушения и защитных сооружений ГО и ЧС.</p><p style="margin-top:10px;">Мы работаем напрямую с заводами-изготовителями и осуществляем комплексное снабжение объектов в Санкт-Петербурге и по всей территории России с НДС 22%.</p>'
         },
         delivery: {
           t: 'Доставка и оплата',
-          c: '<p><strong>Оплата:</strong> безналичный расчет для юрлиц (УПД с НДС 20%).</p><p style="margin-top:10px;"><strong>Доставка:</strong> самовывоз со склада в Санкт-Петербурге, адресная доставка по городу и Ленобласти или отправка ведущими транспортными компаниями (Деловые Линии, ПЭК, СДЭК) по всей России.</p>'
+          c: '<p><strong>Оплата:</strong> безналичный расчет для юридических лиц с предоставлением всех закрывающих документов (УПД с НДС 22%).</p><p style="margin-top:10px;"><strong>Доставка:</strong> бесплатный забор со склада в СПб, экспресс-доставка по городу собственным транспортом или отправка через ТК (Деловые Линии, ПЭК, СДЭК) в любой регион РФ.</p>'
         },
         designers: {
           t: 'Проектировщикам и интеграторам',
-          c: '<p>Предоставляем технические паспорта, BIM-семейства оборудования, схемы подключений в DWG и помогаем с пересогласованием проектных спецификаций.</p>'
+          c: '<p>Предоставляем BIM-модели, чертежи в DWG, типовые схемы подключения и проектные спецификации оборудования.</p><p style="margin-top:10px;">Помогаем с подбором оборудования и согласованием проектной документации в органах надзора.</p>'
         },
         certs: {
           t: 'Сертификаты соответствия',
-          c: '<p>Вся поставляемая номенклатура сертифицирована по ТР ТС и ГОСТ Р. Заверенные копии сертификатов и паспорта изделий передаются с каждой отгрузкой.</p>'
+          c: '<p>Все поставляемое оборудование имеет действующие сертификаты ТР ТС, пожарные сертификаты соответствия ГОСТ Р и паспорта заводов-изготовителей.</p><p style="margin-top:10px;">Копии паспортов и сертификатов прикладываются к каждой отгрузочной партии.</p>'
         },
         contacts: {
           t: 'Контакты отдела снабжения',
-          c: '<p><strong>Склад и офис:</strong> г. Санкт-Петербург</p><p style="margin-top:8px;"><strong>Телефон отдела продаж:</strong> 8 (911) 765-54-84</p><p style="margin-top:8px;"><strong>Email для заявок и смет:</strong> logist@tradeatm.ru</p><p style="margin-top:8px;">График работы: Пн-Пт с 9:00 до 18:00 (отгрузка по согласованию 24/7).</p>'
+          c: '<p><strong>Офис и склад:</strong> г. Санкт-Петербург</p><p style="margin-top:8px;"><strong>Телефон отдела продаж:</strong> 8 (911) 765-54-84</p><p style="margin-top:8px;"><strong>Email для заявок и смет:</strong> logist@tradeatm.ru</p><p style="margin-top:8px;">График работы: Пн-Пт с 9:00 до 18:00 (отгрузка по согласованию 24/7).</p>'
         },
         requisites: {
           t: 'Реквизиты компании',
-          c: '<p>Для выставления счета отправьте реквизиты вашей организации на почту <a href="mailto:logist@tradeatm.ru" style="color:var(--cyan-accent)">logist@tradeatm.ru</a> или оформите заявку в корзине сайта.</p>'
+          c: '<p>Для получения актуальной карточки предприятия с расчетным счетом отправьте запрос на почту <a href="mailto:logist@tradeatm.ru" style="color:var(--cyan-accent)">logist@tradeatm.ru</a> или укажите ваш ИНН при оформлении сметы — счет с НДС 22% будет выставлен автоматически.</p>'
         },
         contract: {
           t: 'Типовой договор поставки',
-          c: '<p>Работаем по типовому договору оптовой поставки оборудования с гарантией заводов до 36 месяцев или по форме договора покупателя.</p>'
+          c: '<p>Мы работаем по стандартному договору поставки оборудования с гарантией до 36 месяцев или согласовываем протокол разногласий к договору вашей организации.</p>'
         },
         price: {
           t: 'Полный прайс-лист',
-          c: '<p>Каталог включает более 15 000 артикулов. Отправьте спецификацию на <a href="mailto:logist@tradeatm.ru" style="color:var(--cyan-accent)">logist@tradeatm.ru</a> для расчета объектной скидки.</p>'
+          c: '<p>Номенклатура компании насчитывает свыше 15 000 позиций. Вы можете прикрепить список необходимых позиций в форме на сайте, и инженер подготовит спецификацию с максимальной скидкой.</p>'
         }
       };
 
