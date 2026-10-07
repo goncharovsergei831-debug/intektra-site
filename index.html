@@ -428,4 +428,598 @@
       </div>
       <div class="form-group">
         <label>Контактный телефон:</label>
-        <input type="tel" id="orderPhone" class="form-input" placeholder="+7
+        <input type="tel" id="orderPhone" class="form-input" placeholder="+7 (999) 000-00-00" required>
+      </div>
+      <div class="form-group">
+        <label>Email для отправки КП:</label>
+        <input type="email" id="orderEmail" class="form-input" placeholder="zakaz@company.ru" required>
+      </div>
+      <button type="submit" class="btn-submit">Получить расчет и счет</button>
+    </form>
+  </div>
+
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="top-bar-links">
+        <a href="#">О компании</a>
+        <a href="#">Доставка и оплата</a>
+        <a href="#">Проектировщикам</a>
+        <a href="#">Сертификаты</a>
+        <a href="#">Контакты</a>
+      </div>
+      <div class="top-bar-contacts">
+        <span>Санкт-Петербург</span>
+        <span>Пн-Пт: 9:00 - 18:00</span>
+        <a href="tel:+79117655484">8 (911) 765-54-84</a>
+        <a href="mailto:logist@tradeatm.ru">logist@tradeatm.ru</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="header-main">
+    <div class="container header-grid">
+      <div>
+        <a href="/" class="brand-logo">INTEK<span>TRA</span></a>
+        <div class="brand-tagline">Инженерные системы и безопасность</div>
+      </div>
+
+      <button class="catalog-btn" id="catalogToggleBtn" onclick="toggleCatalog()">
+        ☰ Каталог
+      </button>
+
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Поиск по артикулу (01482), названию (РИП, кабель) или ГОСТ..." oninput="handleSearch(this.value)">
+        <button type="button" class="search-clear-btn" id="searchClearBtn" onclick="clearSearch()">✕</button>
+        <button type="button" class="search-submit-btn" onclick="scrollToCatalog()">Найти</button>
+      </div>
+
+      <div class="header-actions">
+        <a href="#spec-form-block" class="action-btn">
+          <span>Спецификация</span>
+          Загрузить
+        </a>
+        <a href="#" class="action-btn">
+          <span>0 ₽</span>
+          Корзина (0)
+        </a>
+      </div>
+    </div>
+
+    <div class="mega-menu" id="megaMenu">
+      <div class="container">
+        <div class="mega-menu-grid">
+          <div class="mega-nav-left">
+            <div class="mega-nav-item selected" onmouseenter="showTab('tab-ops')">ОПС и СОУЭ <span>→</span></div>
+            <div class="mega-nav-item" onmouseenter="showTab('tab-cctv')">Видеонаблюдение (CCTV) <span>→</span></div>
+            <div class="mega-nav-item" onmouseenter="showTab('tab-skud')">СКУД и автоматика <span>→</span></div>
+            <div class="mega-nav-item" onmouseenter="showTab('tab-go')">Оборудование ГО и ЧС <span>→</span></div>
+            <div class="mega-nav-item" onmouseenter="showTab('tab-cable')">Кабельная продукция <span>→</span></div>
+            <div class="mega-nav-item" onmouseenter="showTab('tab-power')">Источники питания и АКБ <span>→</span></div>
+          </div>
+
+          <div class="mega-nav-content">
+            <div class="mega-tab-panel active" id="tab-ops">
+              <div class="panel-header"><span>Охранно-пожарная сигнализация</span><a onclick="filterByKeyword('ППКОП')">Все приборы ОПС →</a></div>
+              <div class="subcat-columns">
+                <div class="subcat-group">
+                  <h5>Приборы и панели</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('ППКОП')">Приборы приемно-контрольные (ППКОП)</a></li>
+                    <li><a onclick="filterByKeyword('ОПС')">Адресные радиоканальные системы</a></li>
+                    <li><a onclick="filterByKeyword('пульт')">Пульты управления и клавиатуры</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Извещатели</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('ИП')">Дымовые оптико-электронные (ИП 212)</a></li>
+                    <li><a onclick="filterByKeyword('пламени')">Извещатели пламени</a></li>
+                    <li><a onclick="filterByKeyword('ИПР')">Ручные пожарные извещатели (ИПР)</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Оповещение СОУЭ</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('Выход')">Световые табло («Выход», стрелки)</a></li>
+                    <li><a onclick="filterByKeyword('оповещатель')">Звуковые и речевые оповещатели</a></li>
+                    <li><a onclick="filterByKeyword('усилитель')">Трансляционные усилители</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mega-tab-panel" id="tab-cctv">
+              <div class="panel-header"><span>Системы видеонаблюдения</span><a onclick="filterByKeyword('камера')">Все камеры и NVR →</a></div>
+              <div class="subcat-columns">
+                <div class="subcat-group">
+                  <h5>IP-камеры</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('камера')">Купольные IP-камеры</a></li>
+                    <li><a onclick="filterByKeyword('камера')">Цилиндрические уличные камеры</a></li>
+                    <li><a onclick="filterByKeyword('PTZ')">Поворотные скоростные PTZ</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Регистрация и архив</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('NVR')">Сетевые NVR видеорегистраторы</a></li>
+                    <li><a onclick="filterByKeyword('XVR')">Гибридные XVR видеорегистраторы</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Сетевое оборудование</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('PoE')">PoE-коммутаторы 4/8/16/24 портов</a></li>
+                    <li><a onclick="filterByKeyword('коммутатор')">Управляемые L2/L3 коммутаторы</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mega-tab-panel" id="tab-skud">
+              <div class="panel-header"><span>Контроль доступа (СКУД)</span><a onclick="filterByKeyword('СКУД')">Все товары СКУД →</a></div>
+              <div class="subcat-columns">
+                <div class="subcat-group">
+                  <h5>Исполнительные узлы</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('турникет')">Турникеты-триподы и калитки</a></li>
+                    <li><a onclick="filterByKeyword('замок')">Электромагнитные замки</a></li>
+                    <li><a onclick="filterByKeyword('доводчик')">Дверные доводчики усиленные</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Идентификаторы</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('считыватель')">Считыватели Mifare / EM-Marin</a></li>
+                    <li><a onclick="filterByKeyword('терминал')">Терминалы распознавания лиц</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Контроллеры</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('контроллер')">Сетевые контроллеры доступа</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mega-tab-panel" id="tab-go">
+              <div class="panel-header"><span>Оборудование ГО и ЧС</span><a onclick="filterByKeyword('А-ТТ')">Защитные сооружения →</a></div>
+              <div class="subcat-columns">
+                <div class="subcat-group">
+                  <h5>Транспортное оборудование</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('А-ТТ')">Тележки транспортные специальные А-ТТ-01</a></li>
+                    <li><a onclick="filterByKeyword('тележка')">Складские настилы и тележки</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Оповещение ЧС</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('сирена')">Электросирены оповещения С-40, С-28</a></li>
+                    <li><a onclick="filterByKeyword('запуск')">Блоки запуска сирен</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Защитные сооружения</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('дверь')">Герметические двери и люки</a></li>
+                    <li><a onclick="filterByKeyword('фильтр')">Фильтровентиляция</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mega-tab-panel" id="tab-cable">
+              <div class="panel-header"><span>Кабельная продукция</span><a onclick="filterByKeyword('кабель')">Кабельный каталог →</a></div>
+              <div class="subcat-columns">
+                <div class="subcat-group">
+                  <h5>Огнестойкий кабель</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('КПСЭнг')">КПСЭнг(А)-FRLS</a></li>
+                    <li><a onclick="filterByKeyword('кабель')">КПСнг(А)-FRLS</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Витая пара и ЛВС</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('UTP')">Витая пара UTP Cat 5e</a></li>
+                    <li><a onclick="filterByKeyword('FTP')">Витая пара FTP уличная</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Крепеж</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('клипса')">Огнестойкие металлические клипсы</a></li>
+                    <li><a onclick="filterByKeyword('гофра')">Гофра негорючая</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mega-tab-panel" id="tab-power">
+              <div class="panel-header"><span>Питание и АКБ</span><a onclick="filterByKeyword('РИП')">Каталог электропитания →</a></div>
+              <div class="subcat-columns">
+                <div class="subcat-group">
+                  <h5>Источники питания</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('РИП')">РИП 12В (1.5А, 3А, 5А)</a></li>
+                    <li><a onclick="filterByKeyword('РИП')">РИП 24В</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Аккумуляторы AGM</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('АКБ')">АКБ 12В 7Ач (для ОПС и РИП)</a></li>
+                    <li><a onclick="filterByKeyword('АКБ')">АКБ 12В 12Ач / 17Ач</a></li>
+                  </ul>
+                </div>
+                <div class="subcat-group">
+                  <h5>Защита</h5>
+                  <ul>
+                    <li><a onclick="filterByKeyword('УЗИП')">Устройства грозозащиты (УЗИП)</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav-bar">
+    <div class="container">
+      <ul class="nav-list">
+        <li><a href="#" onclick="openCatalogTab('tab-ops'); return false;">Охранно-пожарная сигнализация</a></li>
+        <li><a href="#" onclick="openCatalogTab('tab-cctv'); return false;">Видеонаблюдение</a></li>
+        <li><a href="#" onclick="openCatalogTab('tab-skud'); return false;">СКУД и автоматика</a></li>
+        <li><a href="#" onclick="openCatalogTab('tab-go'); return false;">Оборудование ГО и ЧС</a></li>
+        <li><a href="#" onclick="openCatalogTab('tab-cable'); return false;">Кабель и монтаж</a></li>
+        <li><a href="#" onclick="openCatalogTab('tab-power'); return false;">Источники питания</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero-section">
+      <div class="hero-grid">
+        <div class="hero-main">
+          <h1>Комплексные поставки систем безопасности и слаботочных сетей</h1>
+          <p>Оптовые поставки сертифицированного оборудования для монтажных организаций, интеграторов и объектов гражданской обороны в Санкт-Петербурге и по всей России.</p>
+          <div>
+            <button class="catalog-btn" onclick="toggleCatalog()" style="display: inline-flex; width: auto;">Перейти в каталог продукции</button>
+          </div>
+        </div>
+
+        <div class="hero-b2b" id="spec-form-block">
+          <h3>Оптовый расчет спецификации</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Прикрепите ведомость или файл проекта (Excel, PDF) — инженер подготовит счет со скидкой.</p>
+          
+          <form id="specForm" onsubmit="handleLocalSpecSubmit(event, this)">
+            <div class="form-group">
+              <label>Организация / ИНН:</label>
+              <input type="text" id="specCompany" class="form-input" placeholder="ООО 'Инженерные сети' или ИНН" required>
+            </div>
+            <div class="form-group">
+              <label>Телефон снабженца / инженера:</label>
+              <input type="tel" id="specPhone" class="form-input" placeholder="+7 (911) 000-00-00" required>
+            </div>
+            <div class="form-group">
+              <label>Email для выставления счета:</label>
+              <input type="email" id="specEmail" class="form-input" placeholder="snab@company.ru" required>
+            </div>
+            <div class="form-group">
+              <label>Файл спецификации (XLSX, PDF, DOC):</label>
+              <input type="file" id="specFileInput" class="form-input" style="padding: 5px;" required>
+            </div>
+            <button type="submit" class="btn-submit">Отправить спецификацию на расчет</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <h2>Популярные направления каталога</h2>
+      <a href="javascript:void(0)" onclick="toggleCatalog()" style="font-size: 14px; color: var(--primary); text-decoration: none;">Открыть полный каталог →</a>
+    </div>
+
+    <div class="categories-grid">
+      <a onclick="openCatalogTab('tab-ops')" class="category-card">
+        <strong>ОПС и СОУЭ</strong>
+        <span>Извещатели, приборы, оповещатели</span>
+      </a>
+      <a onclick="openCatalogTab('tab-cctv')" class="category-card">
+        <strong>Видеонаблюдение</strong>
+        <span>IP-камеры, NVR, коммутаторы PoE</span>
+      </a>
+      <a onclick="openCatalogTab('tab-skud')" class="category-card">
+        <strong>СКУД</strong>
+        <span>Турникеты, контроллеры, считыватели</span>
+      </a>
+      <a onclick="openCatalogTab('tab-go')" class="category-card">
+        <strong>Оборудование ГО и ЧС</strong>
+        <span>Средства защиты, сирены, тележки А-ТТ</span>
+      </a>
+      <a onclick="openCatalogTab('tab-cable')" class="category-card">
+        <strong>Кабельная продукция</strong>
+        <span>КПСЭнг, витая пара UTP/FTP, силовой</span>
+      </a>
+      <a onclick="openCatalogTab('tab-power')" class="category-card">
+        <strong>Электропитание</strong>
+        <span>РИП, ИБП 12В/24В/220В, аккумуляторы</span>
+      </a>
+    </div>
+
+    <div class="search-status-bar" id="searchStatusBar">
+      <span id="searchStatusText">Найдено позиций: 0</span>
+      <button type="button" onclick="clearSearch()">✕ Сбросить поиск</button>
+    </div>
+
+    <div class="section-title" id="catalog-anchor">
+      <h2>Складская программа Intektra</h2>
+      <span style="font-size: 13px; color: var(--text-muted);">Цены с НДС 20%</span>
+    </div>
+
+    <div class="products-grid" id="productsContainer">
+      <div class="product-card" data-keywords="ппкоп прибор приемно контрольный опс инк-01482 01482 сигнализация 8 шлейфов">
+        <div class="product-sku">Артикул: ИНК-01482</div>
+        <div class="product-stock">● В наличии на складе в СПб (142 шт.)</div>
+        <a href="#" class="product-title">Прибор приемно-контрольный охранно-пожарный (ППКОП) 8 шлейфов</a>
+        <div class="product-prices">
+          <div class="price-main">4 850 ₽</div>
+          <div class="price-vat">Оптовая цена: по запросу в счете</div>
+        </div>
+        <div class="product-actions">
+          <button class="btn-buy" onclick="openOrderModal('ППКОП 8 шлейфов (ИНК-01482)')">В корзину</button>
+          <button class="btn-quick" onclick="openOrderModal('ППКОП 8 шлейфов (ИНК-01482)')">В 1 клик</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-keywords="рип источник питания ибп резервированный 12в 3а акб 7ач инк-02319 02319 питание">
+        <div class="product-sku">Артикул: ИНК-02319</div>
+        <div class="product-stock">● В наличии на складе в СПб (85 шт.)</div>
+        <a href="#" class="product-title">Резервированный источник питания РИП-12 RS (12В, 3А, под АКБ 7Ач)</a>
+        <div class="product-prices">
+          <div class="price-main">3 420 ₽</div>
+          <div class="price-vat">Оптовая цена: по запросу в счете</div>
+        </div>
+        <div class="product-actions">
+          <button class="btn-buy" onclick="openOrderModal('РИП-12 RS 3А (ИНК-02319)')">В корзину</button>
+          <button class="btn-quick" onclick="openOrderModal('РИП-12 RS 3А (ИНК-02319)')">В 1 клик</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-keywords="кабель огнестойкий кпсэнг кпснг frls 1х2х0.75 инк-08910 08910 слаботочка провод бухта">
+        <div class="product-sku">Артикул: ИНК-08910</div>
+        <div class="product-stock">● В наличии на складе в СПб (2 400 м)</div>
+        <a href="#" class="product-title">Кабель огнестойкий КПСЭнг(А)-FRLS 1х2х0.75 мм² (бухта 200м)</a>
+        <div class="product-prices">
+          <div class="price-main">48.50 ₽ / м</div>
+          <div class="price-vat">Цена с НДС за метр</div>
+        </div>
+        <div class="product-actions">
+          <button class="btn-buy" onclick="openOrderModal('Кабель КПСЭнг(А)-FRLS 1х2х0.75 (ИНК-08910)')">В корзину</button>
+          <button class="btn-quick" onclick="openOrderModal('Кабель КПСЭнг(А)-FRLS 1х2х0.75 (ИНК-08910)')">В 1 клик</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-keywords="тележка а-тт-01 атт01 а-тт го чс защитные сооружения убежища инк-го-001 спецсерия транспортная">
+        <div class="product-sku">Артикул: ИНК-ГО-001</div>
+        <div class="product-stock">● Под заказ (3-5 дней)</div>
+        <a href="#" class="product-title">Транспортная тележка специальная А-ТТ-01 (усиленная рама)</a>
+        <div class="product-prices">
+          <div class="price-main">18 900 ₽</div>
+          <div class="price-vat">Спецсерия для защитных сооружений</div>
+        </div>
+        <div class="product-actions">
+          <button class="btn-buy" onclick="openOrderModal('Тележка специальная А-ТТ-01 (ИНК-ГО-001)')">Заказать</button>
+          <button class="btn-quick" onclick="openOrderModal('Тележка специальная А-ТТ-01 (ИНК-ГО-001)')">КП на юрлицо</button>
+        </div>
+      </div>
+
+      <div class="no-results-box" id="noResultsBox">
+        <h4>По вашему запросу оборудование не найдено на витрине</h4>
+        <p>Каталог Intektra насчитывает свыше 15 000 позиций. Прикрепите проектную ведомость в форму выше, и мы выставим счет с оптовой скидкой.</p>
+        <a href="#spec-form-block" class="btn-submit" style="display:inline-block; width:auto; text-decoration:none; padding:10px 20px;">Перейти к расчету спецификации</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4 style="color:#fff;">INTEKTRA</h4>
+          <p>Комплексный поставщик оборудования систем безопасности, связи, слаботочных систем и средств гражданской обороны.</p>
+          <p style="margin-top: 10px;">Работаем с юридическими лицами по безналичному расчету с НДС.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Оборудование</h4>
+          <ul>
+            <li><a href="#" onclick="openCatalogTab('tab-ops'); return false;">ОПС и пожаротушение</a></li>
+            <li><a href="#" onclick="openCatalogTab('tab-cctv'); return false;">Видеонаблюдение</a></li>
+            <li><a href="#" onclick="openCatalogTab('tab-skud'); return false;">Контроль доступа</a></li>
+            <li><a href="#" onclick="openCatalogTab('tab-go'); return false;">Оборудование ГО и ЧС</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Клиентам</h4>
+          <ul>
+            <li><a href="#spec-form-block">Загрузка спецификаций</a></li>
+            <li><a href="#">Доставка по России</a></li>
+            <li><a href="#">Гарантия и возврат</a></li>
+            <li><a href="#">Реквизиты компании</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Отдел продаж</h4>
+          <p><a href="tel:+79117655484" style="color:#fff; font-weight:700; font-size:16px;">8 (911) 765-54-84</a></p>
+          <p><a href="mailto:logist@tradeatm.ru" style="color:#fff;">logist@tradeatm.ru</a></p>
+          <p style="margin-top: 10px;">Склад и офис: г. Санкт-Петербург.<br>Пн-Пт: 9:00 - 18:00.<br>Отгрузка ТК по всей России.</p>
+        </div>
+      </div>
+      <div class="copyright">
+        © 2026 INTEKTRA. Все права защищены. Информация на сайте не является публичной офертой.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const megaMenu = document.getElementById('megaMenu');
+    const overlay = document.getElementById('catalogOverlay');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const orderModal = document.getElementById('orderModal');
+    const catalogBtn = document.getElementById('catalogToggleBtn');
+    const searchInput = document.getElementById('searchInput');
+    const searchClearBtn = document.getElementById('searchClearBtn');
+    const searchStatusBar = document.getElementById('searchStatusBar');
+    const searchStatusText = document.getElementById('searchStatusText');
+    const noResultsBox = document.getElementById('noResultsBox');
+
+    function toggleCatalog() {
+      const isOpen = megaMenu.classList.contains('active');
+      if (isOpen) closeCatalog();
+      else openCatalog();
+    }
+
+    function openCatalog() {
+      megaMenu.classList.add('active');
+      overlay.classList.add('active');
+      catalogBtn.innerHTML = '✕ Закрыть';
+    }
+
+    function closeCatalog() {
+      megaMenu.classList.remove('active');
+      overlay.classList.remove('active');
+      catalogBtn.innerHTML = '☰ Каталог';
+    }
+
+    function showTab(tabId) {
+      document.querySelectorAll('.mega-nav-item').forEach(item => item.classList.remove('selected'));
+      document.querySelectorAll('.mega-tab-panel').forEach(panel => panel.classList.remove('active'));
+      if (window.event && window.event.currentTarget) window.event.currentTarget.classList.add('selected');
+      const targetPanel = document.getElementById(tabId);
+      if (targetPanel) targetPanel.classList.add('active');
+    }
+
+    function openCatalogTab(tabId) {
+      openCatalog();
+      const tabTrigger = Array.from(document.querySelectorAll('.mega-nav-item')).find(item => 
+        item.getAttribute('onmouseenter') && item.getAttribute('onmouseenter').includes(tabId)
+      );
+      if (tabTrigger) {
+        document.querySelectorAll('.mega-nav-item').forEach(item => item.classList.remove('selected'));
+        tabTrigger.classList.add('selected');
+      }
+      document.querySelectorAll('.mega-tab-panel').forEach(panel => panel.classList.remove('active'));
+      const targetPanel = document.getElementById(tabId);
+      if (targetPanel) targetPanel.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleSearch(query) {
+      const q = query.trim().toLowerCase();
+      const cards = document.querySelectorAll('.products-grid .product-card');
+
+      if (q.length > 0) {
+        searchClearBtn.style.display = 'block';
+        searchStatusBar.style.display = 'flex';
+      } else {
+        searchClearBtn.style.display = 'none';
+        searchStatusBar.style.display = 'none';
+      }
+
+      let matches = 0;
+      cards.forEach(card => {
+        const text = (card.getAttribute('data-keywords') + ' ' + card.innerText).toLowerCase();
+        if (text.includes(q)) {
+          card.style.display = 'flex';
+          matches++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      searchStatusText.innerText = `Найдено позиций по запросу "${query}": ${matches}`;
+      if (matches === 0) {
+        noResultsBox.style.display = 'block';
+      } else {
+        noResultsBox.style.display = 'none';
+      }
+    }
+
+    function clearSearch() {
+      searchInput.value = '';
+      handleSearch('');
+    }
+
+    function filterByKeyword(keyword) {
+      closeCatalog();
+      searchInput.value = keyword;
+      handleSearch(keyword);
+      scrollToCatalog();
+    }
+
+    function scrollToCatalog() {
+      const anchor = document.getElementById('catalog-anchor');
+      if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function openOrderModal(productName) {
+      document.getElementById('modalProductName').innerText = productName;
+      document.getElementById('modalProductInput').value = productName;
+      orderModal.classList.add('active');
+      modalOverlay.classList.add('active');
+    }
+
+    function closeOrderModal() {
+      orderModal.classList.remove('active');
+      modalOverlay.classList.remove('active');
+    }
+
+    function handleLocalQuickOrder(e, form) {
+      e.preventDefault();
+      const product = document.getElementById('modalProductInput').value;
+      const company = document.getElementById('orderCompany').value;
+      const phone = document.getElementById('orderPhone').value;
+      const email = document.getElementById('orderEmail').value;
+
+      alert(`Спасибо! Заявка на ${product} принята.\nКомпания: ${company}\nТелефон: ${phone}\nМы свяжемся с вами в течение 30 минут.`);
+      
+      const subject = encodeURIComponent(`Запрос счета Intektra: ${product}`);
+      const body = encodeURIComponent(`Товар: ${product}\nОрганизация: ${company}\nТелефон: ${phone}\nEmail: ${email}`);
+      window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
+
+      form.reset();
+      closeOrderModal();
+    }
+
+    function handleLocalSpecSubmit(e, form) {
+      e.preventDefault();
+      const company = document.getElementById('specCompany').value;
+      const phone = document.getElementById('specPhone').value;
+      const email = document.getElementById('specEmail').value;
+      const fileInput = document.getElementById('specFileInput');
+      const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : 'Файл не выбран';
+
+      alert(`Спецификация "${fileName}" принята на расчет!\nКомпания: ${company}\nТелефон: ${phone}\nИнженер Intektra готовит коммерческое предложение.`);
+      
+      const subject = encodeURIComponent(`Спецификация на расчет от ${company}`);
+      const body = encodeURIComponent(`Организация: ${company}\nТелефон: ${phone}\nEmail: ${email}\nПрикрепленный файл: ${fileName}\n\n(Пожалуйста, прикрепите файл спецификации к этому письму)`);
+      window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
+
+      form.reset();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeCatalog();
+        closeOrderModal();
+      }
+    });
+  </script>
+</body>
+</html>
