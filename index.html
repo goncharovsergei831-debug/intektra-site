@@ -9,17 +9,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0b0f14;
-      --bg-card: rgba(18, 24, 33, 0.75);
-      --bg-card-hover: rgba(26, 35, 48, 0.9);
-      --border: rgba(255, 255, 255, 0.08);
-      --border-accent: rgba(230, 57, 70, 0.35);
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
-      --red-accent: #e63946;
-      --red-glow: rgba(230, 57, 70, 0.25);
-      --cyan-accent: #38bdf8;
-      --green-stock: #10b981;
+      --bg: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-hover: #ffffff;
+      --border: #e2e8f0;
+      --border-accent: rgba(225, 29, 72, 0.25);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --red-accent: #e11d48;
+      --red-glow: rgba(225, 29, 72, 0.15);
+      --cyan-accent: #0284c7;
+      --green-stock: #16a34a;
       --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -32,8 +32,8 @@
       line-height: 1.5;
       overflow-x: hidden;
       background-image: 
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(230, 57, 70, 0.15), transparent 70%),
-        radial-gradient(circle at 100% 40%, rgba(56, 189, 248, 0.06), transparent 50%);
+        radial-gradient(ellipse 80% 40% at 50% -10%, rgba(225, 29, 72, 0.05), transparent 60%),
+        radial-gradient(circle at 100% 30%, rgba(2, 132, 199, 0.04), transparent 40%);
       background-attachment: fixed;
     }
 
@@ -49,8 +49,7 @@
       font-size: 13px;
       color: var(--text-muted);
       padding: 8px 0;
-      backdrop-filter: blur(12px);
-      background: rgba(11, 15, 20, 0.6);
+      background: #f1f5f9;
     }
     .top-bar-inner {
       display: flex;
@@ -65,14 +64,15 @@
       gap: 8px;
       font-family: var(--font-mono);
       font-size: 12px;
-      color: #cbd5e1;
+      color: #334155;
+      font-weight: 600;
     }
     .status-dot {
       width: 7px;
       height: 7px;
       background: var(--green-stock);
       border-radius: 50%;
-      box-shadow: 0 0 10px var(--green-stock);
+      box-shadow: 0 0 8px var(--green-stock);
     }
     .top-nav {
       display: flex;
@@ -84,7 +84,7 @@
       cursor: pointer;
       transition: color 0.2s;
     }
-    .top-nav a:hover { color: #fff; }
+    .top-nav a:hover { color: var(--red-accent); }
     .top-contacts {
       display: flex;
       gap: 18px;
@@ -103,9 +103,10 @@
       top: 0;
       z-index: 1000;
       backdrop-filter: blur(20px);
-      background: rgba(11, 15, 20, 0.95);
+      background: rgba(255, 255, 255, 0.95);
       border-bottom: 1px solid var(--border);
       padding: 14px 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
     .header-inner {
       display: grid;
@@ -117,7 +118,7 @@
       font-size: 24px;
       font-weight: 800;
       letter-spacing: -0.5px;
-      color: #fff;
+      color: var(--text-main);
       text-decoration: none;
       display: flex;
       align-items: center;
@@ -127,17 +128,18 @@
     .logo-badge {
       font-family: var(--font-mono);
       font-size: 10px;
-      background: rgba(255,255,255,0.06);
+      background: #e2e8f0;
       padding: 2px 6px;
       border-radius: 4px;
       margin-left: 6px;
       border: 1px solid var(--border);
-      color: var(--cyan-accent);
+      color: #0369a1;
+      font-weight: 700;
     }
 
     .btn-catalog {
-      background: linear-gradient(135deg, var(--red-accent), #c1121f);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: linear-gradient(135deg, var(--red-accent), #be123c);
+      border: none;
       color: #fff;
       padding: 11px 18px;
       border-radius: 10px;
@@ -148,12 +150,12 @@
       justify-content: center;
       gap: 8px;
       cursor: pointer;
-      box-shadow: 0 4px 20px var(--red-glow);
+      box-shadow: 0 4px 14px var(--red-glow);
       transition: all 0.2s ease;
     }
     .btn-catalog:hover {
       transform: translateY(-1px);
-      box-shadow: 0 6px 25px rgba(230, 57, 70, 0.4);
+      box-shadow: 0 6px 20px rgba(225, 29, 72, 0.35);
     }
 
     .search-wrapper {
@@ -162,19 +164,20 @@
     }
     .search-input {
       width: 100%;
-      background: rgba(18, 24, 33, 0.9);
+      background: #f1f5f9;
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 12px 44px 12px 18px;
-      color: #fff;
+      color: var(--text-main);
       font-family: var(--font-sans);
       font-size: 14px;
       outline: none;
       transition: all 0.2s;
     }
     .search-input:focus {
+      background: #fff;
       border-color: var(--cyan-accent);
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
     }
     .search-clear {
       position: absolute;
@@ -195,9 +198,9 @@
       gap: 12px;
     }
     .cart-btn {
-      background: rgba(18, 24, 33, 0.9);
+      background: #fff;
       border: 1px solid var(--border);
-      color: #fff;
+      color: var(--text-main);
       padding: 10px 18px;
       border-radius: 10px;
       font-weight: 600;
@@ -206,9 +209,10 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      transition: border-color 0.2s;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
-    .cart-btn:hover { border-color: rgba(255,255,255,0.25); }
+    .cart-btn:hover { border-color: #cbd5e1; background: #f8fafc; }
     .cart-badge {
       background: var(--red-accent);
       color: #fff;
@@ -225,9 +229,9 @@
       top: 72px;
       left: 0;
       width: 100%;
-      background: #0f141c;
+      background: #ffffff;
       border-bottom: 2px solid var(--red-accent);
-      box-shadow: 0 25px 60px rgba(0,0,0,0.85);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
       z-index: 1500;
       padding: 36px 0;
       animation: menuSlideDown 0.2s ease-out forwards;
@@ -248,9 +252,10 @@
       font-size: 14px;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      color: var(--cyan-accent);
+      color: #0369a1;
       margin-bottom: 14px;
       font-family: var(--font-mono);
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -266,13 +271,13 @@
       transition: all 0.2s;
     }
     .mega-group a:hover {
-      color: #fff;
-      transform: translateX(5px);
+      color: var(--red-accent);
+      transform: translateX(4px);
     }
 
     /* Hero-секция */
     .hero {
-      padding: 60px 0 40px;
+      padding: 50px 0 30px;
     }
     .hero-grid {
       display: grid;
@@ -284,22 +289,12 @@
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 44px;
-      backdrop-filter: blur(16px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
       overflow: hidden;
-    }
-    .hero-card::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, var(--red-glow), transparent 70%);
-      pointer-events: none;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
     }
     .hero-card h1 {
       font-size: 42px;
@@ -307,11 +302,10 @@
       line-height: 1.15;
       margin-bottom: 16px;
       letter-spacing: -1px;
+      color: #0f172a;
     }
     .hero-card h1 span {
-      background: linear-gradient(135deg, #fff 30%, var(--text-muted) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--red-accent);
     }
     .hero-card p {
       color: var(--text-muted);
@@ -328,31 +322,29 @@
     .stat-val {
       font-family: var(--font-mono);
       font-size: 24px;
-      font-weight: 700;
-      color: #fff;
+      font-weight: 800;
+      color: #0f172a;
     }
     .stat-lbl {
       font-size: 12px;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      font-weight: 600;
     }
 
     /* Блок расчета спецификации */
     .spec-card {
       background: var(--bg-card);
-      border: 1px solid var(--border-accent);
+      border: 1px solid var(--border);
       border-radius: 20px;
       padding: 36px;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
     }
     .spec-card h3 {
       font-size: 20px;
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      color: #0f172a;
     }
     .spec-card p {
       font-size: 13px;
@@ -365,26 +357,28 @@
     .form-group label {
       display: block;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 6px;
-      color: #cbd5e1;
+      color: #334155;
     }
     .form-ctrl {
       width: 100%;
-      background: rgba(11, 15, 20, 0.7);
+      background: #f8fafc;
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 10px 14px;
-      color: #fff;
+      color: var(--text-main);
       font-family: var(--font-sans);
       font-size: 13px;
       outline: none;
     }
     .form-ctrl:focus {
+      background: #fff;
       border-color: var(--cyan-accent);
     }
     .file-upload {
-      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border: 2px dashed #cbd5e1;
+      background: #f8fafc;
       border-radius: 8px;
       padding: 12px;
       text-align: center;
@@ -395,12 +389,13 @@
       transition: all 0.2s;
     }
     .file-upload:hover {
-      border-color: var(--cyan-accent);
-      color: #fff;
+      border-color: var(--red-accent);
+      color: var(--text-main);
+      background: #fff;
     }
     .btn-submit {
       width: 100%;
-      background: linear-gradient(135deg, var(--red-accent), #c1121f);
+      background: linear-gradient(135deg, var(--red-accent), #be123c);
       border: none;
       color: #fff;
       padding: 13px;
@@ -420,7 +415,7 @@
       margin-bottom: 20px;
     }
     .chip {
-      background: var(--bg-card);
+      background: #fff;
       border: 1px solid var(--border);
       padding: 8px 18px;
       border-radius: 20px;
@@ -432,12 +427,12 @@
       transition: all 0.2s;
     }
     .chip:hover, .chip.active {
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.25);
+      border-color: var(--red-accent);
+      color: var(--red-accent);
+      background: #fff;
     }
     .chip.active {
-      border-color: var(--red-accent);
+      background: var(--red-accent);
       color: #fff;
     }
 
@@ -452,6 +447,7 @@
       font-size: 26px;
       font-weight: 800;
       letter-spacing: -0.5px;
+      color: #0f172a;
     }
     .products-grid {
       display: grid;
@@ -467,12 +463,12 @@
       flex-direction: column;
       position: relative;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
     }
     .product-card:hover {
-      background: var(--bg-card-hover);
       transform: translateY(-4px);
-      border-color: rgba(255, 255, 255, 0.18);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      border-color: #cbd5e1;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
     }
     .card-top {
       display: flex;
@@ -483,14 +479,15 @@
     .sku-badge {
       font-family: var(--font-mono);
       font-size: 11px;
-      color: var(--text-muted);
-      background: rgba(255, 255, 255, 0.04);
+      color: #475569;
+      background: #f1f5f9;
       padding: 2px 6px;
       border-radius: 4px;
+      font-weight: 600;
     }
     .stock-tag {
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--green-stock);
       display: flex;
       align-items: center;
@@ -500,14 +497,14 @@
       font-size: 16px;
       font-weight: 700;
       line-height: 1.4;
-      color: #fff;
+      color: #0f172a;
       margin-bottom: 20px;
       flex-grow: 1;
       cursor: pointer;
       transition: color 0.2s;
     }
     .product-title:hover {
-      color: var(--cyan-accent);
+      color: var(--red-accent);
     }
     .card-bottom {
       border-top: 1px solid var(--border);
@@ -516,14 +513,15 @@
     .price-value {
       font-family: var(--font-mono);
       font-size: 22px;
-      font-weight: 700;
-      color: #fff;
+      font-weight: 800;
+      color: #0f172a;
       margin-bottom: 2px;
     }
     .price-sub {
       font-size: 11px;
       color: var(--text-muted);
       margin-bottom: 16px;
+      font-weight: 500;
     }
     .card-actions {
       display: grid;
@@ -533,20 +531,20 @@
     .btn-card {
       padding: 10px;
       border-radius: 8px;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 13px;
       cursor: pointer;
       text-align: center;
       transition: all 0.2s;
     }
     .btn-add {
-      background: rgba(255, 255, 255, 0.06);
+      background: #f1f5f9;
       border: 1px solid var(--border);
-      color: #fff;
+      color: #334155;
     }
     .btn-add:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 255, 255, 0.2);
+      background: #e2e8f0;
+      color: #0f172a;
     }
     .btn-buy-one {
       background: var(--red-accent);
@@ -554,15 +552,15 @@
       color: #fff;
     }
     .btn-buy-one:hover {
-      background: #c1121f;
+      background: #be123c;
     }
 
     /* Модальные окна и шторки */
     .drawer-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
       z-index: 1400;
       display: none;
     }
@@ -573,12 +571,13 @@
       width: 100%;
       max-width: 520px;
       height: 100vh;
-      background: #111720;
+      background: #ffffff;
       border-left: 1px solid var(--border);
       z-index: 2001;
       display: flex;
       flex-direction: column;
       transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -10px 0 40px rgba(0,0,0,0.1);
     }
     .drawer.open { right: 0; }
     .drawer-header {
@@ -588,6 +587,7 @@
       justify-content: space-between;
       align-items: center;
     }
+    .drawer-header h3 { color: #0f172a; font-size: 18px; font-weight: 800; }
     .drawer-body {
       flex: 1;
       padding: 24px;
@@ -596,7 +596,7 @@
     .drawer-footer {
       padding: 24px;
       border-top: 1px solid var(--border);
-      background: rgba(11, 15, 20, 0.5);
+      background: #f8fafc;
     }
     .cart-item {
       display: flex;
@@ -605,32 +605,34 @@
       padding: 14px 0;
       border-bottom: 1px solid var(--border);
     }
-    .cart-item-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-    .cart-item-price { font-family: var(--font-mono); font-size: 13px; color: var(--cyan-accent); }
+    .cart-item-title { font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+    .cart-item-price { font-family: var(--font-mono); font-size: 13px; color: #0369a1; font-weight: 600; }
     .cart-qty-ctrl {
       display: flex;
       align-items: center;
       gap: 10px;
-      background: rgba(255,255,255,0.05);
+      background: #f1f5f9;
       border-radius: 6px;
       padding: 4px 8px;
+      border: 1px solid var(--border);
     }
     .cart-qty-btn {
       background: none;
       border: none;
-      color: #fff;
+      color: #0f172a;
       cursor: pointer;
       font-size: 16px;
+      font-weight: 700;
     }
 
     .btn-secondary {
       width: 100%;
-      background: rgba(255, 255, 255, 0.08);
+      background: #fff;
       border: 1px solid var(--border);
-      color: #fff;
+      color: #334155;
       padding: 12px;
       border-radius: 8px;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 13px;
       cursor: pointer;
       margin-bottom: 8px;
@@ -641,18 +643,18 @@
       gap: 8px;
     }
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
+      background: #f1f5f9;
+      color: #0f172a;
     }
     .btn-telegram {
-      background: #229ED9;
+      background: #0284c7;
       border: none;
       color: #fff;
-      box-shadow: 0 4px 15px rgba(34, 158, 217, 0.3);
       margin-bottom: 8px;
     }
     .btn-telegram:hover {
-      background: #1e8ec3;
+      background: #0369a1;
+      color: #fff;
     }
 
     /* Инфо-модалка */
@@ -662,14 +664,14 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #121821;
+      background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 32px;
       width: 90%;
       max-width: 580px;
       z-index: 2100;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.85);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.15);
       max-height: 90vh;
       overflow-y: auto;
     }
@@ -682,9 +684,9 @@
       border-bottom: 1px solid var(--border);
       padding-bottom: 12px;
     }
-    .info-modal-header h3 { font-size: 20px; color: #fff; }
+    .info-modal-header h3 { font-size: 20px; color: #0f172a; font-weight: 800; }
 
-    /* Таблица оптовых цен и спецификаций */
+    /* Таблица спецификаций */
     .specs-table {
       width: 100%;
       border-collapse: collapse;
@@ -692,14 +694,14 @@
       font-size: 13px;
     }
     .specs-table th, .specs-table td {
-      padding: 8px 12px;
+      padding: 10px 12px;
       border-bottom: 1px solid var(--border);
       text-align: left;
     }
     .specs-table th {
-      color: var(--cyan-accent);
+      color: #0369a1;
       font-family: var(--font-mono);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     /* Подвал */
@@ -707,7 +709,7 @@
       border-top: 1px solid var(--border);
       padding: 60px 0 30px;
       margin-top: 80px;
-      background: rgba(11, 15, 20, 0.7);
+      background: #f1f5f9;
     }
     .footer-grid {
       display: grid;
@@ -720,7 +722,8 @@
       text-transform: uppercase;
       letter-spacing: 0.8px;
       margin-bottom: 16px;
-      color: #cbd5e1;
+      color: #0f172a;
+      font-weight: 800;
     }
     .footer-col ul { list-style: none; }
     .footer-col ul li { margin-bottom: 10px; }
@@ -731,7 +734,7 @@
       cursor: pointer;
       transition: color 0.2s;
     }
-    .footer-col a:hover { color: #fff; }
+    .footer-col a:hover { color: var(--red-accent); }
 
     @media (max-width: 960px) {
       .header-inner { grid-template-columns: 1fr auto; }
@@ -974,7 +977,7 @@
   <div class="drawer" id="cartDrawer">
     <div class="drawer-header">
       <h3>Спецификация заказа</h3>
-      <button onclick="toggleCart(false)" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">✕</button>
+      <button onclick="toggleCart(false)" style="background:none;border:none;color:#0f172a;font-size:20px;cursor:pointer;">✕</button>
     </div>
     <div class="drawer-body" id="cartItemsContainer">
       <p style="color:var(--text-muted);font-size:14px;">Ваша проектная спецификация пуста.</p>
@@ -1006,7 +1009,7 @@
   <div class="info-modal" id="quickOrderModal">
     <div class="info-modal-header">
       <h3 id="orderModalTitle">Быстрый заказ</h3>
-      <button onclick="closeModal('quickOrderModal')" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">✕</button>
+      <button onclick="closeModal('quickOrderModal')" style="background:none;border:none;color:#0f172a;font-size:20px;cursor:pointer;">✕</button>
     </div>
     <form onsubmit="handleQuickOrderSubmit(event)">
       <div class="form-group">
@@ -1032,7 +1035,7 @@
   <div class="info-modal" id="productModal">
     <div class="info-modal-header">
       <h3 id="productModalTitle">Характеристики оборудования</h3>
-      <button onclick="closeModal('productModal')" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">✕</button>
+      <button onclick="closeModal('productModal')" style="background:none;border:none;color:#0f172a;font-size:20px;cursor:pointer;">✕</button>
     </div>
     <div id="productModalBody"></div>
   </div>
@@ -1041,7 +1044,7 @@
   <div class="info-modal" id="infoModal">
     <div class="info-modal-header">
       <h3 id="infoModalTitle">Информация</h3>
-      <button onclick="closeModal('infoModal')" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">✕</button>
+      <button onclick="closeModal('infoModal')" style="background:none;border:none;color:#0f172a;font-size:20px;cursor:pointer;">✕</button>
     </div>
     <div id="infoModalContent" style="color:var(--text-muted);font-size:14px;line-height:1.6;"></div>
   </div>
@@ -1075,8 +1078,8 @@
         </div>
         <div class="footer-col">
           <h5>Отдел продаж</h5>
-          <p style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;">
-            <a href="tel:+79117655484" style="color:#fff;text-decoration:none;">8 (911) 765-54-84</a>
+          <p style="font-size:18px;font-weight:700;color:#0f172a;margin-bottom:4px;">
+            <a href="tel:+79117655484" style="color:#0f172a;text-decoration:none;">8 (911) 765-54-84</a>
           </p>
           <p style="font-size:14px;color:var(--text-muted);margin-bottom:12px;">logist@tradeatm.ru</p>
           <p style="font-size:12px;color:var(--text-muted);">г. Санкт-Петербург, складской терминал Пн-Пт с 9:00 до 18:00</p>
@@ -1181,18 +1184,18 @@
       title.innerText = item.title;
       body.innerHTML = `
         <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted);margin-bottom:12px;">
-          АРТИКУЛ: ${item.sku} | <span style="color:var(--green-stock)">● На складе в СПб</span>
+          АРТИКУЛ: ${item.sku} | <span style="color:var(--green-stock);font-weight:700;">● На складе в СПб</span>
         </div>
         <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;">${item.desc}</p>
         
-        <h5 style="color:#fff;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Технические параметры</h5>
+        <h5 style="color:#0f172a;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;font-weight:800;">Технические параметры</h5>
         <table class="specs-table">
-          ${item.specs.map(s => `<tr><td style="color:var(--text-muted);">\${s.k}</td><td style="font-weight:600;color:#fff;">\${s.v}</td></tr>`).join('')}
+          ${item.specs.map(s => `<tr><td style="color:var(--text-muted);">\${s.k}</td><td style="font-weight:600;color:#0f172a;">\${s.v}</td></tr>`).join('')}
         </table>
 
-        <h5 style="color:#fff;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;margin-top:16px;margin-bottom:8px;">Оптовая сетка (с НДС 22%)</h5>
-        <div style="display:flex;gap:10px;margin-bottom:20px;">
-          ${item.bulkPrices.map(b => `<div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);padding:8px 12px;border-radius:8px;font-size:12px;"><div style="color:var(--text-muted);">\${b.q}</div><div style="font-family:var(--font-mono);font-weight:700;color:var(--cyan-accent);">\${b.p}</div></div>`).join('')}
+        <h5 style="color:#0f172a;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;margin-top:16px;margin-bottom:8px;font-weight:800;">Оптовая сетка (с НДС 22%)</h5>
+        <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+          ${item.bulkPrices.map(b => `<div style="background:#f8fafc;border:1px solid var(--border);padding:8px 12px;border-radius:8px;font-size:12px;"><div style="color:var(--text-muted);">\${b.q}</div><div style="font-family:var(--font-mono);font-weight:700;color:#0369a1;">\${b.p}</div></div>`).join('')}
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -1387,7 +1390,7 @@
             </div>
             <div class="cart-qty-ctrl">
               <button class="cart-qty-btn" onclick="changeQty('${item.sku}', -1)">-</button>
-              <span style="font-family:var(--font-mono);font-size:13px;">${item.qty}</span>
+              <span style="font-family:var(--font-mono);font-size:13px;font-weight:700;">${item.qty}</span>
               <button class="cart-qty-btn" onclick="changeQty('${item.sku}', 1)">+</button>
             </div>
           </div>
@@ -1457,7 +1460,7 @@
         },
         requisites: {
           t: 'Реквизиты компании',
-          c: '<p>Для выставления счета отправьте реквизиты вашей организации на почту <a href="mailto:logist@tradeatm.ru" style="color:var(--cyan-accent)">logist@tradeatm.ru</a> или оформите заявку в корзине сайта.</p>'
+          c: '<p>Для выставления счета отправьте реквизиты вашей организации на почту <a href="mailto:logist@tradeatm.ru" style="color:#0369a1;font-weight:600;">logist@tradeatm.ru</a> или оформите заявку в корзине сайта.</p>'
         },
         contract: {
           t: 'Типовой договор поставки',
@@ -1465,7 +1468,7 @@
         },
         price: {
           t: 'Полный прайс-лист',
-          c: '<p>Каталог включает более 15 000 артикулов. Отправьте спецификацию на <a href="mailto:logist@tradeatm.ru" style="color:var(--cyan-accent)">logist@tradeatm.ru</a> для расчета объектной скидки.</p>'
+          c: '<p>Каталог включает более 15 000 артикулов. Отправьте спецификацию на <a href="mailto:logist@tradeatm.ru" style="color:#0369a1;font-weight:600;">logist@tradeatm.ru</a> для расчета объектной скидки.</p>'
         }
       };
 
