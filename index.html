@@ -45,17 +45,16 @@
       position: relative;
     }
 
-    /* Интерактивная камера видеонаблюдения на фоне */
+    /* Реалистичная уличная камера видеонаблюдения */
     .bg-cctv-widget {
       position: fixed;
-      top: 90px;
-      right: 40px;
-      width: 160px;
-      height: 160px;
+      top: 100px;
+      right: 30px;
+      width: 220px;
+      height: 200px;
       z-index: 50;
       pointer-events: none;
-      opacity: 0.85;
-      filter: drop-shadow(0 15px 30px rgba(15, 23, 42, 0.12));
+      filter: drop-shadow(0 15px 35px rgba(15, 23, 42, 0.16));
       transition: opacity 0.3s;
     }
     @media (max-width: 1100px) {
@@ -65,7 +64,7 @@
     }
 
     .cctv-rec-indicator {
-      animation: cctvBlink 1.5s infinite;
+      animation: cctvBlink 1.4s infinite;
     }
     @keyframes cctvBlink {
       0%, 100% { opacity: 1; }
@@ -779,34 +778,66 @@
 </head>
 <body>
 
-  <!-- Интерактивная купольная камера видеонаблюдения -->
+  <!-- Реалистичная уличная камера наблюдения (Bullet Type) -->
   <div class="bg-cctv-widget" id="cctvWidget" title="Система мониторинга Intektra">
-    <svg viewBox="0 0 160 160" width="100%" height="100%">
-      <!-- Основание кронштейна (крепление к стене/потолку) -->
-      <path d="M50 15 L110 15 L115 28 L45 28 Z" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/>
-      <rect x="72" y="28" width="16" height="18" fill="#94a3b8" rx="2"/>
+    <svg viewBox="0 0 220 200" width="100%" height="100%" style="overflow: visible;">
+      <defs>
+        <!-- Градиенты для металлического и пластикового корпуса -->
+        <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="50%" stop-color="#e2e8f0"/>
+          <stop offset="100%" stop-color="#cbd5e1"/>
+        </linearGradient>
+        <linearGradient id="hoodGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#f8fafc"/>
+          <stop offset="100%" stop-color="#94a3b8"/>
+        </linearGradient>
+        <linearGradient id="lensGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0284c7"/>
+          <stop offset="60%" stop-color="#0f172a"/>
+          <stop offset="100%" stop-color="#000000"/>
+        </linearGradient>
+      </defs>
 
-      <!-- Корпус полусферы (купол) -->
-      <g id="cctvHead" style="transform-origin: 80px 75px; transition: transform 0.08s ease-out;">
-        <!-- Внешний купольный кожух -->
-        <circle cx="80" cy="75" r="42" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
-        <circle cx="80" cy="75" r="34" fill="#0f172a"/>
+      <!-- Настенное крепление (база на стене) -->
+      <path d="M 175 30 Q 195 30 195 55 L 195 75 Q 195 100 175 100 Z" fill="#94a3b8" stroke="#64748b" stroke-width="2"/>
+      <circle cx="185" cy="45" r="3" fill="#475569"/>
+      <circle cx="185" cy="85" r="3" fill="#475569"/>
+
+      <!-- Кронштейн с шарниром (ножка) -->
+      <path d="M 175 60 L 140 65 L 138 75 L 175 70 Z" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="138" cy="70" r="10" fill="#94a3b8" stroke="#64748b" stroke-width="2"/>
+      <circle cx="138" cy="70" r="4" fill="#475569"/>
+
+      <!-- Поворотный корпус камеры (следит за курсором мыши) -->
+      <g id="cctvArm" style="transform-origin: 138px 70px; transition: transform 0.08s ease-out;">
+        <!-- Задняя крышка камеры с ребрами -->
+        <path d="M 130 52 L 142 56 L 142 84 L 130 88 Z" fill="#64748b"/>
         
-        <!-- Светодиод REC (мигающий индикатор активности) -->
-        <circle cx="80" cy="48" r="3.5" fill="#e11d48" class="cctv-rec-indicator"/>
-        <text x="88" y="51" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="700">REC</text>
+        <!-- Основной цилиндрический корпус -->
+        <rect x="45" y="48" width="88" height="44" rx="6" fill="url(#bodyGrad)" stroke="#94a3b8" stroke-width="1.5"/>
+        
+        <!-- Фирменная надпись INTEKTRA на боку камеры -->
+        <text x="65" y="73" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" letter-spacing="1">INTEKTRA</text>
 
-        <!-- Поворотный объектив / линза с динамическим зрачком -->
-        <g id="cctvLens" style="transform-origin: 80px 75px;">
-          <!-- Оправа линзы -->
-          <circle cx="80" cy="78" r="20" fill="#1e293b" stroke="#334155" stroke-width="2"/>
-          <!-- Сама оптика линзы -->
-          <circle cx="80" cy="78" r="14" fill="#0284c7" opacity="0.85"/>
-          <!-- Зрачок объектива (смещается за мышью) -->
-          <circle id="cctvPupil" cx="80" cy="78" r="7" fill="#030712"/>
-          <!-- Блик на стекле -->
-          <circle cx="76" cy="74" r="3.5" fill="#ffffff" opacity="0.6"/>
-        </g>
+        <!-- Верхний солнцезащитный козырек (выступает вперед) -->
+        <path d="M 28 42 L 138 42 L 138 48 L 38 48 Z" fill="url(#hoodGrad)" stroke="#64748b" stroke-width="1.5"/>
+
+        <!-- Передняя черная маска объектива -->
+        <path d="M 45 48 L 36 50 L 36 90 L 45 92 Z" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+        
+        <!-- Объектив с оптикой -->
+        <ellipse cx="36" cy="70" rx="4" ry="16" fill="#1e293b"/>
+        <ellipse cx="36" cy="70" rx="2.5" ry="11" fill="url(#lensGrad)"/>
+        
+        <!-- ИК-диоды ночного видения вокруг объектива -->
+        <circle cx="40" cy="56" r="1.8" fill="#334155"/>
+        <circle cx="40" cy="62" r="1.8" fill="#334155"/>
+        <circle cx="40" cy="78" r="1.8" fill="#334155"/>
+        <circle cx="40" cy="84" r="1.8" fill="#334155"/>
+
+        <!-- Активный индикатор записи (мигает красным) -->
+        <circle cx="40" cy="51" r="2.2" fill="#e11d48" class="cctv-rec-indicator"/>
       </g>
     </svg>
   </div>
@@ -1161,41 +1192,30 @@
     let currentOrderSku = '';
 
     // ==========================================
-    // ИНТЕРАКТИВНАЯ КАМЕРА СЛЕЖЕНИЯ ЗА КУРСОРОМ
+    // ИНТЕРАКТИВНАЯ УЛИЧНАЯ КАМЕРА
     // ==========================================
     const cctvWidget = document.getElementById('cctvWidget');
-    const cctvHead = document.getElementById('cctvHead');
-    const cctvPupil = document.getElementById('cctvPupil');
+    const cctvArm = document.getElementById('cctvArm');
 
     window.addEventListener('mousemove', (e) => {
-      if (!cctvWidget || !cctvHead) return;
+      if (!cctvWidget || !cctvArm) return;
 
       const rect = cctvWidget.getBoundingClientRect();
-      const cameraCenterX = rect.left + rect.width / 2;
-      const cameraCenterY = rect.top + rect.height * 0.45;
+      // Точка шарнира крепления камеры (138, 70 в системе координат SVG)
+      const pivotX = rect.left + (138 / 220) * rect.width;
+      const pivotY = rect.top + (70 / 200) * rect.height;
 
-      const deltaX = e.clientX - cameraCenterX;
-      const deltaY = e.clientY - cameraCenterY;
+      const deltaX = e.clientX - pivotX;
+      const deltaY = e.clientY - pivotY;
 
-      // Угол поворота купола к мыши
-      let angleDeg = Math.atan2(deltaY, deltaX) * (180 / Math.PI) - 90;
+      // Угол поворота относительно горизонтали влево
+      const angleRad = Math.atan2(deltaY, -deltaX);
+      let angleDeg = -angleRad * (180 / Math.PI);
 
-      // Ограничиваем угол поворота для реалистичности (-70° .. +70°)
-      if (angleDeg < -180) angleDeg += 360;
-      const clampedAngle = Math.max(-75, Math.min(75, angleDeg));
+      // Ограничиваем естественный угол наклона корпуса (-45° вверх, +55° вниз)
+      const clampedAngle = Math.max(-45, Math.min(55, angleDeg));
 
-      cctvHead.style.transform = `rotate(${clampedAngle}deg)`;
-
-      // Смещение зрачка линзы в сторону взгляда (эффект 3D-фокуса)
-      const dist = Math.hypot(deltaX, deltaY);
-      const maxOffset = 5;
-      const offsetX = (deltaX / Math.max(dist, 1)) * maxOffset;
-      const offsetY = (deltaY / Math.max(dist, 1)) * maxOffset;
-
-      if (cctvPupil) {
-        cctvPupil.setAttribute('cx', 80 + offsetX);
-        cctvPupil.setAttribute('cy', 78 + offsetY);
-      }
+      cctvArm.style.transform = `rotate(${clampedAngle}deg)`;
     });
 
     // База детальных характеристик товаров
