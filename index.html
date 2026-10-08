@@ -897,7 +897,7 @@
       </button>
 
       <div class="search-wrapper">
-        <input type="text" id="searchInput" class="search-input" placeholder="Артикул (01482), ГОСТ или название..." oninput="handleSearch(this.value)">
+        <input type="text" id="searchInput" class="search-input" placeholder="Артикул, геркон, ГОСТ или название..." oninput="handleSearch(this.value)">
         <button class="search-clear" id="searchClear" onclick="resetSearch()">✕</button>
       </div>
 
@@ -916,6 +916,7 @@
       <div class="mega-group">
         <h4>ОПС и СОУЭ</h4>
         <ul>
+          <li><a onclick="filterByKeyword('геркон')">Магнитоконтактные датчики Smartec</a></li>
           <li><a onclick="filterByKeyword('ППКОП')">Приборы приемно-контрольные (ППКОП)</a></li>
           <li><a onclick="filterByKeyword('извещатель')">Извещатели пламени и дымовые</a></li>
           <li><a onclick="filterByKeyword('оповещатель')">Табло «Выход» и речевое СОУЭ</a></li>
@@ -1016,11 +1017,11 @@
     <!-- Каталог товаров -->
     <div class="section-header" id="catalogSection">
       <h2>Складская матрица оборудования</h2>
-      <span style="font-size: 13px; color: var(--text-muted);">Кликните на название товара для просмотра характеристик</span>
+      <span style="font-size: 13px; color: var(--text-muted);">Кликните на название товара для просмотра характеристик и оптовых цен</span>
     </div>
 
     <div class="products-grid" id="productsGrid">
-      <!-- Товар 1 -->
+      <!-- Базовый Товар 1 -->
       <div class="product-card" data-cat="ops" data-keywords="ппкоп приемно контрольный опс инк-01482 01482 8 шлейфов">
         <div class="card-top">
           <span class="sku-badge">АРТИКУЛ: ИНК-01482</span>
@@ -1037,7 +1038,7 @@
         </div>
       </div>
 
-      <!-- Товар 2 -->
+      <!-- Базовый Товар 2 -->
       <div class="product-card" data-cat="power" data-keywords="рип источник питания ибп инк-02319 02319 12в 3а 7ач">
         <div class="card-top">
           <span class="sku-badge">АРТИКУЛ: ИНК-02319</span>
@@ -1054,7 +1055,7 @@
         </div>
       </div>
 
-      <!-- Товар 3 -->
+      <!-- Базовый Товар 3 -->
       <div class="product-card" data-cat="cable" data-keywords="кабель огнестойкий кпсэнг frls 1х2х0.75 инк-08910 08910 бухта">
         <div class="card-top">
           <span class="sku-badge">АРТИКУЛ: ИНК-08910</span>
@@ -1071,7 +1072,7 @@
         </div>
       </div>
 
-      <!-- Товар 4 -->
+      <!-- Базовый Товар 4 -->
       <div class="product-card" data-cat="go" data-keywords="тележка а-тт-01 атт01 а-тт го чс убежища инк-го-001">
         <div class="card-top">
           <span class="sku-badge">АРТИКУЛ: ИНК-ГО-001</span>
@@ -1084,6 +1085,194 @@
           <div class="card-actions">
             <button class="btn-card btn-add" onclick="addToCart('Тележка специальная А-ТТ-01', 18900, 'ИНК-ГО-001')">В смету</button>
             <button class="btn-card btn-buy-one" onclick="openOrderModal('Тележка специальная А-ТТ-01', 'ИНК-ГО-001')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Новые товары Smartec из Excel -->
+      <!-- Товар Smartec ST-DM010NC-BR -->
+      <div class="product-card" data-cat="ops" data-keywords="smartec ст-дм010 st-dm010nc-br 279069 магнитоконтактный геркон датчик открытия коричневый">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ST-DM010NC-BR (279069)</span>
+          <span class="stock-tag">● В наличии</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ST-DM010NC-BR')">Извещатель магнитоконтактный Smartec ST-DM010NC-BR (коричневый)</div>
+        <div class="card-bottom">
+          <div class="price-value">132 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Извещатель Smartec ST-DM010NC-BR', 132, 'ST-DM010NC-BR')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Извещатель Smartec ST-DM010NC-BR', 'ST-DM010NC-BR')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар Smartec ST-DM010NC-WT -->
+      <div class="product-card" data-cat="ops" data-keywords="smartec ст-дм010 st-dm010nc-wt 280894 магнитоконтактный геркон датчик открытия белый">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ST-DM010NC-WT (280894)</span>
+          <span class="stock-tag">● В наличии</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ST-DM010NC-WT')">Извещатель магнитоконтактный Smartec ST-DM010NC-WT (белый)</div>
+        <div class="card-bottom">
+          <div class="price-value">132 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Извещатель Smartec ST-DM010NC-WT', 132, 'ST-DM010NC-WT')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Извещатель Smartec ST-DM010NC-WT', 'ST-DM010NC-WT')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар Smartec ST-DM011NC-BR -->
+      <div class="product-card" data-cat="ops" data-keywords="smartec ст-дм011 st-dm011nc-br 286034 магнитоконтактный клеммы под винт коричневый">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ST-DM011NC-BR (286034)</span>
+          <span class="stock-tag">● В наличии</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ST-DM011NC-BR')">Извещатель магнитоконтактный Smartec ST-DM011NC-BR (клеммы под винт, коричневый)</div>
+        <div class="card-bottom">
+          <div class="price-value">231 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Извещатель Smartec ST-DM011NC-BR', 231, 'ST-DM011NC-BR')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Извещатель Smartec ST-DM011NC-BR', 'ST-DM011NC-BR')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар Smartec ST-DM011NC-WT -->
+      <div class="product-card" data-cat="ops" data-keywords="smartec ст-дм011 st-dm011nc-wt 279070 магнитоконтактный клеммы под винт белый">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ST-DM011NC-WT (279070)</span>
+          <span class="stock-tag">● В наличии</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ST-DM011NC-WT')">Извещатель магнитоконтактный Smartec ST-DM011NC-WT (клеммы под винт, белый)</div>
+        <div class="card-bottom">
+          <div class="price-value">231 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Извещатель Smartec ST-DM011NC-WT', 231, 'ST-DM011NC-WT')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Извещатель Smartec ST-DM011NC-WT', 'ST-DM011NC-WT')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар Smartec ST-DM015NO-BR -->
+      <div class="product-card" data-cat="ops" data-keywords="smartec ст-дм015 st-dm015no-br 334323 врезной магнитоконтактный коричневый">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ST-DM015NO-BR (334323)</span>
+          <span class="stock-tag">● В наличии</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ST-DM015NO-BR')">Извещатель магнитоконтактный врезной Smartec ST-DM015NO-BR (коричневый)</div>
+        <div class="card-bottom">
+          <div class="price-value">429 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Извещатель врезной ST-DM015NO-BR', 429, 'ST-DM015NO-BR')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Извещатель врезной ST-DM015NO-BR', 'ST-DM015NO-BR')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар Smartec ST-DM015NO-WT -->
+      <div class="product-card" data-cat="ops" data-keywords="smartec ст-дм015 st-dm015no-wt 283816 магнитоконтактный белый">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ST-DM015NO-WT (283816)</span>
+          <span class="stock-tag">● В наличии</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ST-DM015NO-WT')">Извещатель магнитоконтактный Smartec ST-DM015NO-WT (белый)</div>
+        <div class="card-bottom">
+          <div class="price-value">429 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Извещатель Smartec ST-DM015NO-WT', 429, 'ST-DM015NO-WT')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Извещатель Smartec ST-DM015NO-WT', 'ST-DM015NO-WT')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар Smartec ST-DM020NC-BR -->
+      <div class="product-card" data-cat="ops" data-keywords="smartec ст-дм020 st-dm020nc-br 283817 герметичный ip66 коричневый">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ST-DM020NC-BR (283817)</span>
+          <span class="stock-tag">● IP66 / В наличии</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ST-DM020NC-BR')">Извещатель магнитоконтактный Smartec ST-DM020NC-BR (IP66, коричневый)</div>
+        <div class="card-bottom">
+          <div class="price-value">132 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Извещатель Smartec ST-DM020NC-BR', 132, 'ST-DM020NC-BR')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Извещатель Smartec ST-DM020NC-BR', 'ST-DM020NC-BR')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар Smartec ST-DM020NC-WT -->
+      <div class="product-card" data-cat="ops" data-keywords="smartec ст-дм020 st-dm020nc-wt 283145 герметичный ip66 белый">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ST-DM020NC-WT (283145)</span>
+          <span class="stock-tag">● IP66 / В наличии</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ST-DM020NC-WT')">Извещатель магнитоконтактный Smartec ST-DM020NC-WT (IP66, белый)</div>
+        <div class="card-bottom">
+          <div class="price-value">132 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Извещатель Smartec ST-DM020NC-WT', 132, 'ST-DM020NC-WT')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Извещатель Smartec ST-DM020NC-WT', 'ST-DM020NC-WT')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар Smartec ST-DM110NC-BR -->
+      <div class="product-card" data-cat="ops" data-keywords="smartec ст-дм110 st-dm110nc-br 279074 миниатюрный плоский коричневый">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ST-DM110NC-BR (279074)</span>
+          <span class="stock-tag">● В наличии</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ST-DM110NC-BR')">Извещатель магнитоконтактный Smartec ST-DM110NC-BR (24х14х6 мм, коричневый)</div>
+        <div class="card-bottom">
+          <div class="price-value">132 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Извещатель Smartec ST-DM110NC-BR', 132, 'ST-DM110NC-BR')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Извещатель Smartec ST-DM110NC-BR', 'ST-DM110NC-BR')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар Smartec ST-DM110NC-WT -->
+      <div class="product-card" data-cat="ops" data-keywords="smartec ст-дм110 st-dm110nc-wt 279073 миниатюрный плоский белый">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ST-DM110NC-WT (279073)</span>
+          <span class="stock-tag">● В наличии</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ST-DM110NC-WT')">Извещатель магнитоконтактный Smartec ST-DM110NC-WT (24х14х6 мм, белый)</div>
+        <div class="card-bottom">
+          <div class="price-value">132 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Извещатель Smartec ST-DM110NC-WT', 132, 'ST-DM110NC-WT')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Извещатель Smartec ST-DM110NC-WT', 'ST-DM110NC-WT')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар Smartec ST-DM110NO-BR -->
+      <div class="product-card" data-cat="ops" data-keywords="smartec ст-дм110 st-dm110no-br 334327 замыкание при тревоге no коричневый">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ST-DM110NO-BR (334327)</span>
+          <span class="stock-tag">● В наличии</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ST-DM110NO-BR')">Извещатель магнитоконтактный Smartec ST-DM110NO-BR (NO контакты, коричневый)</div>
+        <div class="card-bottom">
+          <div class="price-value">594 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Извещатель Smartec ST-DM110NO-BR', 594, 'ST-DM110NO-BR')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Извещатель Smartec ST-DM110NO-BR', 'ST-DM110NO-BR')">В 1 клик</button>
           </div>
         </div>
       </div>
@@ -1330,7 +1519,9 @@
       toggleCart(true);
     }
 
-    // База детальных характеристик товаров
+    // ==========================================
+    // БАЗА ДЕТАЛЬНЫХ ХАРАКТЕРИСТИК ТОВАРОВ
+    // ==========================================
     const productDatabase = {
       'ИНК-01482': {
         title: 'Прибор приемно-контрольный охранно-пожарный (ППКОП) 8 шлейфов',
@@ -1402,6 +1593,192 @@
           { q: 'от 1 шт.', p: '18 900 ₽' },
           { q: 'от 5 шт.', p: '17 200 ₽' },
           { q: 'от 20 шт.', p: 'по запросу в счете' }
+        ]
+      },
+      'ST-DM010NC-BR': {
+        title: 'Извещатель магнитоконтактный Smartec ST-DM010NC-BR (коричневый)',
+        sku: 'ST-DM010NC-BR (279069)',
+        price: 132,
+        desc: 'Магнитоконтактный датчик для контроля дверей и окон. Контакты NC (размыкаются при тревоге). Кабельный отвод, пластиковый корпус.',
+        specs: [
+          { k: 'Производитель', v: 'Smartec' },
+          { k: 'Рабочий зазор', v: '15 мм (замкнут) / 25 мм (разомкнут)' },
+          { k: 'Коммутация', v: 'до 30 В, до 3 Вт' },
+          { k: 'Диапазон температур', v: '-30°C … +65°C' },
+          { k: 'Габариты', v: '10х18 мм (геркон и магнит)' }
+        ],
+        bulkPrices: [
+          { q: 'Базовая розница', p: '132.00 ₽' },
+          { q: 'Опт 1', p: '128.50 ₽' },
+          { q: 'Крупный опт', p: '125.00 ₽' }
+        ]
+      },
+      'ST-DM010NC-WT': {
+        title: 'Извещатель магнитоконтактный Smartec ST-DM010NC-WT (белый)',
+        sku: 'ST-DM010NC-WT (280894)',
+        price: 132,
+        desc: 'Магнитоконтактный датчик для дверей и окон. Контакты NC (размыкаются при тревоге). Белый пластиковый корпус, кабельный отвод.',
+        specs: [
+          { k: 'Производитель', v: 'Smartec' },
+          { k: 'Рабочий зазор', v: '15 мм / 25 мм' },
+          { k: 'Коммутация', v: '30 В, 3 Вт' },
+          { k: 'Диапазон температур', v: '-30°C … +65°C' },
+          { k: 'Габариты', v: '10х18 мм' }
+        ],
+        bulkPrices: [
+          { q: 'Базовая розница', p: '132.00 ₽' },
+          { q: 'Опт 1', p: '128.50 ₽' },
+          { q: 'Крупный опт', p: '125.00 ₽' }
+        ]
+      },
+      'ST-DM011NC-BR': {
+        title: 'Извещатель магнитоконтактный Smartec ST-DM011NC-BR (коричневый)',
+        sku: 'ST-DM011NC-BR (286034)',
+        price: 231,
+        desc: 'Накладной датчик открытия с удобным подключением на клеммы под винт. Коричневый пластиковый корпус.',
+        specs: [
+          { k: 'Тип подключения', v: 'Клеммы под винт' },
+          { k: 'Рабочий зазор', v: '15 мм / 25 мм' },
+          { k: 'Коммутация', v: '30 В, 3 Вт' },
+          { k: 'Габариты', v: '10х30 мм (геркон), 10х22 мм (магнит)' }
+        ],
+        bulkPrices: [
+          { q: 'Базовая розница', p: '231.00 ₽' },
+          { q: 'Опт 1', p: '225.00 ₽' },
+          { q: 'Крупный опт', p: '219.00 ₽' }
+        ]
+      },
+      'ST-DM011NC-WT': {
+        title: 'Извещатель магнитоконтактный Smartec ST-DM011NC-WT (белый)',
+        sku: 'ST-DM011NC-WT (279070)',
+        price: 231,
+        desc: 'Накладной датчик открытия с клеммами под винт. Белый пластиковый корпус.',
+        specs: [
+          { k: 'Тип подключения', v: 'Клеммы под винт' },
+          { k: 'Рабочий зазор', v: '15 мм / 25 мм' },
+          { k: 'Коммутация', v: '30 В, 3 Вт' },
+          { k: 'Габариты', v: '10х30 мм / 10х22 мм' }
+        ],
+        bulkPrices: [
+          { q: 'Базовая розница', p: '231.00 ₽' },
+          { q: 'Опт 1', p: '225.00 ₽' },
+          { q: 'Крупный опт', p: '219.00 ₽' }
+        ]
+      },
+      'ST-DM015NO-BR': {
+        title: 'Извещатель магнитоконтактный врезной Smartec ST-DM015NO-BR (коричневый)',
+        sku: 'ST-DM015NO-BR (334323)',
+        price: 429,
+        desc: 'Врезной геркон скрытого монтажа. Контакты NO (замыкаются при тревоге).',
+        specs: [
+          { k: 'Тип монтажа', v: 'Скрытый врезной' },
+          { k: 'Тип контакта', v: 'NO (замыкание при тревоге)' },
+          { k: 'Рабочий зазор', v: '15 мм / 25 мм' },
+          { k: 'Габариты', v: '10х22 мм' }
+        ],
+        bulkPrices: [
+          { q: 'Базовая розница', p: '429.00 ₽' },
+          { q: 'Опт 1', p: '418.50 ₽' },
+          { q: 'Крупный опт', p: '408.00 ₽' }
+        ]
+      },
+      'ST-DM015NO-WT': {
+        title: 'Извещатель магнитоконтактный Smartec ST-DM015NO-WT (белый)',
+        sku: 'ST-DM015NO-WT (283816)',
+        price: 429,
+        desc: 'Магнитоконтактный извещатель с нормально разомкнутыми контактами (NO). Белый корпус, кабельный отвод.',
+        specs: [
+          { k: 'Тип контакта', v: 'NO (замыкание при тревоге)' },
+          { k: 'Рабочий зазор', v: '15 мм / 25 мм' },
+          { k: 'Коммутация', v: '30 В, 3 Вт' },
+          { k: 'Габариты', v: '10х22 мм' }
+        ],
+        bulkPrices: [
+          { q: 'Базовая розница', p: '429.00 ₽' },
+          { q: 'Опт 1', p: '418.50 ₽' },
+          { q: 'Крупный опт', p: '408.00 ₽' }
+        ]
+      },
+      'ST-DM020NC-BR': {
+        title: 'Извещатель магнитоконтактный Smartec ST-DM020NC-BR (IP66, коричневый)',
+        sku: 'ST-DM020NC-BR (283817)',
+        price: 132,
+        desc: 'Герметичный влагозащищенный датчик (IP66) с увеличенным рабочим зазором до 35 мм.',
+        specs: [
+          { k: 'Степень защиты', v: 'IP66 влагозащищенный' },
+          { k: 'Рабочий зазор', v: '25 мм (замкнут) / 35 мм (разомкнут)' },
+          { k: 'Диапазон температур', v: '-30°C … +65°C' },
+          { k: 'Габариты', v: '10х33 мм' }
+        ],
+        bulkPrices: [
+          { q: 'Базовая розница', p: '132.00 ₽' },
+          { q: 'Опт 1', p: '128.50 ₽' },
+          { q: 'Крупный опт', p: '125.00 ₽' }
+        ]
+      },
+      'ST-DM020NC-WT': {
+        title: 'Извещатель магнитоконтактный Smartec ST-DM020NC-WT (IP66, белый)',
+        sku: 'ST-DM020NC-WT (283145)',
+        price: 132,
+        desc: 'Влагозащищенный извещатель открытия IP66. Увеличенный зазор до 35 мм, белый корпус.',
+        specs: [
+          { k: 'Степень защиты', v: 'IP66' },
+          { k: 'Рабочий зазор', v: '25 мм / 35 мм' },
+          { k: 'Коммутация', v: '30 В, 3 Вт' },
+          { k: 'Габариты', v: '10х33 мм' }
+        ],
+        bulkPrices: [
+          { q: 'Базовая розница', p: '132.00 ₽' },
+          { q: 'Опт 1', p: '128.50 ₽' },
+          { q: 'Крупный опт', p: '125.00 ₽' }
+        ]
+      },
+      'ST-DM110NC-BR': {
+        title: 'Извещатель магнитоконтактный Smartec ST-DM110NC-BR (коричневый)',
+        sku: 'ST-DM110NC-BR (279074)',
+        price: 132,
+        desc: 'Компактный плоский магнитоконтактный датчик толщиной всего 6 мм для пластиковых и деревянных рам.',
+        specs: [
+          { k: 'Исполнение', v: 'Миниатюрный плоский' },
+          { k: 'Габариты', v: '24х14х6 мм' },
+          { k: 'Рабочий зазор', v: '15 мм / 25 мм' }
+        ],
+        bulkPrices: [
+          { q: 'Базовая розница', p: '132.00 ₽' },
+          { q: 'Опт 1', p: '128.50 ₽' },
+          { q: 'Крупный опт', p: '125.00 ₽' }
+        ]
+      },
+      'ST-DM110NC-WT': {
+        title: 'Извещатель магнитоконтактный Smartec ST-DM110NC-WT (белый)',
+        sku: 'ST-DM110NC-WT (279073)',
+        price: 132,
+        desc: 'Миниатюрный плоский извещатель открытия толщиной 6 мм. Идеален для стеклопакетов.',
+        specs: [
+          { k: 'Исполнение', v: 'Миниатюрный плоский' },
+          { k: 'Габариты', v: '24х14х6 мм' },
+          { k: 'Рабочий зазор', v: '15 мм / 25 мм' }
+        ],
+        bulkPrices: [
+          { q: 'Базовая розница', p: '132.00 ₽' },
+          { q: 'Опт 1', p: '128.50 ₽' },
+          { q: 'Крупный опт', p: '125.00 ₽' }
+        ]
+      },
+      'ST-DM110NO-BR': {
+        title: 'Извещатель магнитоконтактный Smartec ST-DM110NO-BR (NO контакты, коричневый)',
+        sku: 'ST-DM110NO-BR (334327)',
+        price: 594,
+        desc: 'Плоский компактный геркон с нормально разомкнутыми контактами (NO). Замыкается при тревоге.',
+        specs: [
+          { k: 'Тип контакта', v: 'NO (замыкание при тревоге)' },
+          { k: 'Габариты', v: '24х14х6 мм' },
+          { k: 'Рабочий зазор', v: '15 мм (разомкнут) / 25 мм (замкнут)' }
+        ],
+        bulkPrices: [
+          { q: 'Базовая розница', p: '594.00 ₽' },
+          { q: 'Опт 1', p: '579.00 ₽' },
+          { q: 'Крупный опт', p: '564.00 ₽' }
         ]
       }
     };
