@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VERTEX Инжиниринг | Оптовые поставки B2B</title>
+  <title>VERTEX Инжиниринг | Федеральный B2B Маркетплейс Инженерных Систем</title>
   
   <!-- Tailwind CSS & Google Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -31,11 +31,11 @@
               accent: '#06b6d4',
             },
             dark: {
-              950: '#090d16',
-              900: '#0f172a',
-              850: '#151f32',
-              800: '#1e293b',
-              700: '#334155',
+              950: '#060a12',
+              900: '#0c1322',
+              850: '#131e33',
+              800: '#1a2742',
+              700: '#2b3c5e',
             }
           }
         }
@@ -45,29 +45,29 @@
 
   <style>
     body {
-      background-color: #090d16;
-      color: #f8fafc;
+      background-color: #060a12;
+      color: #f1f5f9;
       overflow-x: hidden;
     }
     .glass-panel {
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(12, 19, 34, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
     .glass-panel-hover:hover {
-      background: rgba(21, 31, 50, 0.85);
-      border-color: rgba(16, 185, 129, 0.35);
+      background: rgba(19, 30, 51, 0.95);
+      border-color: rgba(16, 185, 129, 0.4);
     }
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
-      background: #090d16;
+      background: #060a12;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #334155;
+      background: #2b3c5e;
       border-radius: 3px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -75,10 +75,10 @@
     }
     @media print {
       body * {
-        visibility: hidden;
+        visibility: hidden !important;
       }
       #invoice-modal-content, #invoice-modal-content * {
-        visibility: visible;
+        visibility: visible !important;
       }
       #invoice-modal-content {
         position: absolute;
@@ -97,231 +97,308 @@
 </head>
 <body class="font-sans antialiased selection:bg-brand-500 selection:text-dark-950">
 
-  <!-- ==================== ВЕРХНЯЯ B2B ПАНЕЛЬ ==================== -->
-  <div class="bg-dark-900 border-b border-dark-800 text-xs text-slate-400 py-2 px-4 sm:px-8 flex flex-wrap justify-between items-center gap-2">
-    <div class="flex items-center gap-6">
+  <!-- ==================== ВЕРХНЯЯ B2B ПАНЕЛЬ СЕРВИСОВ ==================== -->
+  <div class="bg-dark-950 border-b border-dark-800 text-xs text-slate-400 py-2 px-4 sm:px-8 flex flex-wrap justify-between items-center gap-2">
+    <div class="flex items-center gap-5">
       <div class="flex items-center gap-2">
         <span class="inline-block w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-        <span>Склады онлайн: <strong class="text-slate-200">МСК (Юг), СПБ (Шушары), ЕКБ</strong></span>
+        <span>Склады синхронизированы: <strong class="text-slate-200">СПб (Шушары), МСК (Подольск), ЕКБ</strong></span>
       </div>
-      <div class="hidden md:flex items-center gap-1 hover:text-white cursor-pointer transition">
+      <button onclick="openEdoModal()" class="hidden md:flex items-center gap-1.5 hover:text-brand-400 cursor-pointer transition">
         <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-brand-500"></i>
-        <span>ЭДО: Диадок / СБИС подключены</span>
-      </div>
+        <span>ЭДО: СБИС / Диадок ID: 2BM-7701982310</span>
+      </button>
     </div>
     
-    <div class="flex items-center gap-6">
+    <div class="flex items-center gap-5">
       <!-- Переключатель НДС -->
-      <div class="flex items-center gap-2 bg-dark-850 px-2.5 py-1 rounded-full border border-dark-700">
-        <span class="font-medium text-slate-300">Цены:</span>
+      <div class="flex items-center gap-2 bg-dark-850 px-3 py-1 rounded-full border border-slate-700/80">
+        <span class="font-medium text-slate-400">Цены:</span>
         <button id="vat-toggle" onclick="toggleVat()" class="flex items-center gap-1.5 font-bold text-brand-400 transition hover:text-white">
-          <span id="vat-mode-label">С НДС (20%)</span>
+          <span id="vat-mode-label">С НДС 20%</span>
           <i data-lucide="refresh-cw" class="w-3 h-3"></i>
         </button>
       </div>
 
-      <div class="hidden sm:flex items-center gap-2">
-        <i data-lucide="phone-call" class="w-3.5 h-3.5 text-brand-accent"></i>
-        <span class="font-mono text-slate-200">8 (800) 550-20-40</span>
-        <span class="text-[10px] text-slate-500">доб. 102</span>
+      <!-- Кредитный лимит -->
+      <button onclick="openCreditModal()" class="hidden lg:flex items-center gap-1.5 text-slate-300 hover:text-brand-400 transition">
+        <i data-lucide="credit-card" class="w-3.5 h-3.5 text-brand-accent"></i>
+        <span>Лимит постоплаты: <strong class="text-white font-mono">1 500 000 ₽</strong></span>
+      </button>
+
+      <!-- Контакты менеджера -->
+      <div class="flex items-center gap-2">
+        <i data-lucide="headset" class="w-3.5 h-3.5 text-brand-400"></i>
+        <a href="tel:88005502040" class="font-mono text-slate-200 hover:text-white font-semibold">8 (800) 550-20-40</a>
       </div>
     </div>
   </div>
 
-  <!-- ==================== ОСНОВНОЙ HEADER ==================== -->
+  <!-- ==================== ОСНОВНОЙ ХЕДЕР ==================== -->
   <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
       
-      <!-- Логотип -->
-      <div class="flex items-center gap-3 cursor-pointer" onclick="resetFilters()">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-accent flex items-center justify-center shadow-lg shadow-brand-500/20">
-          <i data-lucide="cpu" class="w-6 h-6 text-dark-950 font-black"></i>
+      <!-- Логотип компании -->
+      <div class="flex items-center gap-3 cursor-pointer select-none" onclick="resetFilters()">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-600 via-brand-500 to-brand-accent flex items-center justify-center shadow-lg shadow-brand-500/20">
+          <i data-lucide="layers" class="w-6 h-6 text-dark-950 font-black"></i>
         </div>
         <div>
-          <span class="text-xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400 font-mono">VERTEX</span>
-          <span class="text-[10px] block text-brand-400 font-bold uppercase tracking-widest -mt-1">B2B Инжиниринг</span>
+          <span class="text-2xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400 font-mono">VERTEX</span>
+          <span class="text-[10px] block text-brand-400 font-bold uppercase tracking-widest -mt-1">B2B Инжиниринг & Комплектация</span>
         </div>
       </div>
 
-      <!-- Поисковая строка B2B с горячим поиском -->
+      <!-- Умный поиск по SKU, ГОСТ и маркам -->
       <div class="flex-1 max-w-xl relative hidden md:block">
         <div class="relative">
           <input 
             type="text" 
             id="search-input" 
             oninput="handleSearch(this.value)"
-            placeholder="Поиск по артикулу, ГОСТ, марке или названию (напр. ВВГнг, C60N, IP65)..."
-            class="w-full bg-dark-900 border border-slate-700/70 rounded-xl px-4 py-2.5 pl-11 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner font-sans"
+            placeholder="Поиск: ВВГнг, артикул Schneider, ГОСТ 31996, ЩРн..."
+            class="w-full bg-dark-900 border border-slate-700/80 rounded-xl px-4 py-2.5 pl-11 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner font-sans"
           >
           <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3"></i>
           <span class="absolute right-3 top-2.5 px-2 py-0.5 rounded text-[10px] font-mono bg-dark-800 text-slate-400 border border-slate-700">Ctrl + K</span>
         </div>
-        <!-- Выпадающее окно подсказок -->
         <div id="search-dropdown" class="hidden absolute left-0 right-0 top-12 mt-1 glass-panel rounded-xl border border-slate-700 p-2 shadow-2xl z-50 max-h-80 overflow-y-auto custom-scrollbar"></div>
       </div>
 
-      <!-- Правый блок: Быстрый заказ, Корзина, Кабинет -->
-      <div class="flex items-center gap-3">
-        <button onclick="openQuickOrderModal()" class="hidden lg:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-200 text-sm font-medium transition hover:border-slate-500">
+      <!-- Кнопки инструментов снабженца -->
+      <div class="flex items-center gap-2.5">
+        <button onclick="openCalcModal()" class="hidden xl:flex items-center gap-2 px-3 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-200 text-xs font-semibold transition" title="Расчет барабанов кабеля и тоннажа">
+          <i data-lucide="calculator" class="w-4 h-4 text-brand-accent"></i>
+          <span>Логистика кабеля</span>
+        </button>
+
+        <button onclick="openQuickOrderModal()" class="hidden lg:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-200 text-xs font-semibold transition hover:border-slate-500">
           <i data-lucide="file-spreadsheet" class="w-4 h-4 text-brand-400"></i>
           <span>Заказ по смете</span>
         </button>
 
+        <!-- Корзина / Спецификация -->
         <button onclick="toggleCartDrawer(true)" class="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 text-dark-950 font-bold text-sm shadow-lg shadow-brand-500/25 hover:brightness-110 active:scale-95 transition">
           <i data-lucide="shopping-cart" class="w-4 h-4"></i>
           <span class="hidden sm:inline">Спецификация</span>
           <span id="cart-counter" class="bg-dark-950 text-brand-400 text-xs px-2 py-0.5 rounded-full font-mono font-bold">0</span>
         </button>
 
-        <div class="flex items-center gap-2 pl-2 border-l border-slate-800">
-          <div class="w-9 h-9 rounded-xl bg-dark-800 border border-slate-700 flex items-center justify-center text-slate-300 font-mono text-xs font-bold" title="ООО 'ТехноСистемы' (ИНН 7804928172)">
-            ТС
-          </div>
-        </div>
+        <!-- Кабинет юрлица -->
+        <button onclick="openCabinetModal()" class="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-xl bg-dark-850 border border-slate-700 hover:border-brand-500 transition text-slate-200" title="Кабинет юрлица">
+          <div class="w-6 h-6 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center font-mono text-xs font-bold">ООО</div>
+          <span class="text-xs font-semibold hidden md:inline">ТехноСистемы</span>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- ==================== HERO СЕКЦИЯ ДЛЯ СНАБЖЕНЦЕВ ==================== -->
-  <section class="relative overflow-hidden py-12 px-4 sm:px-6 lg:px-8 border-b border-dark-800">
+  <!-- ==================== HERO B2B БЛОК ==================== -->
+  <section class="relative overflow-hidden py-10 px-4 sm:px-6 lg:px-8 border-b border-dark-800">
     <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-brand-accent/10 rounded-full blur-3xl pointer-events-none"></div>
 
-    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-      <div class="max-w-2xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-medium mb-4">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      
+      <div class="lg:col-span-7">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold mb-4">
           <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-          <span>Официальный дистрибьютор ГОСТ / EAC стандартов</span>
+          <span>Официальный дистрибьютор ГОСТ/EAC • Договор с НДС 20%</span>
         </div>
-        <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-          Комплексные B2B поставки <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-400 to-brand-accent">инженерии и электрики</span>
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+          Инженерные поставки <br>
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-400 via-teal-300 to-brand-accent">для объектов и застройщиков</span>
         </h1>
         <p class="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed">
-          Прямые складские отгрузки день в день. Автоматическая выгрузка счетов с факсимиле, спецификаций в XLS и резервирование остатков из 1С ERP.
+          Автоматизация снабжения промышленных строек: прямые отгрузки из распределительных центров день в день, мгновенная выгрузка счета с синей печатью, интеграция с 1С и передача УПД через ЭДО.
         </p>
 
-        <!-- Метрики надёжности -->
-        <div class="mt-6 grid grid-cols-3 gap-4 pt-6 border-t border-slate-800">
-          <div>
-            <div class="text-2xl font-bold font-mono text-white">45 000+</div>
-            <div class="text-xs text-slate-500">Позиций в наличии</div>
+        <!-- Плашки ключевых B2B условий -->
+        <div class="mt-6 grid grid-cols-3 gap-3 pt-6 border-t border-slate-800/80">
+          <div class="glass-panel p-3 rounded-xl border border-slate-800">
+            <div class="text-xl font-bold font-mono text-white">45 000+</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Позиций на 3-х складах</div>
           </div>
-          <div>
-            <div class="text-2xl font-bold font-mono text-brand-400">0.02 сек</div>
-            <div class="text-xs text-slate-500">Генерация КП и счёта</div>
+          <div class="glass-panel p-3 rounded-xl border border-slate-800">
+            <div class="text-xl font-bold font-mono text-brand-400">до 45 дней</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Отсрочка платежа</div>
           </div>
-          <div>
-            <div class="text-2xl font-bold font-mono text-brand-accent">100%</div>
-            <div class="text-xs text-slate-500">Сертификаты и паспорта</div>
+          <div class="glass-panel p-3 rounded-xl border border-slate-800">
+            <div class="text-xl font-bold font-mono text-brand-accent">100% ГОСТ</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Вся документация и BIM</div>
           </div>
         </div>
       </div>
 
-      <!-- Быстрый виджет спецификации -->
-      <div class="w-full lg:w-96 glass-panel p-5 rounded-2xl border border-slate-800 shadow-xl">
+      <!-- Виджет быстрого парсинга сметы -->
+      <div class="lg:col-span-5 glass-panel p-5 rounded-2xl border border-slate-800 shadow-2xl relative">
         <div class="flex items-center justify-between mb-3">
-          <span class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-            <i data-lucide="zap" class="w-4 h-4 text-brand-400"></i> Срочный расчет сметы
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+            <i data-lucide="zap" class="w-4 h-4 text-brand-400"></i> Быстрый заказ по смете
           </span>
-          <span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded font-mono">AI Parser</span>
+          <span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded font-mono font-bold">Auto-Match</span>
         </div>
         <textarea 
           id="hero-quick-text" 
           rows="3" 
-          placeholder="Вставьте артикулы или маркировку списком:&#10;ВВГнг 3х2.5 - 500&#10;АВВГ 4х16 - 120"
-          class="w-full bg-dark-900 border border-slate-700 rounded-xl p-3 text-xs font-mono text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500"
+          placeholder="Вставьте строчки сметы, например:&#10;ВВГнг 3х2.5 500&#10;C60N-16A 30&#10;LE-60W 15"
+          class="w-full bg-dark-900 border border-slate-700/80 rounded-xl p-3 text-xs font-mono text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500 custom-scrollbar"
         ></textarea>
-        <button onclick="processHeroQuickOrder()" class="mt-3 w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition">
+        <button onclick="processHeroQuickOrder()" class="mt-3 w-full py-2.5 rounded-xl bg-gradient-to-r from-slate-800 to-dark-850 hover:bg-slate-700 text-white text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition hover:border-brand-500">
           <i data-lucide="arrow-right-circle" class="w-4 h-4 text-brand-400"></i>
-          Распознать и отправить в корзину
+          Распознать артикулы и добавить в заказ
         </button>
       </div>
+
     </div>
   </section>
 
-  <!-- ==================== КАТАЛОГ И ФИЛЬТРЫ ==================== -->
+  <!-- ==================== ОСНОВНАЯ ЧАСТЬ: КАТАЛОГ С ФИЛЬТРАМИ ==================== -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     
-    <!-- Панель управления каталогом -->
+    <!-- Верхняя панель управления каталогом -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
-      <!-- Категории табами -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 custom-scrollbar text-xs font-medium" id="category-pills">
-        <button onclick="filterCategory('all')" class="cat-pill active px-4 py-2 rounded-xl bg-brand-500 text-dark-950 font-bold transition">Все группы</button>
-        <button onclick="filterCategory('cable')" class="cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition">Кабель и провод</button>
-        <button onclick="filterCategory('automation')" class="cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition">Низковольтная автоматика</button>
-        <button onclick="filterCategory('lighting')" class="cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition">Промсвет и LED</button>
-        <button onclick="filterCategory('boxes')" class="cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition">Щитовое оборудование</button>
+      
+      <!-- Фильтры по категориям -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 custom-scrollbar text-xs font-semibold" id="category-pills">
+        <button onclick="filterCategory('all', event)" class="cat-pill active px-4 py-2 rounded-xl bg-brand-500 text-dark-950 font-bold transition">Все категории (6)</button>
+        <button onclick="filterCategory('cable', event)" class="cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition">Кабельно-проводниковая продукция</button>
+        <button onclick="filterCategory('automation', event)" class="cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition">Низковольтная аппаратура</button>
+        <button onclick="filterCategory('lighting', event)" class="cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition">Промышленный свет</button>
+        <button onclick="filterCategory('boxes', event)" class="cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition">Корпуса и НКУ</button>
       </div>
 
-      <!-- Переключатель видов: Сетка / Таблица снабженца -->
-      <div class="flex items-center gap-3 self-end md:self-auto">
-        <span class="text-xs text-slate-400 hidden sm:inline">Вид витрины:</span>
+      <!-- Складской фильтр и вид отображения -->
+      <div class="flex items-center gap-4 self-end md:self-auto">
+        <select id="warehouse-filter" onchange="renderCatalog()" class="bg-dark-850 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-brand-500">
+          <option value="all">Все склады (СПб + МСК + ЕКБ)</option>
+          <option value="spb">Только склад СПб (Шушары)</option>
+          <option value="msk">Только склад МСК (Подольск)</option>
+        </select>
+
         <div class="bg-dark-850 p-1 rounded-xl border border-slate-700 flex items-center gap-1">
-          <button id="view-table-btn" onclick="setViewMode('table')" class="p-1.5 rounded-lg bg-brand-500 text-dark-950 transition" title="B2B Режим: Таблица">
+          <button id="view-table-btn" onclick="setViewMode('table')" class="p-1.5 rounded-lg bg-brand-500 text-dark-950 transition" title="B2B Режим: Таблица с остатками">
             <i data-lucide="layout-list" class="w-4 h-4"></i>
           </button>
-          <button id="view-grid-btn" onclick="setViewMode('grid')" class="p-1.5 rounded-lg text-slate-400 hover:text-white transition" title="Витрина: Карточки">
+          <button id="view-grid-btn" onclick="setViewMode('grid')" class="p-1.5 rounded-lg text-slate-400 hover:text-white transition" title="Витрина: Карточки с параметрами">
             <i data-lucide="layout-grid" class="w-4 h-4"></i>
           </button>
         </div>
       </div>
+
     </div>
 
-    <!-- Область вывода товаров -->
-    <div id="catalog-container" class="mt-8">
-      <!-- Сюда JS рендерит таблицу или сетку карточек -->
-    </div>
+    <!-- Область вывода каталога -->
+    <div id="catalog-container" class="mt-8"></div>
+
   </main>
 
-  <!-- ==================== DRAWER: ВЫДВИЖНАЯ КОРЗИНА / СПЕЦИФИКАЦИЯ ==================== -->
-  <div id="cart-drawer-overlay" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <!-- ==================== B2B ПОДВАЛ С РЕКВИЗИТАМИ И ЭДО ==================== -->
+  <footer class="bg-dark-950 border-t border-slate-800/80 py-12 px-4 sm:px-6 lg:px-8 mt-20">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-xs">
+      
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-dark-950 font-black">V</div>
+          <span class="text-base font-extrabold text-white font-mono">VERTEX B2B</span>
+        </div>
+        <p class="text-slate-400 leading-relaxed">
+          Федеральный дистрибьютор кабельной продукции, модульного оборудования, промышленных щитов и светотехники.
+        </p>
+        <div class="text-slate-500 font-mono text-[11px]">
+          ИНН 7701982310 / КПП 770101001<br>
+          ОГРН 1187847192841
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Для снабженцев и сметчиков</h4>
+        <ul class="space-y-2 text-slate-400">
+          <li><a href="#" onclick="openQuickOrderModal(); return false;" class="hover:text-brand-400 transition">Загрузить смету в Excel</a></li>
+          <li><a href="#" onclick="openCalcModal(); return false;" class="hover:text-brand-400 transition">Расчет барабанов и логистики</a></li>
+          <li><a href="#" onclick="openEdoModal(); return false;" class="hover:text-brand-400 transition">Обмен по ЭДО (Диадок / СБИС)</a></li>
+          <li><a href="#" onclick="openCreditModal(); return false;" class="hover:text-brand-400 transition">Получить отсрочку платежа 45 дней</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Складские терминалы</h4>
+        <ul class="space-y-2 text-slate-400">
+          <li><strong class="text-slate-300">СПб:</strong> пос. Шушары, Московское шоссе 54 (Пн-Пт 08:00 - 20:00)</li>
+          <li><strong class="text-slate-300">Москва:</strong> г. Подольск, Промзона Северная 3 (Круглосуточно)</li>
+          <li><strong class="text-slate-300">Екатеринбург:</strong> ул. Черняховского 86 (Пн-Сб 09:00 - 18:00)</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Отдел по работе с юрлицами</h4>
+        <div class="space-y-2 text-slate-400">
+          <div>Тел: <a href="tel:88005502040" class="text-white font-mono hover:text-brand-400">8 (800) 550-20-40</a> (бесплатно по РФ)</div>
+          <div>E-mail для спецификаций: <a href="mailto:tender@vertex-b2b.ru" class="text-brand-400 font-mono hover:underline">tender@vertex-b2b.ru</a></div>
+          <button onclick="openPersonalManagerModal()" class="mt-2 w-full py-2 bg-dark-850 hover:bg-dark-800 border border-slate-700 rounded-xl text-slate-200 text-xs font-semibold flex items-center justify-center gap-2">
+            <i data-lucide="message-square" class="w-3.5 h-3.5 text-brand-accent"></i>
+            Связаться с менеджером проекта
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-slate-500">
+      <div>© 2026 ООО «ВЕРТЕКС ИНЖИНИРИНГ». Платформа B2B оптовых поставок. Все права защищены.</div>
+      <div class="flex gap-4">
+        <a href="#" onclick="alert('Типовой договор поставки по 44-ФЗ и 223-ФЗ открыт для загрузки'); return false;" class="hover:text-slate-300">Типовой договор поставки</a>
+        <a href="#" onclick="alert('Сертификаты ISO 9001 и дистрибьюторские письма актуальны на 2026 г.'); return false;" class="hover:text-slate-300">Сертификаты дистрибьютора</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== DRAWER: ВЫДВИЖНАЯ СПЕЦИФИКАЦИЯ ==================== -->
+  <div id="cart-drawer-overlay" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
   
   <div id="cart-drawer" class="fixed right-0 top-0 bottom-0 w-full max-w-xl bg-dark-900 border-l border-slate-800 z-50 translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
     
-    <!-- Шапка корзины -->
-    <div class="p-6 border-b border-slate-800 flex items-center justify-between bg-dark-950">
+    <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-dark-950">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-400">
-          <i data-lucide="file-text" class="w-5 h-5"></i>
+          <i data-lucide="clipboard-list" class="w-5 h-5"></i>
         </div>
         <div>
-          <h3 class="text-lg font-bold text-white">Текущая спецификация</h3>
-          <p class="text-xs text-slate-400">Заказчик: ООО "ТехноСистемы" (ИНН 7804928172)</p>
+          <h3 class="text-base font-bold text-white">Спецификация к заказу</h3>
+          <p class="text-xs text-slate-400">Покупатель: ООО "ТехноСистемы" (ИНН 7804928172)</p>
         </div>
       </div>
-      <button onclick="toggleCartDrawer(false)" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-dark-800">
+      <button onclick="toggleCartDrawer(false)" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-dark-800 transition">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
     </div>
 
-    <!-- Список выбранных позиций -->
-    <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
-      <!-- Рендер позиций корзины -->
-    </div>
+    <!-- Список позиций -->
+    <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-3 custom-scrollbar"></div>
 
-    <!-- Подвал корзины и действия -->
-    <div class="p-6 border-t border-slate-800 bg-dark-950">
-      <div class="space-y-2 mb-4 text-sm">
+    <!-- Итого и действия -->
+    <div class="p-5 border-t border-slate-800 bg-dark-950">
+      <div class="space-y-1.5 mb-4 text-xs">
         <div class="flex justify-between text-slate-400">
           <span>Сумма без НДС:</span>
-          <span class="font-mono" id="cart-subtotal">0.00 ₽</span>
+          <span class="font-mono text-slate-200" id="cart-subtotal">0.00 ₽</span>
         </div>
         <div class="flex justify-between text-slate-400">
-          <span id="cart-vat-label">НДС (20%):</span>
-          <span class="font-mono" id="cart-vat">0.00 ₽</span>
+          <span id="cart-vat-label">В том числе НДС (20%):</span>
+          <span class="font-mono text-slate-200" id="cart-vat">0.00 ₽</span>
         </div>
-        <div class="flex justify-between text-lg font-bold text-white pt-2 border-t border-slate-800">
-          <span>Итого к оплате:</span>
+        <div class="flex justify-between text-base font-extrabold text-white pt-2 border-t border-slate-800">
+          <span>Итого:</span>
           <span class="font-mono text-brand-400" id="cart-total">0.00 ₽</span>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-3">
-        <button onclick="exportCartToCSV()" class="py-3 px-4 rounded-xl bg-dark-800 hover:bg-dark-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition">
-          <i data-lucide="download" class="w-4 h-4 text-brand-accent"></i>
-          Выгрузить XLS/CSV
+        <button onclick="exportCartToCSV()" class="py-3 px-3 rounded-xl bg-dark-850 hover:bg-dark-800 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition">
+          <i data-lucide="file-spreadsheet" class="w-4 h-4 text-brand-accent"></i>
+          Выгрузка в Excel
         </button>
-        <button onclick="generateOfficialInvoice()" class="py-3 px-4 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 hover:brightness-110 text-dark-950 text-xs font-bold flex items-center justify-center gap-2 transition shadow-lg shadow-brand-500/20">
+        <button onclick="generateOfficialInvoice()" class="py-3 px-3 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 hover:brightness-110 text-dark-950 text-xs font-extrabold flex items-center justify-center gap-2 transition shadow-lg shadow-brand-500/20">
           <i data-lucide="printer" class="w-4 h-4"></i>
           Сформировать Счёт
         </button>
@@ -335,7 +412,7 @@
       <div class="flex items-center justify-between pb-4 border-b border-slate-800">
         <div class="flex items-center gap-2">
           <i data-lucide="table-properties" class="w-5 h-5 text-brand-400"></i>
-          <h3 class="font-bold text-lg text-white">Парсер смет и спецификаций</h3>
+          <h3 class="font-bold text-lg text-white">Парсер спецификаций снабженца</h3>
         </div>
         <button onclick="closeQuickOrderModal()" class="text-slate-400 hover:text-white">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -343,47 +420,238 @@
       </div>
       
       <p class="text-xs text-slate-400 mt-4 leading-relaxed">
-        Вставьте список позиций из вашей программы учета или сметы. Формат: <code class="text-brand-400 bg-dark-800 px-1.5 py-0.5 rounded">АРТИКУЛ КОЛИЧЕСТВО</code> или <code class="text-brand-400 bg-dark-800 px-1.5 py-0.5 rounded">НАИМЕНОВАНИЕ КОЛИЧЕСТВО</code>.
+        Вставьте строки из Excel, сметы или 1С. Алгоритм автоматически сопоставит номенклатуру, ГОСТ и количество.
       </p>
 
       <textarea 
         id="quick-order-textarea" 
         rows="6" 
-        placeholder="E-101 100&#10;C60N-16A 25&#10;LE-60W 12&#10;ВВГнг 3х1.5 500"
-        class="w-full mt-4 bg-dark-950 border border-slate-700 rounded-xl p-3 font-mono text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-brand-500 custom-scrollbar"
+        placeholder="E-101 250&#10;C60N-16A 40&#10;LE-60W 12&#10;ВВГнг 3х1.5 600"
+        class="w-full mt-4 bg-dark-950 border border-slate-700/80 rounded-xl p-3 font-mono text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-brand-500 custom-scrollbar"
       ></textarea>
 
       <div class="mt-6 flex justify-end gap-3">
-        <button onclick="closeQuickOrderModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:bg-dark-800">Отмена</button>
-        <button onclick="executeQuickOrderParse()" class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 text-xs font-bold flex items-center gap-2">
-          <i data-lucide="check-circle" class="w-4 h-4"></i>
-          Добавить всё в спецификацию
+        <button onclick="closeQuickOrderModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:bg-dark-800">Отмена</button>
+        <button onclick="executeQuickOrderParse()" class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 text-xs font-bold flex items-center gap-2 transition">
+          <i data-lucide="check-check" class="w-4 h-4"></i>
+          Обработать и добавить в корзину
         </button>
       </div>
     </div>
   </div>
 
-  <!-- ==================== МОДАЛЬНОЕ ОКНО: ОФИЦИАЛЬНЫЙ СЧЁТ НА ОПЛАТУ ==================== -->
+  <!-- ==================== МОДАЛЬНОЕ ОКНО: КАЛЬКУЛЯТОР БАРАБАНОВ И ЛОГИСТИКИ ==================== -->
+  <div id="calc-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-dark-900 border border-slate-800 rounded-2xl max-w-xl w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <i data-lucide="calculator" class="w-5 h-5 text-brand-accent"></i>
+          <h3 class="font-bold text-lg text-white">Инженерный калькулятор кабеля и тары</h3>
+        </div>
+        <button onclick="closeCalcModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 mt-5 text-xs">
+        <div>
+          <label class="block text-slate-400 mb-1 font-semibold">Выберите позицию кабеля:</label>
+          <select id="calc-cable-select" class="w-full bg-dark-950 border border-slate-700 rounded-xl p-2.5 text-slate-200">
+            <option value="VT-101">ВВГнг(А)-LS 3х2.5 (Масса ~0.15 кг/м)</option>
+            <option value="VT-102">ВБШвнг(А)-LS 4х16 (Масса ~1.15 кг/м)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-slate-400 mb-1 font-semibold">Общая строительная длина (метры):</label>
+          <input type="number" id="calc-length" value="1500" class="w-full bg-dark-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 font-mono">
+        </div>
+
+        <button onclick="calculateLogistics()" class="w-full py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold text-xs transition">
+          Рассчитать массу и транспорт
+        </button>
+
+        <div id="calc-result" class="p-4 rounded-xl bg-dark-950 border border-slate-800 space-y-2 hidden">
+          <div class="flex justify-between text-slate-300">
+            <span>Расчетный вес нетто:</span>
+            <strong id="calc-weight" class="font-mono text-white">0 кг</strong>
+          </div>
+          <div class="flex justify-between text-slate-300">
+            <span>Рекомендуемый барабан ГОСТ:</span>
+            <strong id="calc-drum" class="font-mono text-brand-400">№14 (Деревянный)</strong>
+          </div>
+          <div class="flex justify-between text-slate-300 border-t border-slate-800 pt-2">
+            <span>Требуемый транспорт:</span>
+            <strong id="calc-truck" class="font-mono text-brand-accent">Газель 1.5т</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== МОДАЛЬНОЕ ОКНО: ЭДО И ДОГОВОР ==================== -->
+  <div id="edo-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-dark-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <i data-lucide="file-check-2" class="w-5 h-5 text-brand-500"></i>
+          <h3 class="font-bold text-lg text-white">Электронный документооборот (ЭДО)</h3>
+        </div>
+        <button onclick="closeEdoModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 mt-5 text-xs text-slate-300">
+        <p>Мы работаем во всех аккредитованных операторах ЭДО РФ с мгновенной отправкой УПД и счетов-фактур день в день.</p>
+        
+        <div class="p-3 bg-dark-950 rounded-xl border border-slate-800 space-y-1 font-mono text-[11px]">
+          <div><strong class="text-brand-400">Диадок (СКБ Контур):</strong> 2BM-7701982310-770101001-001</div>
+          <div><strong class="text-brand-accent">СБИС (Тензор):</strong> 7701982310 / 770101001</div>
+        </div>
+
+        <div>
+          <label class="block text-slate-400 mb-1 font-semibold">Отправить приглашение вашей компании (ИНН):</label>
+          <div class="flex gap-2">
+            <input type="text" id="edo-inn-input" placeholder="7804928172" value="7804928172" class="flex-1 bg-dark-950 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white">
+            <button onclick="sendEdoInvite()" class="px-4 py-2 bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold rounded-xl">Отправить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== МОДАЛЬНОЕ ОКНО: ОТСРОЧКА ПЛАТЕЖА ==================== -->
+  <div id="credit-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-dark-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <i data-lucide="credit-card" class="w-5 h-5 text-brand-accent"></i>
+          <h3 class="font-bold text-lg text-white">Кредитная линия и постоплата</h3>
+        </div>
+        <button onclick="closeCreditModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 mt-5 text-xs text-slate-300">
+        <p>Для строительно-монтажных организаций и генподрядчиков доступна отсрочка платежа до 45 календарных дней без процентов.</p>
+        
+        <div class="grid grid-cols-2 gap-3 text-center">
+          <div class="p-3 bg-dark-950 rounded-xl border border-slate-800">
+            <div class="text-lg font-mono font-bold text-brand-400">до 3 000 000 ₽</div>
+            <div class="text-[10px] text-slate-500">По упрощенному скорингу</div>
+          </div>
+          <div class="p-3 bg-dark-950 rounded-xl border border-slate-800">
+            <div class="text-lg font-mono font-bold text-white">45 дней</div>
+            <div class="text-[10px] text-slate-500">Период закрытия счетов</div>
+          </div>
+        </div>
+
+        <button onclick="requestCreditLine()" class="w-full py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold text-xs transition">
+          Запросить расширение кредитного лимита
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== МОДАЛЬНОЕ ОКНО: ЛИЧНЫЙ КАБИНЕТ ЮРЛИЦА ==================== -->
+  <div id="cabinet-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-dark-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <i data-lucide="building-2" class="w-5 h-5 text-brand-400"></i>
+          <div>
+            <h3 class="font-bold text-base text-white">ООО «ТехноСистемы»</h3>
+            <span class="text-xs text-slate-500 font-mono">ИНН 7804928172 / КПП 780401001</span>
+          </div>
+        </div>
+        <button onclick="closeCabinetModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-4 text-xs">
+        <div class="flex border-b border-slate-800 pb-2 gap-4">
+          <span class="text-brand-400 font-bold border-b-2 border-brand-400 pb-1 cursor-pointer">Закрывающие документы</span>
+          <span class="text-slate-400 hover:text-white cursor-pointer" onclick="alert('Доступно добавление сотрудников: Бухгалтер, Прораб, Снабженец')">Сотрудники и роли (3)</span>
+          <span class="text-slate-400 hover:text-white cursor-pointer" onclick="alert('Договор поставки № П-2026/04 от 12.01.2026 активен')">Договоры (1)</span>
+        </div>
+
+        <div class="space-y-2">
+          <div class="p-3 bg-dark-950 rounded-xl border border-slate-800 flex items-center justify-between">
+            <div>
+              <div class="font-bold text-white">УПД № 1948 от 02.10.2026</div>
+              <div class="text-[11px] text-slate-500 font-mono">Сумма: 348 200.00 ₽ • Подписан в Диадок</div>
+            </div>
+            <button onclick="alert('Скачивание электронного архива УПД с ЭЦП (ZIP)');" class="px-2.5 py-1.5 bg-dark-800 hover:bg-dark-700 text-slate-300 rounded-lg flex items-center gap-1">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i> PDF
+            </button>
+          </div>
+
+          <div class="p-3 bg-dark-950 rounded-xl border border-slate-800 flex items-center justify-between">
+            <div>
+              <div class="font-bold text-white">Акт сверки за 3 квартал 2026</div>
+              <div class="text-[11px] text-slate-500 font-mono">Сальдо в пользу покупателя: 0.00 ₽</div>
+            </div>
+            <button onclick="alert('Скачивание акта сверки взаиморасчетов (PDF)');" class="px-2.5 py-1.5 bg-dark-800 hover:bg-dark-700 text-slate-300 rounded-lg flex items-center gap-1">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i> PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== МОДАЛЬНОЕ ОКНО: СВЯЗЬ С МЕНЕДЖЕРОМ ==================== -->
+  <div id="manager-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-dark-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="font-bold text-base text-white">Персональный ведущий инженер</h3>
+        <button onclick="closePersonalManagerModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="mt-4 flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold text-lg">АВ</div>
+        <div>
+          <div class="font-bold text-white text-sm">Алексей Васильев</div>
+          <div class="text-xs text-slate-400">Ведущий специалист департамента B2B</div>
+        </div>
+      </div>
+      <div class="mt-4 space-y-2 text-xs">
+        <div class="p-2.5 bg-dark-950 rounded-xl border border-slate-800 flex items-center justify-between">
+          <span class="text-slate-400">Прямой телефон:</span>
+          <a href="tel:+78129994020" class="text-brand-400 font-mono font-bold">+7 (812) 999-40-20 (доб. 102)</a>
+        </div>
+        <div class="p-2.5 bg-dark-950 rounded-xl border border-slate-800 flex items-center justify-between">
+          <span class="text-slate-400">Корпоративный Telegram:</span>
+          <a href="https://t.me/" target="_blank" class="text-brand-accent font-mono font-bold">@vertex_b2b_spb</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== МОДАЛЬНОЕ ОКНО: ОФИЦИАЛЬНЫЙ СЧЁТ-ОФЕРТА ==================== -->
   <div id="invoice-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-2 sm:p-6 overflow-y-auto">
     <div class="bg-white text-slate-900 rounded-xl max-w-4xl w-full p-6 sm:p-10 shadow-2xl relative my-8" id="invoice-modal-content">
       
       <div class="no-print absolute right-4 top-4 flex gap-2">
-        <button onclick="window.print()" class="px-3 py-1.5 bg-slate-800 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 hover:bg-slate-700">
-          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Печать / PDF
+        <button onclick="window.print()" class="px-3.5 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 hover:bg-slate-800">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Распечатать / Сохранить в PDF
         </button>
         <button onclick="closeInvoiceModal()" class="p-1.5 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <!-- Шапка счёта -->
       <div class="border-b-2 border-slate-900 pb-4 mb-6">
-        <div class="text-xs text-slate-500 mb-2">Внимание! Оплата данного счета означает согласие с условиями поставки. Срок действия счета — 3 банковских дня.</div>
+        <div class="text-[11px] text-slate-500 mb-2">Внимание! Оплата данного счета означает согласие с условиями поставки. Срок действия счета — 3 банковских дня. Товар резервируется на 72 часа.</div>
         <table class="w-full text-xs border-collapse border border-slate-400 mb-4">
           <tr>
             <td colspan="2" rowspan="2" class="border border-slate-400 p-2 align-top">
               <span class="text-slate-500 block text-[10px]">Банк получателя</span>
-              ПАО СБЕРБАНК г. Москва
+              ПАО СБЕРБАНК г. Санкт-Петербург
             </td>
             <td class="border border-slate-400 p-1 text-[10px] w-16">БИК</td>
             <td class="border border-slate-400 p-1 font-mono font-bold">044525225</td>
@@ -406,17 +674,15 @@
           </tr>
         </table>
 
-        <h2 class="text-xl font-extrabold mt-6">Счет на оплату № ВТ-8492 от <span id="invoice-date"></span></h2>
+        <h2 class="text-xl font-black mt-6 tracking-tight">Счет на оплату № ВТ-9841 от <span id="invoice-date"></span></h2>
       </div>
 
-      <!-- Реквизиты сторон -->
       <div class="text-xs space-y-2 mb-6">
         <div><strong>Поставщик:</strong> ООО "ВЕРТЕКС ИНЖИНИРИНГ", ИНН 7701982310, КПП 770101001, 196084, г. Санкт-Петербург, Московский пр-кт, дом 108</div>
         <div><strong>Покупатель:</strong> ООО "ТехноСистемы", ИНН 7804928172, КПП 780401001, 195220, г. Санкт-Петербург, Гражданский пр-кт, дом 41</div>
-        <div><strong>Основание:</strong> Договор поставки промышленного оборудования № П-2026/04 от 12.01.2026 г.</div>
+        <div><strong>Основание:</strong> Договор поставки электротехнического оборудования № П-2026/04 от 12.01.2026 г.</div>
       </div>
 
-      <!-- Таблица позиций счёта -->
       <table class="w-full text-xs border-collapse border border-slate-300 mb-6">
         <thead>
           <tr class="bg-slate-100 font-bold">
@@ -428,12 +694,9 @@
             <th class="border border-slate-300 p-2 text-right w-28">Сумма</th>
           </tr>
         </thead>
-        <tbody id="invoice-table-body">
-          <!-- Рендер позиций -->
-        </tbody>
+        <tbody id="invoice-table-body"></tbody>
       </table>
 
-      <!-- Итоги -->
       <div class="flex justify-end text-xs space-y-1 mb-8">
         <div class="w-64 space-y-1">
           <div class="flex justify-between">
@@ -451,14 +714,13 @@
         </div>
       </div>
 
-      <!-- Подписи и печать (Факсимиле) -->
+      <!-- Блок подписей и печати -->
       <div class="pt-8 border-t border-slate-300 relative flex justify-between items-center text-xs">
         <div>
           <div class="mb-4">Руководитель: ______________ / Гончаров С. С. /</div>
           <div>Главный бухгалтер: ______________ / Воронова Е. А. /</div>
         </div>
 
-        <!-- Синяя печать (стилизация SVG) -->
         <div class="w-32 h-32 rounded-full border-4 border-dashed border-blue-600/70 text-blue-700/80 flex flex-col items-center justify-center p-2 text-center rotate-[-12deg] select-none pointer-events-none">
           <div class="text-[8px] uppercase tracking-tighter font-mono">ООО "ВЕРТЕКС ИНЖИНИРИНГ"</div>
           <div class="font-bold text-xs my-0.5">ДЛЯ ДОКУМЕНТОВ</div>
@@ -470,22 +732,19 @@
     </div>
   </div>
 
-  <!-- ==================== МОДАЛЬНОЕ ОКНО: ДЕТАЛИ И ПАСПОРТ ТОВАРА ==================== -->
+  <!-- ==================== МОДАЛЬНОЕ ОКНО: ТЕХПАСПОРТ ТОВАРА ==================== -->
   <div id="product-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="bg-dark-900 border border-slate-800 rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
       <button onclick="closeProductModal()" class="absolute right-6 top-6 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-dark-800">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
-
-      <div id="product-modal-body">
-        <!-- Заполняется динамически -->
-      </div>
+      <div id="product-modal-body"></div>
     </div>
   </div>
 
-  <!-- ==================== JAVASCRIPT ПРИЛОЖЕНИЯ ==================== -->
+  <!-- ==================== JAVASCRIPT БЭКЕНД ПЛАТФОРМЫ ==================== -->
   <script>
-    // База данных промышленного B2B ассортимента
+    // Каталог оборудования с детальными техническими характеристиками
     const PRODUCTS = [
       {
         id: "VT-101",
@@ -493,14 +752,14 @@
         name: "Кабель силовой ВВГнг(А)-LS 3х2.5 ок (N, PE) 0.66кВ",
         category: "cable",
         unit: "м",
-        priceNet: 88.50, // Без НДС
-        stockMsk: 12500,
-        stockSpb: 4800,
-        stockEkb: 1200,
-        moq: 100, // Минимальный квант заказа
+        priceNet: 88.50,
+        stockMsk: 14500,
+        stockSpb: 6200,
+        stockEkb: 2100,
+        moq: 100,
         gost: "ГОСТ 31996-2012",
         brand: "Кольчугино ЭКЗ",
-        specs: { "Сечение": "3х2.5 мм²", "Материал": "Медь (Cu)", "Изоляция": "ПВХ низкой пожароопасности", "t° эксплуатации": "от -50°C до +50°C" },
+        specs: { "Сечение": "3х2.5 мм²", "Жила": "Медь (Cu)", "Изоляция": "ПВХ пониженной пожароопасности", "Масса 1 км": "150 кг" },
         analog: "ВВГ-Пнг(А)-LS 3х2.5 (Конкорд)"
       },
       {
@@ -510,13 +769,13 @@
         category: "cable",
         unit: "м",
         priceNet: 640.00,
-        stockMsk: 3200,
-        stockSpb: 1950,
-        stockEkb: 400,
+        stockMsk: 3800,
+        stockSpb: 2400,
+        stockEkb: 800,
         moq: 50,
         gost: "ГОСТ 31996-2012",
         brand: "Камкабель",
-        specs: { "Сечение": "4х16 мм²", "Броня": "Стальные оцинкованные ленты", "Оболочка": "ПВХ пониженной горючести" },
+        specs: { "Сечение": "4х16 мм²", "Броня": "Стальные ленты", "Оболочка": "ПВХ низкой горючести", "Масса 1 км": "1150 кг" },
         analog: "АВБШвнг(А)-LS 4х25 (Алюминиевый аналог)"
       },
       {
@@ -526,13 +785,13 @@
         category: "automation",
         unit: "шт",
         priceNet: 1420.00,
-        stockMsk: 840,
-        stockSpb: 310,
-        stockEkb: 95,
+        stockMsk: 920,
+        stockSpb: 410,
+        stockEkb: 110,
         moq: 1,
         gost: "ГОСТ IEC 60898-1",
         brand: "Systeme Electric",
-        specs: { "Полюсов": "3P", "Номинальный ток": "16А", "Кривая": "C", "Отключающая способность": "6 кА" },
+        specs: { "Полюсов": "3P", "Номинальный ток": "16А", "Характеристика": "C", "Отключающая способность": "6 кА" },
         analog: "CHINT NB1-63 3P C16 6kA"
       },
       {
@@ -542,25 +801,25 @@
         category: "automation",
         unit: "шт",
         priceNet: 2150.00,
-        stockMsk: 410,
-        stockSpb: 180,
-        stockEkb: 60,
+        stockMsk: 430,
+        stockSpb: 190,
+        stockEkb: 75,
         moq: 1,
         gost: "ГОСТ Р 50030.4.1",
         brand: "IEK Industrial",
-        specs: { "Ток AC-3": "25А", "Катушка": "230В AC", "Доп. контакты": "1НО" },
+        specs: { "Ток AC-3": "25А", "Катушка": "230В AC", "Доп. контакты": "1НО", "Монтаж": "DIN-рейка" },
         analog: "DEKraft КМ-102 25А 220В"
       },
       {
         id: "VT-301",
         sku: "LE-60W",
-        name: "Светильник промышленный пылевлагозащищенный LED IP65 60Вт 5000К",
+        name: "Светильник промышленный LED IP65 60Вт 5000К 8400Лм",
         category: "lighting",
         unit: "шт",
         priceNet: 3180.00,
-        stockMsk: 620,
-        stockSpb: 240,
-        stockEkb: 110,
+        stockMsk: 680,
+        stockSpb: 290,
+        stockEkb: 140,
         moq: 2,
         gost: "ГОСТ Р МЭК 60598-1",
         brand: "ФЕРЕКС",
@@ -570,49 +829,45 @@
       {
         id: "VT-401",
         sku: "SH-654",
-        name: "Шкаф навесной металлический ЩРн-36з-1 36 мод. IP54 с замком",
+        name: "Шкаф навесной металлический ЩРн-36з-1 36 мод. IP54",
         category: "boxes",
         unit: "шт",
         priceNet: 4890.00,
-        stockMsk: 190,
-        stockSpb: 85,
-        stockEkb: 30,
+        stockMsk: 210,
+        stockSpb: 95,
+        stockEkb: 45,
         moq: 1,
         gost: "ГОСТ 32127-2013",
         brand: "Провенто",
-        specs: { "Емкость": "36 модулей", "Степень защиты": "IP54", "Толщина стали": "1.2 мм", "Покрытие": "Порошковое RAL 7035" },
+        specs: { "Емкость": "36 модулей", "Степень защиты": "IP54", "Толщина стали": "1.2 мм", "Покрытие": "RAL 7035" },
         analog: "DKC RAM block ST 500x400x200 IP66"
       }
     ];
 
-    // Состояние приложения
+    // Глобальное состояние
     let state = {
       isVatIncluded: true,
       currentCategory: 'all',
-      viewMode: 'table', // 'table' или 'grid'
-      cart: {}, // { "VT-101": 200 }
+      viewMode: 'table',
+      cart: {}, // { "VT-101": 500 }
       searchQuery: ''
     };
 
-    // Форматирование чисел в денежный вид
-    function formatCurrency(amount) {
-      return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', minimumFractionDigits: 2 }).format(amount);
+    function formatCurrency(val) {
+      return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', minimumFractionDigits: 2 }).format(val);
     }
 
-    // Расчет отображаемой цены с учетом переключателя НДС
     function getDisplayPrice(priceNet) {
       return state.isVatIncluded ? (priceNet * 1.20) : priceNet;
     }
 
-    // Переключение НДС
     function toggleVat() {
       state.isVatIncluded = !state.isVatIncluded;
-      document.getElementById('vat-mode-label').textContent = state.isVatIncluded ? 'С НДС (20%)' : 'Без НДС';
+      document.getElementById('vat-mode-label').textContent = state.isVatIncluded ? 'С НДС 20%' : 'Без НДС';
       renderCatalog();
       renderCart();
     }
 
-    // Переключение режимов витрины
     function setViewMode(mode) {
       state.viewMode = mode;
       const tableBtn = document.getElementById('view-table-btn');
@@ -628,13 +883,14 @@
       renderCatalog();
     }
 
-    // Фильтр по категориям
-    function filterCategory(cat) {
+    function filterCategory(cat, ev) {
       state.currentCategory = cat;
       document.querySelectorAll('.cat-pill').forEach(btn => {
         btn.className = "cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition";
       });
-      event.target.className = "cat-pill active px-4 py-2 rounded-xl bg-brand-500 text-dark-950 font-bold transition";
+      if (ev && ev.target) {
+        ev.target.className = "cat-pill active px-4 py-2 rounded-xl bg-brand-500 text-dark-950 font-bold transition";
+      }
       renderCatalog();
     }
 
@@ -642,32 +898,39 @@
       state.currentCategory = 'all';
       state.searchQuery = '';
       document.getElementById('search-input').value = '';
-      document.querySelectorAll('.cat-pill').forEach((btn, idx) => {
-        btn.className = idx === 0 ? "cat-pill active px-4 py-2 rounded-xl bg-brand-500 text-dark-950 font-bold transition" : "cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition";
-      });
+      document.getElementById('warehouse-filter').value = 'all';
+      filterCategory('all', null);
+      const firstTab = document.querySelector('.cat-pill');
+      if (firstTab) firstTab.className = "cat-pill active px-4 py-2 rounded-xl bg-brand-500 text-dark-950 font-bold transition";
       renderCatalog();
     }
 
-    // Отрисовка каталога
+    // Рендер каталога товаров
     function renderCatalog() {
       const container = document.getElementById('catalog-container');
+      const whFilter = document.getElementById('warehouse-filter').value;
       
       let filtered = PRODUCTS.filter(p => {
-        const matchesCategory = state.currentCategory === 'all' || p.category === state.currentCategory;
+        const matchesCat = state.currentCategory === 'all' || p.category === state.currentCategory;
         const matchesSearch = !state.searchQuery || 
           p.name.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
           p.sku.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
           p.gost.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
           p.brand.toLowerCase().includes(state.searchQuery.toLowerCase());
-        return matchesCategory && matchesSearch;
+        
+        let matchesWh = true;
+        if (whFilter === 'spb') matchesWh = p.stockSpb > 0;
+        if (whFilter === 'msk') matchesWh = p.stockMsk > 0;
+
+        return matchesCat && matchesSearch && matchesWh;
       });
 
       if (filtered.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-16 border border-dashed border-slate-800 rounded-2xl">
+          <div class="text-center py-16 border border-dashed border-slate-800 rounded-2xl glass-panel">
             <i data-lucide="package-search" class="w-12 h-12 text-slate-600 mx-auto mb-3"></i>
-            <h4 class="text-lg font-bold text-slate-300">Позиций не найдено</h4>
-            <p class="text-xs text-slate-500 mt-1">Попробуйте изменить поисковый запрос или напишите нашему инженеру</p>
+            <h4 class="text-base font-bold text-slate-300">Позиций не найдено</h4>
+            <p class="text-xs text-slate-500 mt-1">Измените запрос или запросите подбор аналога у ведущего инженера</p>
           </div>
         `;
         lucide.createIcons();
@@ -675,63 +938,62 @@
       }
 
       if (state.viewMode === 'table') {
-        // Таблица снабженца
         container.innerHTML = `
           <div class="overflow-x-auto glass-panel rounded-2xl border border-slate-800 shadow-xl custom-scrollbar">
             <table class="w-full text-left text-xs">
-              <thead class="bg-dark-950/80 text-slate-400 font-semibold border-b border-slate-800 uppercase text-[10px] tracking-wider">
+              <thead class="bg-dark-950/90 text-slate-400 font-semibold border-b border-slate-800 uppercase text-[10px] tracking-wider">
                 <tr>
-                  <th class="py-4 px-4">Артикул / ГОСТ</th>
-                  <th class="py-4 px-4">Наименование оборудования</th>
+                  <th class="py-4 px-4">Артикул / Стандарт</th>
+                  <th class="py-4 px-4">Наименование номенклатуры</th>
                   <th class="py-4 px-4">Склады (СПб / Мск)</th>
-                  <th class="py-4 px-4 text-right">Цена (\${state.isVatIncluded ? 'с НДС' : 'без НДС'})</th>
+                  <th class="py-4 px-4 text-right">Цена (${state.isVatIncluded ? 'с НДС 20%' : 'без НДС'})</th>
                   <th class="py-4 px-4 text-center">Заказ</th>
-                  <th class="py-4 px-4 text-center">Действие</th>
+                  <th class="py-4 px-4 text-center">В корзину</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-800 font-medium">
-                \${filtered.map(p => `
-                  <tr class="hover:bg-dark-850/50 transition group">
+              <tbody class="divide-y divide-slate-800/80 font-medium">
+                ${filtered.map(p => `
+                  <tr class="hover:bg-dark-850/60 transition group">
                     <td class="py-4 px-4">
-                      <div class="font-mono text-brand-400 font-bold">${p.sku}</div>
-                      <div class="text-[10px] text-slate-500">${p.gost}</div>
+                      <div class="font-mono text-brand-400 font-bold">\${p.sku}</div>
+                      <div class="text-[10px] text-slate-500">\${p.gost}</div>
                     </td>
                     <td class="py-4 px-4 max-w-md">
-                      <div class="text-slate-100 font-bold group-hover:text-brand-300 cursor-pointer transition" onclick="openProductModal('${p.id}')">
-                        ${p.name}
+                      <div class="text-slate-100 font-bold group-hover:text-brand-300 cursor-pointer transition" onclick="openProductModal('\${p.id}')">
+                        \${p.name}
                       </div>
                       <div class="text-[11px] text-slate-500 flex gap-2 mt-0.5">
-                        <span>Бренд: <strong class="text-slate-400">${p.brand}</strong></span>
+                        <span>Завод: <strong class="text-slate-400">\${p.brand}</strong></span>
                         <span>•</span>
-                        <span>Кратность: <strong>${p.moq} ${p.unit}</strong></span>
+                        <span>Кратность: <strong>${p.moq}${p.unit}</strong></span>
                       </div>
                     </td>
                     <td class="py-4 px-4 font-mono text-[11px]">
                       <div class="flex items-center gap-1.5 text-slate-300">
                         <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
-                        СПб: ${p.stockSpb.toLocaleString()} ${p.unit}
+                        СПб: ${p.stockSpb.toLocaleString()}${p.unit}
                       </div>
                       <div class="flex items-center gap-1.5 text-slate-400 mt-0.5">
                         <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-                        Мск: ${p.stockMsk.toLocaleString()} ${p.unit}
+                        Мск: ${p.stockMsk.toLocaleString()}${p.unit}
                       </div>
                     </td>
                     <td class="py-4 px-4 text-right">
-                      <div class="font-mono font-bold text-sm text-slate-100">${formatCurrency(getDisplayPrice(p.priceNet))}</div>
-                      <div class="text-[10px] text-slate-500">за 1 ${p.unit}</div>
+                      <div class="font-mono font-bold text-sm text-slate-100">\${formatCurrency(getDisplayPrice(p.priceNet))}</div>
+                      <div class="text-[10px] text-slate-500">за 1 \${p.unit}</div>
                     </td>
                     <td class="py-4 px-4 text-center">
                       <input 
                         type="number" 
-                        min="${p.moq}" 
-                        step="${p.moq}" 
-                        value="${p.moq}" 
-                        id="qty-${p.id}"
+                        min="\${p.moq}" 
+                        step="\${p.moq}" 
+                        value="\${p.moq}" 
+                        id="qty-\${p.id}"
                         class="w-20 bg-dark-900 border border-slate-700 rounded-lg py-1 px-2 text-center text-xs font-mono text-slate-200 focus:outline-none focus:border-brand-500"
                       >
                     </td>
                     <td class="py-4 px-4 text-center">
-                      <button onclick="addToCart('${p.id}')" class="p-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold transition shadow-md shadow-brand-500/20 active:scale-90" title="Добавить в корзину">
+                      <button onclick="addToCart('\${p.id}')" class="p-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold transition shadow-md shadow-brand-500/20 active:scale-90" title="Добавить в спецификацию">
                         <i data-lucide="plus" class="w-4 h-4"></i>
                       </button>
                     </td>
@@ -742,46 +1004,45 @@
           </div>
         `;
       } else {
-        // Сетка карточек
         container.innerHTML = `
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            \${filtered.map(p => `
+            ${filtered.map(p => `
               <div class="glass-panel glass-panel-hover rounded-2xl p-5 flex flex-col justify-between transition-all duration-300">
                 <div>
                   <div class="flex items-center justify-between gap-2 text-xs font-mono text-slate-400 mb-2">
-                    <span class="text-brand-400 font-bold">${p.sku}</span>
-                    <span class="text-[10px] bg-dark-800 px-2 py-0.5 rounded border border-slate-700">${p.brand}</span>
+                    <span class="text-brand-400 font-bold">\${p.sku}</span>
+                    <span class="text-[10px] bg-dark-800 px-2 py-0.5 rounded border border-slate-700">\${p.brand}</span>
                   </div>
-                  <h4 class="font-bold text-slate-100 text-sm hover:text-brand-300 cursor-pointer line-clamp-2" onclick="openProductModal('${p.id}')">
-                    ${p.name}
+                  <h4 class="font-bold text-slate-100 text-sm hover:text-brand-300 cursor-pointer line-clamp-2" onclick="openProductModal('\${p.id}')">
+                    \${p.name}
                   </h4>
-                  <div class="mt-4 space-y-1 text-xs text-slate-400 border-t border-slate-800 pt-3">
+                  <div class="mt-4 space-y-1.5 text-xs text-slate-400 border-t border-slate-800 pt-3">
                     <div class="flex justify-between">
                       <span>Стандарт:</span>
-                      <span class="text-slate-300">${p.gost}</span>
+                      <span class="text-slate-300">\${p.gost}</span>
                     </div>
                     <div class="flex justify-between">
                       <span>Остаток СПб+Мск:</span>
-                      <span class="text-brand-400 font-mono font-bold">${(p.stockSpb + p.stockMsk).toLocaleString()} ${p.unit}</span>
+                      <span class="text-brand-400 font-mono font-bold">${(p.stockSpb + p.stockMsk).toLocaleString()}${p.unit}</span>
                     </div>
                   </div>
                 </div>
 
                 <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between">
                   <div>
-                    <div class="text-[10px] text-slate-500">${state.isVatIncluded ? 'Цена с НДС' : 'Цена без НДС'}</div>
-                    <div class="text-base font-extrabold font-mono text-slate-100">${formatCurrency(getDisplayPrice(p.priceNet))}</div>
+                    <div class="text-[10px] text-slate-500">\${state.isVatIncluded ? 'С НДС 20%' : 'Без НДС'}</div>
+                    <div class="text-base font-extrabold font-mono text-slate-100">\${formatCurrency(getDisplayPrice(p.priceNet))}</div>
                   </div>
                   <div class="flex items-center gap-2">
                     <input 
                       type="number" 
-                      min="${p.moq}" 
-                      step="${p.moq}" 
-                      value="${p.moq}" 
-                      id="qty-${p.id}"
+                      min="\${p.moq}" 
+                      step="\${p.moq}" 
+                      value="\${p.moq}" 
+                      id="qty-\${p.id}"
                       class="w-16 bg-dark-900 border border-slate-700 rounded-lg py-1 px-1 text-center text-xs font-mono text-slate-200"
                     >
-                    <button onclick="addToCart('${p.id}')" class="p-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold transition shadow-md shadow-brand-500/20">
+                    <button onclick="addToCart('\${p.id}')" class="p-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold transition shadow-md shadow-brand-500/20">
                       <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                     </button>
                   </div>
@@ -794,7 +1055,7 @@
       lucide.createIcons();
     }
 
-    // Умный поиск с подсказками
+    // Быстрый поиск
     function handleSearch(val) {
       state.searchQuery = val.trim();
       const dropdown = document.getElementById('search-dropdown');
@@ -813,19 +1074,19 @@
 
       if (matches.length > 0) {
         dropdown.innerHTML = matches.map(p => `
-          <div onclick="selectSearchResult('\${p.id}')" class="p-2.5 hover:bg-dark-800 rounded-lg cursor-pointer flex justify-between items-center transition">
+          <div onclick="selectSearchResult('${p.id}')" class="p-2.5 hover:bg-dark-800 rounded-lg cursor-pointer flex justify-between items-center transition">
             <div>
-              <div class="text-xs font-bold text-slate-200">\${p.name}</div>
-              <div class="text-[10px] text-brand-400 font-mono">Арт: ${p.sku} \vert{}${p.gost}</div>
+              <div class="text-xs font-bold text-slate-200">${p.name}</div>
+              <div class="text-[10px] text-brand-400 font-mono">Арт: ${p.sku} | ${p.gost}</div>
             </div>
             <div class="text-xs font-mono font-bold text-slate-300">
-              \${formatCurrency(getDisplayPrice(p.priceNet))}
+              ${formatCurrency(getDisplayPrice(p.priceNet))}
             </div>
           </div>
         `).join('');
         dropdown.classList.remove('hidden');
       } else {
-        dropdown.innerHTML = `<div class="p-3 text-xs text-slate-500 text-center">Ничего не найдено по запросу "\${val}"</div>`;
+        dropdown.innerHTML = `<div class="p-3 text-xs text-slate-500 text-center">Позиция не найдена. Инженер подберет аналог.</div>`;
         dropdown.classList.remove('hidden');
       }
       renderCatalog();
@@ -836,9 +1097,9 @@
       openProductModal(id);
     }
 
-    // Управление корзиной
+    // Корзина и спецификация
     function addToCart(productId, customQty = null) {
-      const qtyInput = document.getElementById(`qty-\${productId}`);
+      const qtyInput = document.getElementById(`qty-${productId}`);
       const qty = customQty || (qtyInput ? parseInt(qtyInput.value) : 1);
       
       if (qty <= 0 || isNaN(qty)) return;
@@ -846,7 +1107,6 @@
       state.cart[productId] = (state.cart[productId] || 0) + qty;
       renderCart();
       
-      // Анимация бейджа корзины
       const badge = document.getElementById('cart-counter');
       badge.classList.add('scale-125', 'bg-brand-500', 'text-dark-950');
       setTimeout(() => {
@@ -890,7 +1150,7 @@
           <div class="text-center py-16">
             <i data-lucide="shopping-bag" class="w-12 h-12 text-slate-700 mx-auto mb-3"></i>
             <p class="text-sm text-slate-400 font-bold">Спецификация пока пуста</p>
-            <p class="text-xs text-slate-600 mt-1">Добавьте позиции из каталога или воспользуйтесь быстрой сметой</p>
+            <p class="text-xs text-slate-600 mt-1">Добавьте позиции из таблицы или загрузите смету</p>
           </div>
         `;
         document.getElementById('cart-subtotal').textContent = '0.00 ₽';
@@ -910,25 +1170,24 @@
         subtotalNet += lineTotalNet;
 
         const currentPrice = getDisplayPrice(product.priceNet);
-        const lineDisplayTotal = currentPrice * qty;
 
         return `
           <div class="glass-panel p-3.5 rounded-xl border border-slate-800 flex items-center justify-between gap-3">
             <div class="flex-1 min-w-0">
-              <div class="text-[10px] text-brand-400 font-mono font-bold">\${product.sku}</div>
-              <div class="text-xs font-bold text-slate-100 truncate">\${product.name}</div>
-              <div class="text-[11px] font-mono text-slate-400 mt-0.5">${formatCurrency(currentPrice)} /${product.unit}</div>
+              <div class="text-[10px] text-brand-400 font-mono font-bold">${product.sku}</div>
+              <div class="text-xs font-bold text-slate-100 truncate">${product.name}</div>
+              <div class="text-[11px] font-mono text-slate-400 mt-0.5">${formatCurrency(currentPrice)} / ${product.unit}</div>
             </div>
             <div class="flex items-center gap-2">
               <input 
                 type="number" 
-                min="\${product.moq}" 
-                step="\${product.moq}" 
-                value="\${qty}" 
-                onchange="updateCartItemQty('\${id}', parseInt(this.value))"
+                min="${product.moq}" 
+                step="${product.moq}" 
+                value="${qty}" 
+                onchange="updateCartItemQty('${id}', parseInt(this.value))"
                 class="w-16 bg-dark-950 border border-slate-700 rounded-lg p-1 text-center text-xs font-mono text-slate-200"
               >
-              <button onclick="updateCartItemQty('\${id}', 0)" class="text-slate-500 hover:text-rose-400 p-1">
+              <button onclick="updateCartItemQty('${id}', 0)" class="text-slate-500 hover:text-rose-400 p-1">
                 <i data-lucide="trash-2" class="w-4 h-4"></i>
               </button>
             </div>
@@ -946,7 +1205,7 @@
       lucide.createIcons();
     }
 
-    // Быстрый заказ по смете (Hero & Modal)
+    // Обработка текстовой сметы
     function processHeroQuickOrder() {
       const text = document.getElementById('hero-quick-text').value;
       if (!text.trim()) return;
@@ -981,7 +1240,6 @@
         const clean = line.trim();
         if (!clean) return;
 
-        // Поиск количества (последнее число в строке)
         const parts = clean.split(/[\s,;\t]+/);
         let qty = 1;
         let queryParts = parts;
@@ -993,7 +1251,6 @@
 
         const query = queryParts.join(' ').toLowerCase();
 
-        // Поиск подходящего товара по артикулу или названию
         const found = PRODUCTS.find(p => 
           p.sku.toLowerCase().includes(query) || 
           p.name.toLowerCase().includes(query)
@@ -1007,13 +1264,13 @@
 
       renderCart();
       if (matchedCount > 0) {
-        alert(`Успешно распознано и добавлено \${matchedCount} позиций в спецификацию!`);
+        alert(`Успешно распознано и сопоставлено: ${matchedCount} позиций.`);
       } else {
-        alert('Не удалось сопоставить позиции. Попробуйте ввести артикул (например: E-101 или C60N-16A).');
+        alert('Позиции не распознаны. Укажите артикул (например: E-101 или C60N-16A).');
       }
     }
 
-    // Экспорт корзины в CSV (Excel)
+    // Выгрузка в CSV для Excel
     function exportCartToCSV() {
       const productIds = Object.keys(state.cart);
       if (productIds.length === 0) {
@@ -1021,7 +1278,7 @@
         return;
       }
 
-      let csv = "Артикул;Наименование;Количество;Ед.;Цена без НДС;Сумма без НДС\n";
+      let csv = "Артикул;Номенклатура;Количество;Единица;Цена без НДС;Сумма без НДС\n";
       productIds.forEach(id => {
         const p = PRODUCTS.find(item => item.id === id);
         const qty = state.cart[id];
@@ -1033,17 +1290,17 @@
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.setAttribute("href", url);
-      link.setAttribute("download", `Спецификация_VERTEX_\${new Date().toISOString().slice(0,10)}.csv`);
+      link.setAttribute("download", `Спецификация_VERTEX_${new Date().toISOString().slice(0,10)}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
 
-    // Генерация официального счёта
+    // Генератор счёта с факсимиле
     function generateOfficialInvoice() {
       const productIds = Object.keys(state.cart);
       if (productIds.length === 0) {
-        alert('Добавьте хотя бы один товар для формирования счета.');
+        alert('Добавьте хотя бы один товар в спецификацию.');
         return;
       }
 
@@ -1061,12 +1318,12 @@
 
         rowsHtml += `
           <tr>
-            <td class="border border-slate-300 p-2 text-center">\${index + 1}</td>
-            <td class="border border-slate-300 p-2">${p.name} [Арт: ${p.sku}]</td>
-            <td class="border border-slate-300 p-2 text-center font-mono font-bold">\${qty}</td>
-            <td class="border border-slate-300 p-2 text-center">\${p.unit}</td>
-            <td class="border border-slate-300 p-2 text-right font-mono">\${p.priceNet.toFixed(2)} ₽</td>
-            <td class="border border-slate-300 p-2 text-right font-mono font-bold">\${lineTotal.toFixed(2)} ₽</td>
+            <td class="border border-slate-300 p-2 text-center">${index + 1}</td>
+            <td class="border border-slate-300 p-2">${p.name} [${p.sku}]</td>
+            <td class="border border-slate-300 p-2 text-center font-mono font-bold">${qty}</td>
+            <td class="border border-slate-300 p-2 text-center">${p.unit}</td>
+            <td class="border border-slate-300 p-2 text-right font-mono">${p.priceNet.toFixed(2)} ₽</td>
+            <td class="border border-slate-300 p-2 text-right font-mono font-bold">${lineTotal.toFixed(2)} ₽</td>
           </tr>
         `;
       });
@@ -1088,7 +1345,7 @@
       document.getElementById('invoice-modal').classList.remove('flex');
     }
 
-    // Модальное окно деталей товара
+    // Модальное окно техпаспорта
     function openProductModal(id) {
       const p = PRODUCTS.find(item => item.id === id);
       if (!p) return;
@@ -1096,22 +1353,22 @@
       const body = document.getElementById('product-modal-body');
       body.innerHTML = `
         <div class="flex items-center gap-2 text-xs font-mono text-brand-400 mb-1">
-          <span>\${p.sku}</span>
+          <span>${p.sku}</span>
           <span>•</span>
-          <span>\${p.brand}</span>
+          <span>${p.brand}</span>
           <span>•</span>
-          <span class="text-slate-400">\${p.gost}</span>
+          <span class="text-slate-400">${p.gost}</span>
         </div>
-        <h2 class="text-xl font-extrabold text-white">\${p.name}</h2>
+        <h2 class="text-xl font-extrabold text-white">${p.name}</h2>
 
         <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="glass-panel p-4 rounded-xl border border-slate-800">
-            <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Технические параметры</h5>
+            <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Технические характеристики</h5>
             <div class="space-y-2 text-xs">
-              \${Object.entries(p.specs).map(([key, value]) => `
+              ${Object.entries(p.specs).map(([key, value]) => `
                 <div class="flex justify-between py-1 border-b border-slate-800">
-                  <span class="text-slate-500">${key}:</span>
-                  <span class="font-medium text-slate-200">${value}</span>
+                  <span class="text-slate-500">\${key}:</span>
+                  <span class="font-medium text-slate-200">\${value}</span>
                 </div>
               `).join('')}
             </div>
@@ -1119,36 +1376,32 @@
 
           <div class="glass-panel p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
             <div>
-              <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Документация и BIM</h5>
+              <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Инженерная документация</h5>
               <div class="space-y-2">
-                <a href="#" onclick="alert('Скачивание паспорта изделия \${p.sku} (PDF)'); return false;" class="flex items-center justify-between p-2 rounded-lg bg-dark-950 hover:bg-dark-800 border border-slate-800 text-xs text-slate-300">
+                <button onclick="alert('Скачивание паспорта качества изделия ${p.sku} (PDF)');" class="w-full flex items-center justify-between p-2 rounded-lg bg-dark-950 hover:bg-dark-800 border border-slate-800 text-xs text-slate-300">
                   <span class="flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4 text-brand-400"></i> Паспорт качества (PDF)</span>
                   <i data-lucide="download" class="w-3.5 h-3.5 text-slate-500"></i>
-                </a>
-                <a href="#" onclick="alert('Скачивание сертификата ТР ТС (PDF)'); return false;" class="flex items-center justify-between p-2 rounded-lg bg-dark-950 hover:bg-dark-800 border border-slate-800 text-xs text-slate-300">
-                  <span class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-brand-accent"></i> Сертификат соответствия</span>
+                </button>
+                <button onclick="alert('Скачивание сертификата ТР ТС EAC (PDF)');" class="w-full flex items-center justify-between p-2 rounded-lg bg-dark-950 hover:bg-dark-800 border border-slate-800 text-xs text-slate-300">
+                  <span class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-brand-accent"></i> Сертификат соответствия ГОСТ</span>
                   <i data-lucide="download" class="w-3.5 h-3.5 text-slate-500"></i>
-                </a>
-                <a href="#" onclick="alert('Скачивание BIM/Revit модели (RFA)'); return false;" class="flex items-center justify-between p-2 rounded-lg bg-dark-950 hover:bg-dark-800 border border-slate-800 text-xs text-slate-300">
-                  <span class="flex items-center gap-2"><i data-lucide="box" class="w-4 h-4 text-purple-400"></i> Семейство Revit (RFA)</span>
-                  <i data-lucide="download" class="w-3.5 h-3.5 text-slate-500"></i>
-                </a>
+                </button>
               </div>
             </div>
 
             <div class="mt-4 pt-3 border-t border-slate-800">
-              <span class="text-[10px] text-slate-500 block">Прямой аналог для импортозамещения:</span>
-              <span class="text-xs text-brand-300 font-medium">\${p.analog}</span>
+              <span class="text-[10px] text-slate-500 block">Прямой аналог для согласования сметы:</span>
+              <span class="text-xs text-brand-300 font-semibold">${p.analog}</span>
             </div>
           </div>
         </div>
 
         <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between">
           <div>
-            <div class="text-xs text-slate-400">Цена единицы (\${state.isVatIncluded ? 'с НДС' : 'без НДС'}):</div>
-            <div class="text-xl font-mono font-extrabold text-white">\${formatCurrency(getDisplayPrice(p.priceNet))}</div>
+            <div class="text-xs text-slate-400">Стоимость единицы (${state.isVatIncluded ? 'с НДС 20%' : 'без НДС'}):</div>
+            <div class="text-xl font-mono font-extrabold text-white">${formatCurrency(getDisplayPrice(p.priceNet))}</div>
           </div>
-          <button onclick="addToCart('\${p.id}'); closeProductModal(); toggleCartDrawer(true);" class="px-6 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-brand-500/20">
+          <button onclick="addToCart('${p.id}'); closeProductModal(); toggleCartDrawer(true);" class="px-6 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-brand-500/20">
             <i data-lucide="shopping-cart" class="w-4 h-4"></i>
             В спецификацию
           </button>
@@ -1165,20 +1418,96 @@
       document.getElementById('product-modal').classList.remove('flex');
     }
 
-    // Инициализация при загрузке
+    // Дополнительные B2B модальные окна
+    function openCalcModal() {
+      document.getElementById('calc-modal').classList.remove('hidden');
+      document.getElementById('calc-modal').classList.add('flex');
+    }
+    function closeCalcModal() {
+      document.getElementById('calc-modal').classList.add('hidden');
+      document.getElementById('calc-modal').classList.remove('flex');
+    }
+    function calculateLogistics() {
+      const cableId = document.getElementById('calc-cable-select').value;
+      const length = parseFloat(document.getElementById('calc-length').value) || 0;
+      const weightPerMeter = cableId === 'VT-101' ? 0.15 : 1.15;
+      const totalWeight = Math.round(length * weightPerMeter);
+
+      document.getElementById('calc-weight').textContent = `${totalWeight.toLocaleString()} кг`;
+      
+      let drum = "№10 (Бухта)";
+      let truck = "Газель 1.5т";
+
+      if (totalWeight > 1500 && totalWeight <= 5000) {
+        drum = "№14 (Деревянный барабан)";
+        truck = "Валдай / 5-тонник";
+      } else if (totalWeight > 5000) {
+        drum = "№18 / №20 (Усиленный барабан)";
+        truck = "Еврофура 20т (боковая растентовка)";
+      }
+
+      document.getElementById('calc-drum').textContent = drum;
+      document.getElementById('calc-truck').textContent = truck;
+      document.getElementById('calc-result').classList.remove('hidden');
+    }
+
+    function openEdoModal() {
+      document.getElementById('edo-modal').classList.remove('hidden');
+      document.getElementById('edo-modal').classList.add('flex');
+    }
+    function closeEdoModal() {
+      document.getElementById('edo-modal').classList.add('hidden');
+      document.getElementById('edo-modal').classList.remove('flex');
+    }
+    function sendEdoInvite() {
+      const inn = document.getElementById('edo-inn-input').value;
+      alert(`Приглашение к обмену электронными документами отправлено в Диадок/СБИС для ИНН: ${inn}`);
+      closeEdoModal();
+    }
+
+    function openCreditModal() {
+      document.getElementById('credit-modal').classList.remove('hidden');
+      document.getElementById('credit-modal').classList.add('flex');
+    }
+    function closeCreditModal() {
+      document.getElementById('credit-modal').classList.add('hidden');
+      document.getElementById('credit-modal').classList.remove('flex');
+    }
+    function requestCreditLine() {
+      alert('Заявка на кредитную линию с отсрочкой 45 дней отправлена на скоринг службы безопасности. Решение поступит в течение 15 минут.');
+      closeCreditModal();
+    }
+
+    function openCabinetModal() {
+      document.getElementById('cabinet-modal').classList.remove('hidden');
+      document.getElementById('cabinet-modal').classList.add('flex');
+    }
+    function closeCabinetModal() {
+      document.getElementById('cabinet-modal').classList.add('hidden');
+      document.getElementById('cabinet-modal').classList.remove('flex');
+    }
+
+    function openPersonalManagerModal() {
+      document.getElementById('manager-modal').classList.remove('hidden');
+      document.getElementById('manager-modal').classList.add('flex');
+    }
+    function closePersonalManagerModal() {
+      document.getElementById('manager-modal').classList.add('hidden');
+      document.getElementById('manager-modal').classList.remove('flex');
+    }
+
+    // Инициализация при старте
     window.addEventListener('DOMContentLoaded', () => {
       renderCatalog();
       renderCart();
       lucide.createIcons();
 
-      // Закрытие дропдауна поиска по клику вне
       document.addEventListener('click', (e) => {
         if (!e.target.closest('#search-input') && !e.target.closest('#search-dropdown')) {
           document.getElementById('search-dropdown').classList.add('hidden');
         }
       });
 
-      // Хоткей Ctrl + K для фокуса поиска
       window.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
           e.preventDefault();
