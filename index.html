@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="ru" class="h-full bg-slate-950 text-slate-100 antialiased">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ПРОМСЕТЬ | Федеральная B2B Экосистема Промышленного Снабжения</title>
-  <!-- Google Fonts: Inter -->
+  <title>VERTEX Инжиниринг | Оптовые поставки B2B</title>
+  
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -21,67 +24,1168 @@
           },
           colors: {
             brand: {
-              50: '#eff6ff',
-              100: '#dbeafe',
-              400: '#38bdf8',
-              500: '#0284c7',
-              600: '#0369a1',
+              50: '#ecfdf5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
               accent: '#06b6d4',
-              neon: '#10b981',
-              amber: '#f59e0b',
+            },
+            dark: {
+              950: '#090d16',
+              900: '#0f172a',
+              850: '#151f32',
+              800: '#1e293b',
+              700: '#334155',
             }
           }
         }
       }
     }
   </script>
+
   <style>
-    /* Custom Scrollbar for dense enterprise tables */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #090d16; }
-    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #334155; }
-    
+    body {
+      background-color: #090d16;
+      color: #f8fafc;
+      overflow-x: hidden;
+    }
     .glass-panel {
-      background: rgba(15, 23, 42, 0.78);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .glass-card {
-      background: rgba(30, 41, 59, 0.5);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+    .glass-panel-hover:hover {
+      background: rgba(21, 31, 50, 0.85);
+      border-color: rgba(16, 185, 129, 0.35);
     }
-    .glass-card:hover {
-      border-color: rgba(56, 189, 248, 0.3);
-      box-shadow: 0 10px 30px -10px rgba(2, 132, 199, 0.2);
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
     }
-    .glow-cyan {
-      box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.35);
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #10b981;
     }
     @media print {
-      body * { visibility: hidden; }
-      #printableInvoice, #printableInvoice * { visibility: visible; }
-      #printableInvoice { position: absolute; left: 0; top: 0; width: 100%; color: #000 !important; background: #fff !important; }
+      body * {
+        visibility: hidden;
+      }
+      #invoice-modal-content, #invoice-modal-content * {
+        visibility: visible;
+      }
+      #invoice-modal-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
     }
   </style>
 </head>
-<body class="min-h-full flex flex-col font-sans selection:bg-cyan-500 selection:text-white bg-slate-950 text-slate-100 relative overflow-x-hidden">
+<body class="font-sans antialiased selection:bg-brand-500 selection:text-dark-950">
 
-<!-- B2B Global Status Topbar -->
-<header class="sticky top-0 z-40 w-full border-b border-slate-800/80 glass-panel">
-  <!-- Micro info tier -->
-  <div class="border-b border-slate-800/60 bg-slate-950/70 py-1.5 px-4 sm:px-6 text-xs text-slate-400">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-      <!-- Left: Entity & 1C Sync -->
-      <div class="flex items-center gap-4 flex-wrap">
-        <div class="flex items-center gap-2">
-          <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-slate-300 font-medium">Шлюз 1С:ERP:</span>
-          <span class="text-emerald-400 font-mono text-[11px]">Онлайн (задержка 0.4 сек)</span>
+  <!-- ==================== ВЕРХНЯЯ B2B ПАНЕЛЬ ==================== -->
+  <div class="bg-dark-900 border-b border-dark-800 text-xs text-slate-400 py-2 px-4 sm:px-8 flex flex-wrap justify-between items-center gap-2">
+    <div class="flex items-center gap-6">
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+        <span>Склады онлайн: <strong class="text-slate-200">МСК (Юг), СПБ (Шушары), ЕКБ</strong></span>
+      </div>
+      <div class="hidden md:flex items-center gap-1 hover:text-white cursor-pointer transition">
+        <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-brand-500"></i>
+        <span>ЭДО: Диадок / СБИС подключены</span>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-6">
+      <!-- Переключатель НДС -->
+      <div class="flex items-center gap-2 bg-dark-850 px-2.5 py-1 rounded-full border border-dark-700">
+        <span class="font-medium text-slate-300">Цены:</span>
+        <button id="vat-toggle" onclick="toggleVat()" class="flex items-center gap-1.5 font-bold text-brand-400 transition hover:text-white">
+          <span id="vat-mode-label">С НДС (20%)</span>
+          <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+        </button>
+      </div>
+
+      <div class="hidden sm:flex items-center gap-2">
+        <i data-lucide="phone-call" class="w-3.5 h-3.5 text-brand-accent"></i>
+        <span class="font-mono text-slate-200">8 (800) 550-20-40</span>
+        <span class="text-[10px] text-slate-500">доб. 102</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ОСНОВНОЙ HEADER ==================== -->
+  <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      
+      <!-- Логотип -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="resetFilters()">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-accent flex items-center justify-center shadow-lg shadow-brand-500/20">
+          <i data-lucide="cpu" class="w-6 h-6 text-dark-950 font-black"></i>
         </div>
-        <span class="text-slate-700">|</span>
-        <!-- Warehouse Picker -->
-        <div class="flex items-center gap-1.5 cursor-pointer hover:text-cyan-400 transition" onclick="toggleWarehouseDropdown()">
-          <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2
+        <div>
+          <span class="text-xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400 font-mono">VERTEX</span>
+          <span class="text-[10px] block text-brand-400 font-bold uppercase tracking-widest -mt-1">B2B Инжиниринг</span>
+        </div>
+      </div>
+
+      <!-- Поисковая строка B2B с горячим поиском -->
+      <div class="flex-1 max-w-xl relative hidden md:block">
+        <div class="relative">
+          <input 
+            type="text" 
+            id="search-input" 
+            oninput="handleSearch(this.value)"
+            placeholder="Поиск по артикулу, ГОСТ, марке или названию (напр. ВВГнг, C60N, IP65)..."
+            class="w-full bg-dark-900 border border-slate-700/70 rounded-xl px-4 py-2.5 pl-11 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner font-sans"
+          >
+          <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3"></i>
+          <span class="absolute right-3 top-2.5 px-2 py-0.5 rounded text-[10px] font-mono bg-dark-800 text-slate-400 border border-slate-700">Ctrl + K</span>
+        </div>
+        <!-- Выпадающее окно подсказок -->
+        <div id="search-dropdown" class="hidden absolute left-0 right-0 top-12 mt-1 glass-panel rounded-xl border border-slate-700 p-2 shadow-2xl z-50 max-h-80 overflow-y-auto custom-scrollbar"></div>
+      </div>
+
+      <!-- Правый блок: Быстрый заказ, Корзина, Кабинет -->
+      <div class="flex items-center gap-3">
+        <button onclick="openQuickOrderModal()" class="hidden lg:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-200 text-sm font-medium transition hover:border-slate-500">
+          <i data-lucide="file-spreadsheet" class="w-4 h-4 text-brand-400"></i>
+          <span>Заказ по смете</span>
+        </button>
+
+        <button onclick="toggleCartDrawer(true)" class="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 text-dark-950 font-bold text-sm shadow-lg shadow-brand-500/25 hover:brightness-110 active:scale-95 transition">
+          <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Спецификация</span>
+          <span id="cart-counter" class="bg-dark-950 text-brand-400 text-xs px-2 py-0.5 rounded-full font-mono font-bold">0</span>
+        </button>
+
+        <div class="flex items-center gap-2 pl-2 border-l border-slate-800">
+          <div class="w-9 h-9 rounded-xl bg-dark-800 border border-slate-700 flex items-center justify-center text-slate-300 font-mono text-xs font-bold" title="ООО 'ТехноСистемы' (ИНН 7804928172)">
+            ТС
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO СЕКЦИЯ ДЛЯ СНАБЖЕНЦЕВ ==================== -->
+  <section class="relative overflow-hidden py-12 px-4 sm:px-6 lg:px-8 border-b border-dark-800">
+    <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-brand-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-medium mb-4">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+          <span>Официальный дистрибьютор ГОСТ / EAC стандартов</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+          Комплексные B2B поставки <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-400 to-brand-accent">инженерии и электрики</span>
+        </h1>
+        <p class="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed">
+          Прямые складские отгрузки день в день. Автоматическая выгрузка счетов с факсимиле, спецификаций в XLS и резервирование остатков из 1С ERP.
+        </p>
+
+        <!-- Метрики надёжности -->
+        <div class="mt-6 grid grid-cols-3 gap-4 pt-6 border-t border-slate-800">
+          <div>
+            <div class="text-2xl font-bold font-mono text-white">45 000+</div>
+            <div class="text-xs text-slate-500">Позиций в наличии</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold font-mono text-brand-400">0.02 сек</div>
+            <div class="text-xs text-slate-500">Генерация КП и счёта</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold font-mono text-brand-accent">100%</div>
+            <div class="text-xs text-slate-500">Сертификаты и паспорта</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Быстрый виджет спецификации -->
+      <div class="w-full lg:w-96 glass-panel p-5 rounded-2xl border border-slate-800 shadow-xl">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+            <i data-lucide="zap" class="w-4 h-4 text-brand-400"></i> Срочный расчет сметы
+          </span>
+          <span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded font-mono">AI Parser</span>
+        </div>
+        <textarea 
+          id="hero-quick-text" 
+          rows="3" 
+          placeholder="Вставьте артикулы или маркировку списком:&#10;ВВГнг 3х2.5 - 500&#10;АВВГ 4х16 - 120"
+          class="w-full bg-dark-900 border border-slate-700 rounded-xl p-3 text-xs font-mono text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500"
+        ></textarea>
+        <button onclick="processHeroQuickOrder()" class="mt-3 w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition">
+          <i data-lucide="arrow-right-circle" class="w-4 h-4 text-brand-400"></i>
+          Распознать и отправить в корзину
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== КАТАЛОГ И ФИЛЬТРЫ ==================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    
+    <!-- Панель управления каталогом -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+      <!-- Категории табами -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 custom-scrollbar text-xs font-medium" id="category-pills">
+        <button onclick="filterCategory('all')" class="cat-pill active px-4 py-2 rounded-xl bg-brand-500 text-dark-950 font-bold transition">Все группы</button>
+        <button onclick="filterCategory('cable')" class="cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition">Кабель и провод</button>
+        <button onclick="filterCategory('automation')" class="cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition">Низковольтная автоматика</button>
+        <button onclick="filterCategory('lighting')" class="cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition">Промсвет и LED</button>
+        <button onclick="filterCategory('boxes')" class="cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition">Щитовое оборудование</button>
+      </div>
+
+      <!-- Переключатель видов: Сетка / Таблица снабженца -->
+      <div class="flex items-center gap-3 self-end md:self-auto">
+        <span class="text-xs text-slate-400 hidden sm:inline">Вид витрины:</span>
+        <div class="bg-dark-850 p-1 rounded-xl border border-slate-700 flex items-center gap-1">
+          <button id="view-table-btn" onclick="setViewMode('table')" class="p-1.5 rounded-lg bg-brand-500 text-dark-950 transition" title="B2B Режим: Таблица">
+            <i data-lucide="layout-list" class="w-4 h-4"></i>
+          </button>
+          <button id="view-grid-btn" onclick="setViewMode('grid')" class="p-1.5 rounded-lg text-slate-400 hover:text-white transition" title="Витрина: Карточки">
+            <i data-lucide="layout-grid" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Область вывода товаров -->
+    <div id="catalog-container" class="mt-8">
+      <!-- Сюда JS рендерит таблицу или сетку карточек -->
+    </div>
+  </main>
+
+  <!-- ==================== DRAWER: ВЫДВИЖНАЯ КОРЗИНА / СПЕЦИФИКАЦИЯ ==================== -->
+  <div id="cart-drawer-overlay" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  
+  <div id="cart-drawer" class="fixed right-0 top-0 bottom-0 w-full max-w-xl bg-dark-900 border-l border-slate-800 z-50 translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+    
+    <!-- Шапка корзины -->
+    <div class="p-6 border-b border-slate-800 flex items-center justify-between bg-dark-950">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-400">
+          <i data-lucide="file-text" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-white">Текущая спецификация</h3>
+          <p class="text-xs text-slate-400">Заказчик: ООО "ТехноСистемы" (ИНН 7804928172)</p>
+        </div>
+      </div>
+      <button onclick="toggleCartDrawer(false)" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-dark-800">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- Список выбранных позиций -->
+    <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+      <!-- Рендер позиций корзины -->
+    </div>
+
+    <!-- Подвал корзины и действия -->
+    <div class="p-6 border-t border-slate-800 bg-dark-950">
+      <div class="space-y-2 mb-4 text-sm">
+        <div class="flex justify-between text-slate-400">
+          <span>Сумма без НДС:</span>
+          <span class="font-mono" id="cart-subtotal">0.00 ₽</span>
+        </div>
+        <div class="flex justify-between text-slate-400">
+          <span id="cart-vat-label">НДС (20%):</span>
+          <span class="font-mono" id="cart-vat">0.00 ₽</span>
+        </div>
+        <div class="flex justify-between text-lg font-bold text-white pt-2 border-t border-slate-800">
+          <span>Итого к оплате:</span>
+          <span class="font-mono text-brand-400" id="cart-total">0.00 ₽</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="exportCartToCSV()" class="py-3 px-4 rounded-xl bg-dark-800 hover:bg-dark-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition">
+          <i data-lucide="download" class="w-4 h-4 text-brand-accent"></i>
+          Выгрузить XLS/CSV
+        </button>
+        <button onclick="generateOfficialInvoice()" class="py-3 px-4 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 hover:brightness-110 text-dark-950 text-xs font-bold flex items-center justify-center gap-2 transition shadow-lg shadow-brand-500/20">
+          <i data-lucide="printer" class="w-4 h-4"></i>
+          Сформировать Счёт
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== МОДАЛЬНОЕ ОКНО: БЫСТРЫЙ ЗАКАЗ ПО СМЕТЕ ==================== -->
+  <div id="quick-order-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-dark-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <i data-lucide="table-properties" class="w-5 h-5 text-brand-400"></i>
+          <h3 class="font-bold text-lg text-white">Парсер смет и спецификаций</h3>
+        </div>
+        <button onclick="closeQuickOrderModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      
+      <p class="text-xs text-slate-400 mt-4 leading-relaxed">
+        Вставьте список позиций из вашей программы учета или сметы. Формат: <code class="text-brand-400 bg-dark-800 px-1.5 py-0.5 rounded">АРТИКУЛ КОЛИЧЕСТВО</code> или <code class="text-brand-400 bg-dark-800 px-1.5 py-0.5 rounded">НАИМЕНОВАНИЕ КОЛИЧЕСТВО</code>.
+      </p>
+
+      <textarea 
+        id="quick-order-textarea" 
+        rows="6" 
+        placeholder="E-101 100&#10;C60N-16A 25&#10;LE-60W 12&#10;ВВГнг 3х1.5 500"
+        class="w-full mt-4 bg-dark-950 border border-slate-700 rounded-xl p-3 font-mono text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-brand-500 custom-scrollbar"
+      ></textarea>
+
+      <div class="mt-6 flex justify-end gap-3">
+        <button onclick="closeQuickOrderModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:bg-dark-800">Отмена</button>
+        <button onclick="executeQuickOrderParse()" class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 text-xs font-bold flex items-center gap-2">
+          <i data-lucide="check-circle" class="w-4 h-4"></i>
+          Добавить всё в спецификацию
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== МОДАЛЬНОЕ ОКНО: ОФИЦИАЛЬНЫЙ СЧЁТ НА ОПЛАТУ ==================== -->
+  <div id="invoice-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-2 sm:p-6 overflow-y-auto">
+    <div class="bg-white text-slate-900 rounded-xl max-w-4xl w-full p-6 sm:p-10 shadow-2xl relative my-8" id="invoice-modal-content">
+      
+      <div class="no-print absolute right-4 top-4 flex gap-2">
+        <button onclick="window.print()" class="px-3 py-1.5 bg-slate-800 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 hover:bg-slate-700">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Печать / PDF
+        </button>
+        <button onclick="closeInvoiceModal()" class="p-1.5 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Шапка счёта -->
+      <div class="border-b-2 border-slate-900 pb-4 mb-6">
+        <div class="text-xs text-slate-500 mb-2">Внимание! Оплата данного счета означает согласие с условиями поставки. Срок действия счета — 3 банковских дня.</div>
+        <table class="w-full text-xs border-collapse border border-slate-400 mb-4">
+          <tr>
+            <td colspan="2" rowspan="2" class="border border-slate-400 p-2 align-top">
+              <span class="text-slate-500 block text-[10px]">Банк получателя</span>
+              ПАО СБЕРБАНК г. Москва
+            </td>
+            <td class="border border-slate-400 p-1 text-[10px] w-16">БИК</td>
+            <td class="border border-slate-400 p-1 font-mono font-bold">044525225</td>
+          </tr>
+          <tr>
+            <td class="border border-slate-400 p-1 text-[10px]">Сч. №</td>
+            <td class="border border-slate-400 p-1 font-mono font-bold">30101810400000000225</td>
+          </tr>
+          <tr>
+            <td class="border border-slate-400 p-1 text-[10px]">ИНН 7701982310</td>
+            <td class="border border-slate-400 p-1 text-[10px]">КПП 770101001</td>
+            <td class="border border-slate-400 p-1 text-[10px] rowspan-2">Сч. №</td>
+            <td class="border border-slate-400 p-1 font-mono font-bold rowspan-2">40702810938000192841</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="border border-slate-400 p-2 align-top">
+              <span class="text-slate-500 block text-[10px]">Получатель</span>
+              <strong>ООО "ВЕРТЕКС ИНЖИНИРИНГ"</strong>
+            </td>
+          </tr>
+        </table>
+
+        <h2 class="text-xl font-extrabold mt-6">Счет на оплату № ВТ-8492 от <span id="invoice-date"></span></h2>
+      </div>
+
+      <!-- Реквизиты сторон -->
+      <div class="text-xs space-y-2 mb-6">
+        <div><strong>Поставщик:</strong> ООО "ВЕРТЕКС ИНЖИНИРИНГ", ИНН 7701982310, КПП 770101001, 196084, г. Санкт-Петербург, Московский пр-кт, дом 108</div>
+        <div><strong>Покупатель:</strong> ООО "ТехноСистемы", ИНН 7804928172, КПП 780401001, 195220, г. Санкт-Петербург, Гражданский пр-кт, дом 41</div>
+        <div><strong>Основание:</strong> Договор поставки промышленного оборудования № П-2026/04 от 12.01.2026 г.</div>
+      </div>
+
+      <!-- Таблица позиций счёта -->
+      <table class="w-full text-xs border-collapse border border-slate-300 mb-6">
+        <thead>
+          <tr class="bg-slate-100 font-bold">
+            <th class="border border-slate-300 p-2 text-center w-8">№</th>
+            <th class="border border-slate-300 p-2 text-left">Товары (работы, услуги)</th>
+            <th class="border border-slate-300 p-2 text-center w-16">Кол-во</th>
+            <th class="border border-slate-300 p-2 text-center w-12">Ед.</th>
+            <th class="border border-slate-300 p-2 text-right w-24">Цена</th>
+            <th class="border border-slate-300 p-2 text-right w-28">Сумма</th>
+          </tr>
+        </thead>
+        <tbody id="invoice-table-body">
+          <!-- Рендер позиций -->
+        </tbody>
+      </table>
+
+      <!-- Итоги -->
+      <div class="flex justify-end text-xs space-y-1 mb-8">
+        <div class="w-64 space-y-1">
+          <div class="flex justify-between">
+            <span class="text-slate-500">Итого:</span>
+            <span class="font-bold font-mono" id="invoice-subtotal-val">0.00 ₽</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">В том числе НДС 20%:</span>
+            <span class="font-bold font-mono" id="invoice-vat-val">0.00 ₽</span>
+          </div>
+          <div class="flex justify-between text-sm font-extrabold border-t border-slate-900 pt-1">
+            <span>Всего к оплате:</span>
+            <span class="font-mono" id="invoice-total-val">0.00 ₽</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Подписи и печать (Факсимиле) -->
+      <div class="pt-8 border-t border-slate-300 relative flex justify-between items-center text-xs">
+        <div>
+          <div class="mb-4">Руководитель: ______________ / Гончаров С. С. /</div>
+          <div>Главный бухгалтер: ______________ / Воронова Е. А. /</div>
+        </div>
+
+        <!-- Синяя печать (стилизация SVG) -->
+        <div class="w-32 h-32 rounded-full border-4 border-dashed border-blue-600/70 text-blue-700/80 flex flex-col items-center justify-center p-2 text-center rotate-[-12deg] select-none pointer-events-none">
+          <div class="text-[8px] uppercase tracking-tighter font-mono">ООО "ВЕРТЕКС ИНЖИНИРИНГ"</div>
+          <div class="font-bold text-xs my-0.5">ДЛЯ ДОКУМЕНТОВ</div>
+          <div class="text-[7px]">ОГРН 1187847192841</div>
+          <div class="text-[7px]">Санкт-Петербург</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== МОДАЛЬНОЕ ОКНО: ДЕТАЛИ И ПАСПОРТ ТОВАРА ==================== -->
+  <div id="product-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-dark-900 border border-slate-800 rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <button onclick="closeProductModal()" class="absolute right-6 top-6 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-dark-800">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div id="product-modal-body">
+        <!-- Заполняется динамически -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT ПРИЛОЖЕНИЯ ==================== -->
+  <script>
+    // База данных промышленного B2B ассортимента
+    const PRODUCTS = [
+      {
+        id: "VT-101",
+        sku: "E-101",
+        name: "Кабель силовой ВВГнг(А)-LS 3х2.5 ок (N, PE) 0.66кВ",
+        category: "cable",
+        unit: "м",
+        priceNet: 88.50, // Без НДС
+        stockMsk: 12500,
+        stockSpb: 4800,
+        stockEkb: 1200,
+        moq: 100, // Минимальный квант заказа
+        gost: "ГОСТ 31996-2012",
+        brand: "Кольчугино ЭКЗ",
+        specs: { "Сечение": "3х2.5 мм²", "Материал": "Медь (Cu)", "Изоляция": "ПВХ низкой пожароопасности", "t° эксплуатации": "от -50°C до +50°C" },
+        analog: "ВВГ-Пнг(А)-LS 3х2.5 (Конкорд)"
+      },
+      {
+        id: "VT-102",
+        sku: "E-102",
+        name: "Кабель силовой бронированный ВБШвнг(А)-LS 4х16 ож 1кВ",
+        category: "cable",
+        unit: "м",
+        priceNet: 640.00,
+        stockMsk: 3200,
+        stockSpb: 1950,
+        stockEkb: 400,
+        moq: 50,
+        gost: "ГОСТ 31996-2012",
+        brand: "Камкабель",
+        specs: { "Сечение": "4х16 мм²", "Броня": "Стальные оцинкованные ленты", "Оболочка": "ПВХ пониженной горючести" },
+        analog: "АВБШвнг(А)-LS 4х25 (Алюминиевый аналог)"
+      },
+      {
+        id: "VT-201",
+        sku: "C60N-16A",
+        name: "Автоматический выключатель Acti9 iC60N 3P 16A C 6кА",
+        category: "automation",
+        unit: "шт",
+        priceNet: 1420.00,
+        stockMsk: 840,
+        stockSpb: 310,
+        stockEkb: 95,
+        moq: 1,
+        gost: "ГОСТ IEC 60898-1",
+        brand: "Systeme Electric",
+        specs: { "Полюсов": "3P", "Номинальный ток": "16А", "Кривая": "C", "Отключающая способность": "6 кА" },
+        analog: "CHINT NB1-63 3P C16 6kA"
+      },
+      {
+        id: "VT-202",
+        sku: "MD-25A",
+        name: "Контактор электромагнитный КМИ-32512 25А 230В / 1НО",
+        category: "automation",
+        unit: "шт",
+        priceNet: 2150.00,
+        stockMsk: 410,
+        stockSpb: 180,
+        stockEkb: 60,
+        moq: 1,
+        gost: "ГОСТ Р 50030.4.1",
+        brand: "IEK Industrial",
+        specs: { "Ток AC-3": "25А", "Катушка": "230В AC", "Доп. контакты": "1НО" },
+        analog: "DEKraft КМ-102 25А 220В"
+      },
+      {
+        id: "VT-301",
+        sku: "LE-60W",
+        name: "Светильник промышленный пылевлагозащищенный LED IP65 60Вт 5000К",
+        category: "lighting",
+        unit: "шт",
+        priceNet: 3180.00,
+        stockMsk: 620,
+        stockSpb: 240,
+        stockEkb: 110,
+        moq: 2,
+        gost: "ГОСТ Р МЭК 60598-1",
+        brand: "ФЕРЕКС",
+        specs: { "Мощность": "60 Вт", "Световой поток": "8400 Лм", "Защита": "IP65", "Корпус": "Ударопрочный поликарбонат" },
+        analog: "LEDVANCE DampProof 1500 55W"
+      },
+      {
+        id: "VT-401",
+        sku: "SH-654",
+        name: "Шкаф навесной металлический ЩРн-36з-1 36 мод. IP54 с замком",
+        category: "boxes",
+        unit: "шт",
+        priceNet: 4890.00,
+        stockMsk: 190,
+        stockSpb: 85,
+        stockEkb: 30,
+        moq: 1,
+        gost: "ГОСТ 32127-2013",
+        brand: "Провенто",
+        specs: { "Емкость": "36 модулей", "Степень защиты": "IP54", "Толщина стали": "1.2 мм", "Покрытие": "Порошковое RAL 7035" },
+        analog: "DKC RAM block ST 500x400x200 IP66"
+      }
+    ];
+
+    // Состояние приложения
+    let state = {
+      isVatIncluded: true,
+      currentCategory: 'all',
+      viewMode: 'table', // 'table' или 'grid'
+      cart: {}, // { "VT-101": 200 }
+      searchQuery: ''
+    };
+
+    // Форматирование чисел в денежный вид
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', minimumFractionDigits: 2 }).format(amount);
+    }
+
+    // Расчет отображаемой цены с учетом переключателя НДС
+    function getDisplayPrice(priceNet) {
+      return state.isVatIncluded ? (priceNet * 1.20) : priceNet;
+    }
+
+    // Переключение НДС
+    function toggleVat() {
+      state.isVatIncluded = !state.isVatIncluded;
+      document.getElementById('vat-mode-label').textContent = state.isVatIncluded ? 'С НДС (20%)' : 'Без НДС';
+      renderCatalog();
+      renderCart();
+    }
+
+    // Переключение режимов витрины
+    function setViewMode(mode) {
+      state.viewMode = mode;
+      const tableBtn = document.getElementById('view-table-btn');
+      const gridBtn = document.getElementById('view-grid-btn');
+      
+      if (mode === 'table') {
+        tableBtn.className = "p-1.5 rounded-lg bg-brand-500 text-dark-950 transition";
+        gridBtn.className = "p-1.5 rounded-lg text-slate-400 hover:text-white transition";
+      } else {
+        gridBtn.className = "p-1.5 rounded-lg bg-brand-500 text-dark-950 transition";
+        tableBtn.className = "p-1.5 rounded-lg text-slate-400 hover:text-white transition";
+      }
+      renderCatalog();
+    }
+
+    // Фильтр по категориям
+    function filterCategory(cat) {
+      state.currentCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        btn.className = "cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition";
+      });
+      event.target.className = "cat-pill active px-4 py-2 rounded-xl bg-brand-500 text-dark-950 font-bold transition";
+      renderCatalog();
+    }
+
+    function resetFilters() {
+      state.currentCategory = 'all';
+      state.searchQuery = '';
+      document.getElementById('search-input').value = '';
+      document.querySelectorAll('.cat-pill').forEach((btn, idx) => {
+        btn.className = idx === 0 ? "cat-pill active px-4 py-2 rounded-xl bg-brand-500 text-dark-950 font-bold transition" : "cat-pill px-4 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-slate-700 text-slate-300 transition";
+      });
+      renderCatalog();
+    }
+
+    // Отрисовка каталога
+    function renderCatalog() {
+      const container = document.getElementById('catalog-container');
+      
+      let filtered = PRODUCTS.filter(p => {
+        const matchesCategory = state.currentCategory === 'all' || p.category === state.currentCategory;
+        const matchesSearch = !state.searchQuery || 
+          p.name.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+          p.sku.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+          p.gost.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+          p.brand.toLowerCase().includes(state.searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-16 border border-dashed border-slate-800 rounded-2xl">
+            <i data-lucide="package-search" class="w-12 h-12 text-slate-600 mx-auto mb-3"></i>
+            <h4 class="text-lg font-bold text-slate-300">Позиций не найдено</h4>
+            <p class="text-xs text-slate-500 mt-1">Попробуйте изменить поисковый запрос или напишите нашему инженеру</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      if (state.viewMode === 'table') {
+        // Таблица снабженца
+        container.innerHTML = `
+          <div class="overflow-x-auto glass-panel rounded-2xl border border-slate-800 shadow-xl custom-scrollbar">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-dark-950/80 text-slate-400 font-semibold border-b border-slate-800 uppercase text-[10px] tracking-wider">
+                <tr>
+                  <th class="py-4 px-4">Артикул / ГОСТ</th>
+                  <th class="py-4 px-4">Наименование оборудования</th>
+                  <th class="py-4 px-4">Склады (СПб / Мск)</th>
+                  <th class="py-4 px-4 text-right">Цена (\${state.isVatIncluded ? 'с НДС' : 'без НДС'})</th>
+                  <th class="py-4 px-4 text-center">Заказ</th>
+                  <th class="py-4 px-4 text-center">Действие</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 font-medium">
+                \${filtered.map(p => `
+                  <tr class="hover:bg-dark-850/50 transition group">
+                    <td class="py-4 px-4">
+                      <div class="font-mono text-brand-400 font-bold">${p.sku}</div>
+                      <div class="text-[10px] text-slate-500">${p.gost}</div>
+                    </td>
+                    <td class="py-4 px-4 max-w-md">
+                      <div class="text-slate-100 font-bold group-hover:text-brand-300 cursor-pointer transition" onclick="openProductModal('${p.id}')">
+                        ${p.name}
+                      </div>
+                      <div class="text-[11px] text-slate-500 flex gap-2 mt-0.5">
+                        <span>Бренд: <strong class="text-slate-400">${p.brand}</strong></span>
+                        <span>•</span>
+                        <span>Кратность: <strong>${p.moq} ${p.unit}</strong></span>
+                      </div>
+                    </td>
+                    <td class="py-4 px-4 font-mono text-[11px]">
+                      <div class="flex items-center gap-1.5 text-slate-300">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
+                        СПб: ${p.stockSpb.toLocaleString()} ${p.unit}
+                      </div>
+                      <div class="flex items-center gap-1.5 text-slate-400 mt-0.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                        Мск: ${p.stockMsk.toLocaleString()} ${p.unit}
+                      </div>
+                    </td>
+                    <td class="py-4 px-4 text-right">
+                      <div class="font-mono font-bold text-sm text-slate-100">${formatCurrency(getDisplayPrice(p.priceNet))}</div>
+                      <div class="text-[10px] text-slate-500">за 1 ${p.unit}</div>
+                    </td>
+                    <td class="py-4 px-4 text-center">
+                      <input 
+                        type="number" 
+                        min="${p.moq}" 
+                        step="${p.moq}" 
+                        value="${p.moq}" 
+                        id="qty-${p.id}"
+                        class="w-20 bg-dark-900 border border-slate-700 rounded-lg py-1 px-2 text-center text-xs font-mono text-slate-200 focus:outline-none focus:border-brand-500"
+                      >
+                    </td>
+                    <td class="py-4 px-4 text-center">
+                      <button onclick="addToCart('${p.id}')" class="p-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold transition shadow-md shadow-brand-500/20 active:scale-90" title="Добавить в корзину">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                      </button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else {
+        // Сетка карточек
+        container.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            \${filtered.map(p => `
+              <div class="glass-panel glass-panel-hover rounded-2xl p-5 flex flex-col justify-between transition-all duration-300">
+                <div>
+                  <div class="flex items-center justify-between gap-2 text-xs font-mono text-slate-400 mb-2">
+                    <span class="text-brand-400 font-bold">${p.sku}</span>
+                    <span class="text-[10px] bg-dark-800 px-2 py-0.5 rounded border border-slate-700">${p.brand}</span>
+                  </div>
+                  <h4 class="font-bold text-slate-100 text-sm hover:text-brand-300 cursor-pointer line-clamp-2" onclick="openProductModal('${p.id}')">
+                    ${p.name}
+                  </h4>
+                  <div class="mt-4 space-y-1 text-xs text-slate-400 border-t border-slate-800 pt-3">
+                    <div class="flex justify-between">
+                      <span>Стандарт:</span>
+                      <span class="text-slate-300">${p.gost}</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>Остаток СПб+Мск:</span>
+                      <span class="text-brand-400 font-mono font-bold">${(p.stockSpb + p.stockMsk).toLocaleString()} ${p.unit}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between">
+                  <div>
+                    <div class="text-[10px] text-slate-500">${state.isVatIncluded ? 'Цена с НДС' : 'Цена без НДС'}</div>
+                    <div class="text-base font-extrabold font-mono text-slate-100">${formatCurrency(getDisplayPrice(p.priceNet))}</div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <input 
+                      type="number" 
+                      min="${p.moq}" 
+                      step="${p.moq}" 
+                      value="${p.moq}" 
+                      id="qty-${p.id}"
+                      class="w-16 bg-dark-900 border border-slate-700 rounded-lg py-1 px-1 text-center text-xs font-mono text-slate-200"
+                    >
+                    <button onclick="addToCart('${p.id}')" class="p-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold transition shadow-md shadow-brand-500/20">
+                      <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+      lucide.createIcons();
+    }
+
+    // Умный поиск с подсказками
+    function handleSearch(val) {
+      state.searchQuery = val.trim();
+      const dropdown = document.getElementById('search-dropdown');
+      
+      if (!val.trim()) {
+        dropdown.classList.add('hidden');
+        renderCatalog();
+        return;
+      }
+
+      const matches = PRODUCTS.filter(p => 
+        p.name.toLowerCase().includes(val.toLowerCase()) || 
+        p.sku.toLowerCase().includes(val.toLowerCase()) || 
+        p.gost.toLowerCase().includes(val.toLowerCase())
+      );
+
+      if (matches.length > 0) {
+        dropdown.innerHTML = matches.map(p => `
+          <div onclick="selectSearchResult('\${p.id}')" class="p-2.5 hover:bg-dark-800 rounded-lg cursor-pointer flex justify-between items-center transition">
+            <div>
+              <div class="text-xs font-bold text-slate-200">\${p.name}</div>
+              <div class="text-[10px] text-brand-400 font-mono">Арт: ${p.sku} \vert{}${p.gost}</div>
+            </div>
+            <div class="text-xs font-mono font-bold text-slate-300">
+              \${formatCurrency(getDisplayPrice(p.priceNet))}
+            </div>
+          </div>
+        `).join('');
+        dropdown.classList.remove('hidden');
+      } else {
+        dropdown.innerHTML = `<div class="p-3 text-xs text-slate-500 text-center">Ничего не найдено по запросу "\${val}"</div>`;
+        dropdown.classList.remove('hidden');
+      }
+      renderCatalog();
+    }
+
+    function selectSearchResult(id) {
+      document.getElementById('search-dropdown').classList.add('hidden');
+      openProductModal(id);
+    }
+
+    // Управление корзиной
+    function addToCart(productId, customQty = null) {
+      const qtyInput = document.getElementById(`qty-\${productId}`);
+      const qty = customQty || (qtyInput ? parseInt(qtyInput.value) : 1);
+      
+      if (qty <= 0 || isNaN(qty)) return;
+
+      state.cart[productId] = (state.cart[productId] || 0) + qty;
+      renderCart();
+      
+      // Анимация бейджа корзины
+      const badge = document.getElementById('cart-counter');
+      badge.classList.add('scale-125', 'bg-brand-500', 'text-dark-950');
+      setTimeout(() => {
+        badge.classList.remove('scale-125', 'bg-brand-500', 'text-dark-950');
+      }, 200);
+    }
+
+    function updateCartItemQty(productId, qty) {
+      if (qty <= 0) {
+        delete state.cart[productId];
+      } else {
+        state.cart[productId] = qty;
+      }
+      renderCart();
+    }
+
+    function toggleCartDrawer(open) {
+      const drawer = document.getElementById('cart-drawer');
+      const overlay = document.getElementById('cart-drawer-overlay');
+      if (open) {
+        overlay.classList.remove('pointer-events-none');
+        overlay.classList.remove('opacity-0');
+        drawer.classList.remove('translate-x-full');
+      } else {
+        overlay.classList.add('opacity-0');
+        overlay.classList.add('pointer-events-none');
+        drawer.classList.add('translate-x-full');
+      }
+    }
+
+    function renderCart() {
+      const cartItemsContainer = document.getElementById('cart-items');
+      const badge = document.getElementById('cart-counter');
+      const productIds = Object.keys(state.cart);
+      
+      const totalCount = productIds.reduce((sum, id) => sum + state.cart[id], 0);
+      badge.textContent = totalCount;
+
+      if (productIds.length === 0) {
+        cartItemsContainer.innerHTML = `
+          <div class="text-center py-16">
+            <i data-lucide="shopping-bag" class="w-12 h-12 text-slate-700 mx-auto mb-3"></i>
+            <p class="text-sm text-slate-400 font-bold">Спецификация пока пуста</p>
+            <p class="text-xs text-slate-600 mt-1">Добавьте позиции из каталога или воспользуйтесь быстрой сметой</p>
+          </div>
+        `;
+        document.getElementById('cart-subtotal').textContent = '0.00 ₽';
+        document.getElementById('cart-vat').textContent = '0.00 ₽';
+        document.getElementById('cart-total').textContent = '0.00 ₽';
+        lucide.createIcons();
+        return;
+      }
+
+      let subtotalNet = 0;
+
+      cartItemsContainer.innerHTML = productIds.map(id => {
+        const product = PRODUCTS.find(p => p.id === id);
+        if (!product) return '';
+        const qty = state.cart[id];
+        const lineTotalNet = product.priceNet * qty;
+        subtotalNet += lineTotalNet;
+
+        const currentPrice = getDisplayPrice(product.priceNet);
+        const lineDisplayTotal = currentPrice * qty;
+
+        return `
+          <div class="glass-panel p-3.5 rounded-xl border border-slate-800 flex items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="text-[10px] text-brand-400 font-mono font-bold">\${product.sku}</div>
+              <div class="text-xs font-bold text-slate-100 truncate">\${product.name}</div>
+              <div class="text-[11px] font-mono text-slate-400 mt-0.5">${formatCurrency(currentPrice)} /${product.unit}</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <input 
+                type="number" 
+                min="\${product.moq}" 
+                step="\${product.moq}" 
+                value="\${qty}" 
+                onchange="updateCartItemQty('\${id}', parseInt(this.value))"
+                class="w-16 bg-dark-950 border border-slate-700 rounded-lg p-1 text-center text-xs font-mono text-slate-200"
+              >
+              <button onclick="updateCartItemQty('\${id}', 0)" class="text-slate-500 hover:text-rose-400 p-1">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const vatAmount = subtotalNet * 0.20;
+      const totalGross = subtotalNet + vatAmount;
+
+      document.getElementById('cart-subtotal').textContent = formatCurrency(subtotalNet);
+      document.getElementById('cart-vat').textContent = formatCurrency(vatAmount);
+      document.getElementById('cart-total').textContent = formatCurrency(state.isVatIncluded ? totalGross : subtotalNet);
+      
+      lucide.createIcons();
+    }
+
+    // Быстрый заказ по смете (Hero & Modal)
+    function processHeroQuickOrder() {
+      const text = document.getElementById('hero-quick-text').value;
+      if (!text.trim()) return;
+      parseAndAddTextLines(text);
+      document.getElementById('hero-quick-text').value = '';
+      toggleCartDrawer(true);
+    }
+
+    function openQuickOrderModal() {
+      document.getElementById('quick-order-modal').classList.remove('hidden');
+      document.getElementById('quick-order-modal').classList.add('flex');
+    }
+
+    function closeQuickOrderModal() {
+      document.getElementById('quick-order-modal').classList.add('hidden');
+      document.getElementById('quick-order-modal').classList.remove('flex');
+    }
+
+    function executeQuickOrderParse() {
+      const text = document.getElementById('quick-order-textarea').value;
+      if (!text.trim()) return;
+      parseAndAddTextLines(text);
+      closeQuickOrderModal();
+      toggleCartDrawer(true);
+    }
+
+    function parseAndAddTextLines(text) {
+      const lines = text.split('\n');
+      let matchedCount = 0;
+
+      lines.forEach(line => {
+        const clean = line.trim();
+        if (!clean) return;
+
+        // Поиск количества (последнее число в строке)
+        const parts = clean.split(/[\s,;\t]+/);
+        let qty = 1;
+        let queryParts = parts;
+
+        if (parts.length > 1 && !isNaN(parts[parts.length - 1])) {
+          qty = parseInt(parts.pop());
+          queryParts = parts;
+        }
+
+        const query = queryParts.join(' ').toLowerCase();
+
+        // Поиск подходящего товара по артикулу или названию
+        const found = PRODUCTS.find(p => 
+          p.sku.toLowerCase().includes(query) || 
+          p.name.toLowerCase().includes(query)
+        );
+
+        if (found) {
+          state.cart[found.id] = (state.cart[found.id] || 0) + qty;
+          matchedCount++;
+        }
+      });
+
+      renderCart();
+      if (matchedCount > 0) {
+        alert(`Успешно распознано и добавлено \${matchedCount} позиций в спецификацию!`);
+      } else {
+        alert('Не удалось сопоставить позиции. Попробуйте ввести артикул (например: E-101 или C60N-16A).');
+      }
+    }
+
+    // Экспорт корзины в CSV (Excel)
+    function exportCartToCSV() {
+      const productIds = Object.keys(state.cart);
+      if (productIds.length === 0) {
+        alert('Спецификация пуста для выгрузки!');
+        return;
+      }
+
+      let csv = "Артикул;Наименование;Количество;Ед.;Цена без НДС;Сумма без НДС\n";
+      productIds.forEach(id => {
+        const p = PRODUCTS.find(item => item.id === id);
+        const qty = state.cart[id];
+        const lineTotal = (p.priceNet * qty).toFixed(2);
+        csv += `"${p.sku}";"${p.name}";${qty};"${p.unit}";${p.priceNet.toFixed(2)};${lineTotal}\n`;
+      });
+
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Спецификация_VERTEX_\${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Генерация официального счёта
+    function generateOfficialInvoice() {
+      const productIds = Object.keys(state.cart);
+      if (productIds.length === 0) {
+        alert('Добавьте хотя бы один товар для формирования счета.');
+        return;
+      }
+
+      document.getElementById('invoice-date').textContent = new Date().toLocaleDateString('ru-RU');
+      const tableBody = document.getElementById('invoice-table-body');
+      
+      let subtotal = 0;
+      let rowsHtml = '';
+
+      productIds.forEach((id, index) => {
+        const p = PRODUCTS.find(item => item.id === id);
+        const qty = state.cart[id];
+        const lineTotal = p.priceNet * qty;
+        subtotal += lineTotal;
+
+        rowsHtml += `
+          <tr>
+            <td class="border border-slate-300 p-2 text-center">\${index + 1}</td>
+            <td class="border border-slate-300 p-2">${p.name} [Арт: ${p.sku}]</td>
+            <td class="border border-slate-300 p-2 text-center font-mono font-bold">\${qty}</td>
+            <td class="border border-slate-300 p-2 text-center">\${p.unit}</td>
+            <td class="border border-slate-300 p-2 text-right font-mono">\${p.priceNet.toFixed(2)} ₽</td>
+            <td class="border border-slate-300 p-2 text-right font-mono font-bold">\${lineTotal.toFixed(2)} ₽</td>
+          </tr>
+        `;
+      });
+
+      const vat = subtotal * 0.20;
+      const total = subtotal + vat;
+
+      tableBody.innerHTML = rowsHtml;
+      document.getElementById('invoice-subtotal-val').textContent = formatCurrency(subtotal);
+      document.getElementById('invoice-vat-val').textContent = formatCurrency(vat);
+      document.getElementById('invoice-total-val').textContent = formatCurrency(total);
+
+      document.getElementById('invoice-modal').classList.remove('hidden');
+      document.getElementById('invoice-modal').classList.add('flex');
+    }
+
+    function closeInvoiceModal() {
+      document.getElementById('invoice-modal').classList.add('hidden');
+      document.getElementById('invoice-modal').classList.remove('flex');
+    }
+
+    // Модальное окно деталей товара
+    function openProductModal(id) {
+      const p = PRODUCTS.find(item => item.id === id);
+      if (!p) return;
+
+      const body = document.getElementById('product-modal-body');
+      body.innerHTML = `
+        <div class="flex items-center gap-2 text-xs font-mono text-brand-400 mb-1">
+          <span>\${p.sku}</span>
+          <span>•</span>
+          <span>\${p.brand}</span>
+          <span>•</span>
+          <span class="text-slate-400">\${p.gost}</span>
+        </div>
+        <h2 class="text-xl font-extrabold text-white">\${p.name}</h2>
+
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="glass-panel p-4 rounded-xl border border-slate-800">
+            <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Технические параметры</h5>
+            <div class="space-y-2 text-xs">
+              \${Object.entries(p.specs).map(([key, value]) => `
+                <div class="flex justify-between py-1 border-b border-slate-800">
+                  <span class="text-slate-500">${key}:</span>
+                  <span class="font-medium text-slate-200">${value}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="glass-panel p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+            <div>
+              <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Документация и BIM</h5>
+              <div class="space-y-2">
+                <a href="#" onclick="alert('Скачивание паспорта изделия \${p.sku} (PDF)'); return false;" class="flex items-center justify-between p-2 rounded-lg bg-dark-950 hover:bg-dark-800 border border-slate-800 text-xs text-slate-300">
+                  <span class="flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4 text-brand-400"></i> Паспорт качества (PDF)</span>
+                  <i data-lucide="download" class="w-3.5 h-3.5 text-slate-500"></i>
+                </a>
+                <a href="#" onclick="alert('Скачивание сертификата ТР ТС (PDF)'); return false;" class="flex items-center justify-between p-2 rounded-lg bg-dark-950 hover:bg-dark-800 border border-slate-800 text-xs text-slate-300">
+                  <span class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-brand-accent"></i> Сертификат соответствия</span>
+                  <i data-lucide="download" class="w-3.5 h-3.5 text-slate-500"></i>
+                </a>
+                <a href="#" onclick="alert('Скачивание BIM/Revit модели (RFA)'); return false;" class="flex items-center justify-between p-2 rounded-lg bg-dark-950 hover:bg-dark-800 border border-slate-800 text-xs text-slate-300">
+                  <span class="flex items-center gap-2"><i data-lucide="box" class="w-4 h-4 text-purple-400"></i> Семейство Revit (RFA)</span>
+                  <i data-lucide="download" class="w-3.5 h-3.5 text-slate-500"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-800">
+              <span class="text-[10px] text-slate-500 block">Прямой аналог для импортозамещения:</span>
+              <span class="text-xs text-brand-300 font-medium">\${p.analog}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between">
+          <div>
+            <div class="text-xs text-slate-400">Цена единицы (\${state.isVatIncluded ? 'с НДС' : 'без НДС'}):</div>
+            <div class="text-xl font-mono font-extrabold text-white">\${formatCurrency(getDisplayPrice(p.priceNet))}</div>
+          </div>
+          <button onclick="addToCart('\${p.id}'); closeProductModal(); toggleCartDrawer(true);" class="px-6 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-brand-500/20">
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+            В спецификацию
+          </button>
+        </div>
+      `;
+
+      document.getElementById('product-modal').classList.remove('hidden');
+      document.getElementById('product-modal').classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function closeProductModal() {
+      document.getElementById('product-modal').classList.add('hidden');
+      document.getElementById('product-modal').classList.remove('flex');
+    }
+
+    // Инициализация при загрузке
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCatalog();
+      renderCart();
+      lucide.createIcons();
+
+      // Закрытие дропдауна поиска по клику вне
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#search-input') && !e.target.closest('#search-dropdown')) {
+          document.getElementById('search-dropdown').classList.add('hidden');
+        }
+      });
+
+      // Хоткей Ctrl + K для фокуса поиска
+      window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          document.getElementById('search-input').focus();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
