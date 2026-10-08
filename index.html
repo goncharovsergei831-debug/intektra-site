@@ -391,3 +391,1409 @@
       font-size: 13px;
       color: var(--text-muted);
       margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #334155;
+    }
+    .form-ctrl {
+      width: 100%;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      outline: none;
+    }
+    .form-ctrl:focus {
+      background: #fff;
+      border-color: var(--cyan-accent);
+    }
+    .file-upload {
+      border: 2px dashed #cbd5e1;
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      transition: all 0.2s;
+    }
+    .file-upload:hover {
+      border-color: var(--red-accent);
+      color: var(--text-main);
+      background: #fff;
+    }
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--red-accent), #be123c);
+      border: none;
+      color: #fff;
+      padding: 13px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px var(--red-glow);
+    }
+
+    /* Инженерный калькулятор АКБ для РИП */
+    .calc-section {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .calc-inputs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .calc-result-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+    }
+    .calc-result-val {
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 800;
+      color: #0369a1;
+      margin: 8px 0;
+    }
+
+    /* Навигация категорий (Chips) */
+    .filter-chips {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 10px 0 20px;
+      margin-bottom: 10px;
+    }
+    .chip {
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .chip:hover, .chip.active {
+      border-color: var(--red-accent);
+      color: var(--red-accent);
+      background: #fff;
+    }
+    .chip.active {
+      background: var(--red-accent);
+      color: #fff;
+    }
+
+    /* Каталог товаров */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .section-header h2 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #0f172a;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 24px;
+    }
+    .product-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      border-color: #cbd5e1;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .sku-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #475569;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .stock-tag {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green-stock);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .product-title {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #0f172a;
+      margin-bottom: 20px;
+      flex-grow: 1;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .product-title:hover {
+      color: var(--red-accent);
+    }
+    .card-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    .price-value {
+      font-family: var(--font-mono);
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+    .price-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .btn-card {
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .btn-add {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      color: #334155;
+    }
+    .btn-add:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .btn-buy-one {
+      background: var(--red-accent);
+      border: 1px solid transparent;
+      color: #fff;
+    }
+    .btn-buy-one:hover {
+      background: #be123c;
+    }
+
+    /* Модальные окна и шторки */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 1400;
+      display: none;
+    }
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -520px;
+      width: 100%;
+      max-width: 520px;
+      height: 100vh;
+      background: #ffffff;
+      border-left: 1px solid var(--border);
+      z-index: 2001;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -10px 0 40px rgba(0,0,0,0.1);
+    }
+    .drawer.open { right: 0; }
+    .drawer-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .drawer-header h3 { color: #0f172a; font-size: 18px; font-weight: 800; }
+    .drawer-body {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
+    .drawer-footer {
+      padding: 24px;
+      border-top: 1px solid var(--border);
+      background: #f8fafc;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .cart-item-title { font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+    .cart-item-price { font-family: var(--font-mono); font-size: 13px; color: #0369a1; font-weight: 600; }
+    .cart-qty-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f1f5f9;
+      border-radius: 6px;
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+    }
+    .cart-qty-btn {
+      background: none;
+      border: none;
+      color: #0f172a;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      background: #fff;
+      border: 1px solid var(--border);
+      color: #334155;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-secondary:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .btn-telegram {
+      background: #0284c7;
+      border: none;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .btn-telegram:hover {
+      background: #0369a1;
+      color: #fff;
+    }
+
+    /* Инфо-модалка */
+    .info-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      width: 90%;
+      max-width: 580px;
+      z-index: 2100;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .info-modal.active { display: block; }
+    .info-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .info-modal-header h3 { font-size: 20px; color: #0f172a; font-weight: 800; }
+
+    /* Таблица спецификаций */
+    .specs-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+    .specs-table th, .specs-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .specs-table th {
+      color: #0369a1;
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    /* Подвал */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 60px 0 30px;
+      margin-top: 80px;
+      background: #f1f5f9;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-col h5 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 16px;
+      color: #0f172a;
+      font-weight: 800;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--red-accent); }
+
+    @media (max-width: 960px) {
+      .header-inner { grid-template-columns: 1fr auto; }
+      .search-wrapper, .btn-catalog { display: none; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .calc-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .mega-catalog-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Реалистичная уличная камера наблюдения (Bullet Type) -->
+  <div class="bg-cctv-widget" id="cctvWidget" title="Система мониторинга Intektra">
+    <svg viewBox="0 0 220 200" width="100%" height="100%" style="overflow: visible;">
+      <defs>
+        <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="50%" stop-color="#e2e8f0"/>
+          <stop offset="100%" stop-color="#cbd5e1"/>
+        </linearGradient>
+        <linearGradient id="hoodGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#f8fafc"/>
+          <stop offset="100%" stop-color="#94a3b8"/>
+        </linearGradient>
+        <linearGradient id="lensGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0284c7"/>
+          <stop offset="60%" stop-color="#0f172a"/>
+          <stop offset="100%" stop-color="#000000"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Настенное крепление -->
+      <path d="M 175 30 Q 195 30 195 55 L 195 75 Q 195 100 175 100 Z" fill="#94a3b8" stroke="#64748b" stroke-width="2"/>
+      <circle cx="185" cy="45" r="3" fill="#475569"/>
+      <circle cx="185" cy="85" r="3" fill="#475569"/>
+
+      <!-- Кронштейн с шарниром -->
+      <path d="M 175 60 L 140 65 L 138 75 L 175 70 Z" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="138" cy="70" r="10" fill="#94a3b8" stroke="#64748b" stroke-width="2"/>
+      <circle cx="138" cy="70" r="4" fill="#475569"/>
+
+      <!-- Поворотный корпус камеры -->
+      <g id="cctvArm" style="transform-origin: 138px 70px; transition: transform 0.08s ease-out;">
+        <path d="M 130 52 L 142 56 L 142 84 L 130 88 Z" fill="#64748b"/>
+        <rect x="45" y="48" width="88" height="44" rx="6" fill="url(#bodyGrad)" stroke="#94a3b8" stroke-width="1.5"/>
+        <text x="65" y="73" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" letter-spacing="1">INTEKTRA</text>
+        <path d="M 28 42 L 138 42 L 138 48 L 38 48 Z" fill="url(#hoodGrad)" stroke="#64748b" stroke-width="1.5"/>
+        <path d="M 45 48 L 36 50 L 36 90 L 45 92 Z" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+        <ellipse cx="36" cy="70" rx="4" ry="16" fill="#1e293b"/>
+        <ellipse cx="36" cy="70" rx="2.5" ry="11" fill="url(#lensGrad)"/>
+        <circle cx="40" cy="56" r="1.8" fill="#334155"/>
+        <circle cx="40" cy="62" r="1.8" fill="#334155"/>
+        <circle cx="40" cy="78" r="1.8" fill="#334155"/>
+        <circle cx="40" cy="84" r="1.8" fill="#334155"/>
+        <circle cx="40" cy="51" r="2.2" fill="#e11d48" class="cctv-rec-indicator"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Затемнение -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeAllDrawers()"></div>
+
+  <!-- Верхняя сервисная полоса -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span>СПБ ЛОГИСТИЧЕСКИЙ ХАБ: ОТГРУЗКА 24/7</span>
+      </div>
+      <div class="top-nav">
+        <a onclick="showInfo('about')">О компании</a>
+        <a onclick="showInfo('delivery')">Доставка и оплата</a>
+        <a onclick="showInfo('designers')">Проектировщикам</a>
+        <a onclick="showInfo('certs')">Сертификаты</a>
+        <a onclick="showInfo('contacts')">Контакты</a>
+      </div>
+      <div class="top-contacts">
+        <span>Санкт-Петербург</span>
+        <a href="tel:+79117655484">8 (911) 765-54-84</a>
+        <a href="mailto:logist@tradeatm.ru">logist@tradeatm.ru</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Шапка -->
+  <header id="mainHeader">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        INTEK<span>TRA</span>
+        <span class="logo-badge">ENGINEERING</span>
+      </a>
+
+      <!-- Кнопка каталога -->
+      <button class="btn-catalog" id="megaCatalogBtn" onclick="toggleMegaCatalog()">
+        <span>☰</span> Каталог
+      </button>
+
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" class="search-input" placeholder="Артикул (01482), ГОСТ или название..." oninput="handleSearch(this.value)">
+        <button class="search-clear" id="searchClear" onclick="resetSearch()">✕</button>
+      </div>
+
+      <div class="header-tools">
+        <button class="cart-btn" onclick="toggleCart(true)">
+          <span>Спецификация</span>
+          <span class="cart-badge" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Мега-меню каталога -->
+  <div class="mega-catalog-menu" id="megaCatalogMenu">
+    <div class="container mega-catalog-grid">
+      <div class="mega-group">
+        <h4>ОПС и СОУЭ</h4>
+        <ul>
+          <li><a onclick="filterByKeyword('ППКОП')">Приборы приемно-контрольные (ППКОП)</a></li>
+          <li><a onclick="filterByKeyword('извещатель')">Извещатели пламени и дымовые</a></li>
+          <li><a onclick="filterByKeyword('оповещатель')">Табло «Выход» и речевое СОУЭ</a></li>
+        </ul>
+      </div>
+      <div class="mega-group">
+        <h4>Электропитание</h4>
+        <ul>
+          <li><a onclick="filterByKeyword('РИП')">Резервированные источники (РИП 12/24В)</a></li>
+          <li><a onclick="filterByKeyword('АКБ')">Аккумуляторные батареи AGM 7-17 Ач</a></li>
+          <li><a onclick="filterByKeyword('УЗИП')">Устройства грозозащиты (УЗИП)</a></li>
+        </ul>
+      </div>
+      <div class="mega-group">
+        <h4>Кабель и монтаж</h4>
+        <ul>
+          <li><a onclick="filterByKeyword('КПСЭнг')">Огнестойкие кабели КПСЭнг(А)-FRLS</a></li>
+          <li><a onclick="filterByKeyword('витая пара')">Витая пара UTP/FTP для ЛВС</a></li>
+          <li><a onclick="filterByKeyword('клипса')">Огнестойкий крепеж и гофра</a></li>
+        </ul>
+      </div>
+      <div class="mega-group">
+        <h4>Оборудование ГО и ЧС</h4>
+        <ul>
+          <li><a onclick="filterByKeyword('А-ТТ')">Тележки транспортные А-ТТ-01</a></li>
+          <li><a onclick="filterByKeyword('сирена')">Сирены оповещения С-40 / С-28</a></li>
+          <li><a onclick="filterByKeyword('фильтр')">Фильтровентиляция убежищ</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero секция -->
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-card">
+          <div>
+            <h1>Инженерная дистрибуция <span>нового поколения.</span></h1>
+            <p>Оптовые поставки слаботочных систем, комплексов пожаротушения, СКУД и сертифицированного оборудования защитных сооружений ГО и ЧС по всей России.</p>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <div class="stat-val">15 000+</div>
+              <div class="stat-lbl">Номенклатура</div>
+            </div>
+            <div>
+              <div class="stat-val">24/7</div>
+              <div class="stat-lbl">Складской хаб СПб</div>
+            </div>
+            <div>
+              <div class="stat-val">НДС 22%</div>
+              <div class="stat-lbl">Безналичный расчет</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-card" id="specBlock">
+          <h3>Быстрый расчет сметы</h3>
+          <p>Прикрепите ведомость проекта или файл спецификации (Excel / PDF) для оптового расчета со скидкой до 22%.</p>
+          <form onsubmit="handleSpecUpload(event)">
+            <div class="form-group">
+              <label>Компания / ИНН:</label>
+              <input type="text" id="specCompany" class="form-ctrl" placeholder="ООО 'СпецМонтаж' или ИНН" required>
+            </div>
+            <div class="form-group">
+              <label>Телефон снабжения:</label>
+              <input type="tel" id="specPhone" class="form-ctrl" placeholder="+7 (911) 000-00-00" required>
+            </div>
+            <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+              <input type="file" id="fileInput" style="display:none" onchange="fileChosen(this)">
+              <span id="fileNameDisplay">📎 Прикрепить ведомость (XLSX, PDF)</span>
+            </div>
+            <button type="submit" class="btn-submit">Отправить на экспресс-расчет</button>
+            <button type="button" class="btn-secondary btn-telegram" style="margin-top:8px;" onclick="sendSpecTelegram()">
+              ✈ Отправить смету через Telegram
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Инженерный калькулятор АКБ для РИП (СП 484) -->
+    <section class="calc-section">
+      <div class="calc-grid">
+        <div>
+          <span style="font-family:var(--font-mono);font-size:12px;color:var(--cyan-accent);font-weight:700;">ИНЖЕНЕРНЫЙ МОДУЛЬ РАСЧЕТА</span>
+          <h3 style="font-size:22px;color:#0f172a;margin-top:4px;">Подбор аккумулятора для РИП (СП 484 / СП 5)</h3>
+          <p style="font-size:14px;color:var(--text-muted);margin-top:6px;">
+            Рассчитайте емкость батареи резервного электропитания под токовую нагрузку вашей системы с учетом запаса емкости 25%.
+          </p>
+          <div class="calc-inputs-grid">
+            <div class="form-group">
+              <label>Ток в дежурном режиме (А):</label>
+              <input type="number" id="calcStandbyCurrent" class="form-ctrl" value="0.8" step="0.1" min="0.1" oninput="calculateBattery()">
+            </div>
+            <div class="form-group">
+              <label>Время дежурного режима (ч):</label>
+              <select id="calcStandbyHours" class="form-ctrl" onchange="calculateBattery()">
+                <option value="24" selected>24 часа (по нормам СП)</option>
+                <option value="48">48 часов (особые объекты)</option>
+                <option value="12">12 часов</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Ток в тревоге/пожаре (А):</label>
+              <input type="number" id="calcAlarmCurrent" class="form-ctrl" value="1.8" step="0.1" min="0.1" oninput="calculateBattery()">
+            </div>
+            <div class="form-group">
+              <label>Время в тревоге (ч):</label>
+              <select id="calcAlarmHours" class="form-ctrl" onchange="calculateBattery()">
+                <option value="3" selected>3 часа (СОУЭ / дымоудаление)</option>
+                <option value="1">1 час (стандарт ОПС)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-result-box">
+          <div style="font-size:13px;color:var(--text-muted);font-weight:600;">Расчетная минимальная емкость:</div>
+          <div class="calc-result-val" id="calcResultAh">30.8 А·ч</div>
+          <div style="font-size:14px;font-weight:700;color:#0f172a;" id="calcRecommendedAkb">Рекомендуемый комплект: 2 × АКБ 17 А·ч</div>
+          <p style="font-size:12px;color:var(--text-muted);margin:10px 0 16px;">С учетом коэффициента старения и потери емкости 1.25</p>
+          <button class="btn-card btn-buy-one" style="width:100%;" onclick="addCalculatedToCart()">
+            + Добавить РИП-12 и АКБ в смету
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Категории фильтрации -->
+    <div class="filter-chips">
+      <button class="chip active" onclick="filterCategory('all', this)">Все категории</button>
+      <button class="chip" onclick="filterCategory('ops', this)">ОПС и СОУЭ</button>
+      <button class="chip" onclick="filterCategory('power', this)">Источники питания / АКБ</button>
+      <button class="chip" onclick="filterCategory('cable', this)">Кабельные трассы</button>
+      <button class="chip" onclick="filterCategory('go', this)">Оборудование ГО и ЧС</button>
+    </div>
+
+    <!-- Каталог товаров -->
+    <div class="section-header" id="catalogSection">
+      <h2>Складская матрица оборудования</h2>
+      <span style="font-size: 13px; color: var(--text-muted);">Кликните на название товара для просмотра характеристик</span>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+      <!-- Товар 1 -->
+      <div class="product-card" data-cat="ops" data-keywords="ппкоп приемно контрольный опс инк-01482 01482 8 шлейфов">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ИНК-01482</span>
+          <span class="stock-tag">● В наличии (142 шт.)</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ИНК-01482')">Прибор приемно-контрольный охранно-пожарный (ППКОП) 8 шлейфов</div>
+        <div class="card-bottom">
+          <div class="price-value">4 850 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('ППКОП 8 шлейфов', 4850, 'ИНК-01482')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('ППКОП 8 шлейфов', 'ИНК-01482')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар 2 -->
+      <div class="product-card" data-cat="power" data-keywords="рип источник питания ибп инк-02319 02319 12в 3а 7ач">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ИНК-02319</span>
+          <span class="stock-tag">● В наличии (85 шт.)</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ИНК-02319')">Резервированный источник питания РИП-12 RS (12В, 3А, под АКБ 7Ач)</div>
+        <div class="card-bottom">
+          <div class="price-value">3 420 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за шт.</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('РИП-12 RS (12В, 3А)', 3420, 'ИНК-02319')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('РИП-12 RS (12В, 3А)', 'ИНК-02319')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар 3 -->
+      <div class="product-card" data-cat="cable" data-keywords="кабель огнестойкий кпсэнг frls 1х2х0.75 инк-08910 08910 бухта">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ИНК-08910</span>
+          <span class="stock-tag">● На складе (2 400 м)</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ИНК-08910')">Кабель огнестойкий КПСЭнг(А)-FRLS 1х2х0.75 мм² (бухта 200м)</div>
+        <div class="card-bottom">
+          <div class="price-value">48.50 ₽</div>
+          <div class="price-sub">Цена с НДС 22% за метр</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Кабель КПСЭнг(А)-FRLS (1м)', 48.5, 'ИНК-08910')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Кабель КПСЭнг(А)-FRLS', 'ИНК-08910')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товар 4 -->
+      <div class="product-card" data-cat="go" data-keywords="тележка а-тт-01 атт01 а-тт го чс убежища инк-го-001">
+        <div class="card-top">
+          <span class="sku-badge">АРТИКУЛ: ИНК-ГО-001</span>
+          <span class="stock-tag" style="color:var(--cyan-accent)">● Резерв завода (3-5 дн.)</span>
+        </div>
+        <div class="product-title" onclick="openProductDetails('ИНК-ГО-001')">Транспортная тележка специальная А-ТТ-01 (усиленная рама)</div>
+        <div class="card-bottom">
+          <div class="price-value">18 900 ₽</div>
+          <div class="price-sub">Серия ЗС ГО / спецтехника</div>
+          <div class="card-actions">
+            <button class="btn-card btn-add" onclick="addToCart('Тележка специальная А-ТТ-01', 18900, 'ИНК-ГО-001')">В смету</button>
+            <button class="btn-card btn-buy-one" onclick="openOrderModal('Тележка специальная А-ТТ-01', 'ИНК-ГО-001')">В 1 клик</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Боковая шторка Сметы / Корзины -->
+  <div class="drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <h3>Спецификация заказа</h3>
+      <button onclick="toggleCart(false)" style="background:none;border:none;color:#0f172a;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div class="drawer-body" id="cartItemsContainer">
+      <p style="color:var(--text-muted);font-size:14px;">Ваша проектная спецификация пуста.</p>
+    </div>
+    <div class="drawer-footer">
+      <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
+        <span style="color:var(--text-muted);">Итого с НДС 22%:</span>
+        <span style="font-family:var(--font-mono);font-size:20px;font-weight:700;" id="cartTotalSum">0 ₽</span>
+      </div>
+      
+      <!-- Экспорт в Excel -->
+      <button class="btn-secondary" onclick="exportCartToExcel()">
+        📊 Скачать КП в Excel (.xls)
+      </button>
+
+      <!-- Заказ через Telegram -->
+      <button class="btn-secondary btn-telegram" onclick="checkoutTelegram()">
+        ✈ Заказать через Telegram
+      </button>
+
+      <!-- Заказ по Email -->
+      <button class="btn-submit" onclick="checkoutCart()">
+        ✉ Запросить официальный счет (Email)
+      </button>
+    </div>
+  </div>
+
+  <!-- Модальное окно быстрого заказа (В 1 клик) -->
+  <div class="info-modal" id="quickOrderModal">
+    <div class="info-modal-header">
+      <h3 id="orderModalTitle">Быстрый заказ</h3>
+      <button onclick="closeModal('quickOrderModal')" style="background:none;border:none;color:#0f172a;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <form onsubmit="handleQuickOrderSubmit(event)">
+      <div class="form-group">
+        <label>Выбранная позиция:</label>
+        <div id="quickOrderProductLabel" style="color:var(--cyan-accent);font-weight:700;font-size:13px;margin-bottom:8px;">—</div>
+      </div>
+      <div class="form-group">
+        <label>Компания или ИНН (для счета с НДС 22%):</label>
+        <input type="text" id="orderModalCompany" class="form-ctrl" placeholder="ООО 'Инженер-Сервис' или ИНН" required>
+      </div>
+      <div class="form-group">
+        <label>Телефон для связи:</label>
+        <input type="tel" id="orderModalPhone" class="form-ctrl" placeholder="+7 (911) 000-00-00" required>
+      </div>
+      <button type="submit" class="btn-submit" style="margin-top:10px;">Запросить счет на Email</button>
+      <button type="button" class="btn-secondary btn-telegram" style="margin-top:8px;" onclick="quickOrderTelegram()">
+        ✈ Отправить запрос в Telegram
+      </button>
+    </form>
+  </div>
+
+  <!-- Модальное окно детального просмотра товара (Quick View) -->
+  <div class="info-modal" id="productModal">
+    <div class="info-modal-header">
+      <h3 id="productModalTitle">Характеристики оборудования</h3>
+      <button onclick="closeModal('productModal')" style="background:none;border:none;color:#0f172a;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div id="productModalBody"></div>
+  </div>
+
+  <!-- Информационное модальное окно для служебных ссылок -->
+  <div class="info-modal" id="infoModal">
+    <div class="info-modal-header">
+      <h3 id="infoModalTitle">Информация</h3>
+      <button onclick="closeModal('infoModal')" style="background:none;border:none;color:#0f172a;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div id="infoModalContent" style="color:var(--text-muted);font-size:14px;line-height:1.6;"></div>
+  </div>
+
+  <!-- Подвал -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="logo" style="margin-bottom:14px;">INTEK<span>TRA</span></div>
+          <p style="font-size:13px;color:var(--text-muted);max-width:300px;">
+            Федеральные поставки оборудования слаботочных сетей, комплексов безопасности и ГО. Работа по безналичному расчету с НДС 22%.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h5>Каталог</h5>
+          <ul>
+            <li><a onclick="filterCategory('ops')">ОПС и СОУЭ</a></li>
+            <li><a onclick="filterCategory('power')">Источники питания РИП</a></li>
+            <li><a onclick="filterCategory('cable')">Огнестойкие кабели</a></li>
+            <li><a onclick="filterCategory('go')">Оборудование ГО и ЧС</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Клиентам</h5>
+          <ul>
+            <li><a onclick="showInfo('requisites')">Реквизиты компании</a></li>
+            <li><a onclick="showInfo('contract')">Договор поставки</a></li>
+            <li><a onclick="showInfo('price')">Запрос полного прайс-листа</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Отдел продаж</h5>
+          <p style="font-size:18px;font-weight:700;color:#0f172a;margin-bottom:4px;">
+            <a href="tel:+79117655484" style="color:#0f172a;text-decoration:none;">8 (911) 765-54-84</a>
+          </p>
+          <p style="font-size:14px;color:var(--text-muted);margin-bottom:12px;">logist@tradeatm.ru</p>
+          <p style="font-size:12px;color:var(--text-muted);">г. Санкт-Петербург, складской терминал Пн-Пт с 9:00 до 18:00</p>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:20px;font-size:12px;color:var(--text-muted);text-align:center;">
+        © 2026 INTEKTRA ENGINEERING. Все права защищены.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let cart = [];
+    let currentOrderProduct = '';
+    let currentOrderSku = '';
+
+    // ==========================================
+    // ИНТЕРАКТИВНАЯ УЛИЧНАЯ КАМЕРА
+    // ==========================================
+    const cctvWidget = document.getElementById('cctvWidget');
+    const cctvArm = document.getElementById('cctvArm');
+
+    window.addEventListener('mousemove', (e) => {
+      if (!cctvWidget || !cctvArm) return;
+
+      const rect = cctvWidget.getBoundingClientRect();
+      const pivotX = rect.left + (138 / 220) * rect.width;
+      const pivotY = rect.top + (70 / 200) * rect.height;
+
+      const deltaX = e.clientX - pivotX;
+      const deltaY = e.clientY - pivotY;
+
+      const angleRad = Math.atan2(deltaY, -deltaX);
+      let angleDeg = -angleRad * (180 / Math.PI);
+      const clampedAngle = Math.max(-45, Math.min(55, angleDeg));
+
+      cctvArm.style.transform = `rotate(${clampedAngle}deg)`;
+    });
+
+    // ==========================================
+    // ИНЖЕНЕРНЫЙ КАЛЬКУЛЯТОР АКБ
+    // ==========================================
+    function calculateBattery() {
+      const iStandby = parseFloat(document.getElementById('calcStandbyCurrent').value) || 0;
+      const tStandby = parseFloat(document.getElementById('calcStandbyHours').value) || 24;
+      const iAlarm = parseFloat(document.getElementById('calcAlarmCurrent').value) || 0;
+      const tAlarm = parseFloat(document.getElementById('calcAlarmHours').value) || 3;
+
+      // Формула СП: 1.25 * (Iдеж * Tдеж + Iпож * Tпож)
+      const capacityRequired = 1.25 * ((iStandby * tStandby) + (iAlarm * tAlarm));
+      const rounded = capacityRequired.toFixed(1);
+
+      document.getElementById('calcResultAh').innerText = `${rounded} А·ч`;
+
+      const recLabel = document.getElementById('calcRecommendedAkb');
+      if (capacityRequired <= 7) {
+        recLabel.innerText = 'Рекомендуемый комплект: 1 × АКБ 7 А·ч';
+      } else if (capacityRequired <= 12) {
+        recLabel.innerText = 'Рекомендуемый комплект: 1 × АКБ 12 А·ч';
+      } else if (capacityRequired <= 17) {
+        recLabel.innerText = 'Рекомендуемый комплект: 1 × АКБ 17 А·ч';
+      } else if (capacityRequired <= 26) {
+        recLabel.innerText = 'Рекомендуемый комплект: 1 × АКБ 26 А·ч (или 2 × 12 А·ч)';
+      } else if (capacityRequired <= 34) {
+        recLabel.innerText = 'Рекомендуемый комплект: 2 × АКБ 17 А·ч';
+      } else {
+        recLabel.innerText = `Рекомендуемый комплект: ББП 24В + 2 × АКБ ${(Math.ceil(capacityRequired/2/5)*5)} А·ч`;
+      }
+    }
+
+    function addCalculatedToCart() {
+      addToCart('Резервированный источник питания РИП-12 RS (12В, 3А)', 3420, 'ИНК-02319');
+      addToCart('Аккумулятор AGM 12В 17Ач (для РИП)', 3200, 'ИНК-АКБ-17');
+      toggleCart(true);
+    }
+
+    // Инициализация расчета при загрузке
+    calculateBattery();
+
+    // База детальных характеристик товаров
+    const productDatabase = {
+      'ИНК-01482': {
+        title: 'Прибор приемно-контрольный охранно-пожарный (ППКОП) 8 шлейфов',
+        sku: 'ИНК-01482',
+        price: 4850,
+        desc: 'Профессиональный контроллер охранно-пожарной сигнализации на 8 шлейфов сигнализации с автономным питанием и выходом на ПЦН.',
+        specs: [
+          { k: 'Количество шлейфов', v: '8 шлейфов сигнализации' },
+          { k: 'Напряжение питания', v: '220В / Резерв АКБ 12В 7Ач' },
+          { k: 'Диапазон температур', v: '-30°C ... +55°C' },
+          { k: 'Степень защиты оболочки', v: 'IP40, металлический корпус' },
+          { k: 'Габариты / Масса', v: '240х200х75 мм / 2.1 кг' }
+        ],
+        bulkPrices: [
+          { q: 'от 1 шт.', p: '4 850 ₽' },
+          { q: 'от 10 шт.', p: '4 410 ₽ (-9%)' },
+          { q: 'от 50 шт.', p: '4 120 ₽ (-15%)' }
+        ]
+      },
+      'ИНК-02319': {
+        title: 'Резервированный источник питания РИП-12 RS (12В, 3А)',
+        sku: 'ИНК-02319',
+        price: 3420,
+        desc: 'Импульсный стабилизированный источник вторичного электропитания с контролем цепи АКБ и защитой от глубокого разряда.',
+        specs: [
+          { k: 'Выходное напряжение', v: '13.6 ± 0.2 В' },
+          { k: 'Номинальный ток нагрузки', v: '3.0 А (кратковременно до 4.5 А)' },
+          { k: 'Тип устанавливаемой АКБ', v: '12В 7Ач герметичная AGM' },
+          { k: 'Интерфейс контроля', v: 'RS-485 / релейные выходы' },
+          { k: 'Степень защиты', v: 'IP30' }
+        ],
+        bulkPrices: [
+          { q: 'от 1 шт.', p: '3 420 ₽' },
+          { q: 'от 10 шт.', p: '3 150 ₽ (-8%)' },
+          { q: 'от 50 шт.', p: '2 920 ₽ (-14%)' }
+        ]
+      },
+      'ИНК-08910': {
+        title: 'Кабель огнестойкий КПСЭнг(А)-FRLS 1х2х0.75 мм²',
+        sku: 'ИНК-08910',
+        price: 48.5,
+        desc: 'Кабель для систем пожарной сигнализации, СОУЭ и аварийного освещения. Сохраняет работоспособность в условиях открытого огня до 180 минут.',
+        specs: [
+          { k: 'Предел огнестойкости', v: '180 минут (ГОСТ 31565-2012)' },
+          { k: 'Сечение жил', v: '1 пара х 0.75 мм², монолитная медь' },
+          { k: 'Экран', v: 'Алюмолавсановая лента с дренажом' },
+          { k: 'Материал оболочки', v: 'ПВХ пластикат пониженной пожароопасности' },
+          { k: 'Упаковка', v: 'Бухта 200 м' }
+        ],
+        bulkPrices: [
+          { q: 'от 200 м (1 бухта)', p: '48.50 ₽/м' },
+          { q: 'от 1 000 м', p: '44.80 ₽/м' },
+          { q: 'от 5 000 м', p: '41.20 ₽/м' }
+        ]
+      },
+      'ИНК-ГО-001': {
+        title: 'Транспортная тележка специальная А-ТТ-01',
+        sku: 'ИНК-ГО-001',
+        price: 18900,
+        desc: 'Усиленная ручная тележка повышенной грузоподъемности, разработанная специально для перемещения фильтровентиляционного и технического оборудования в защитных сооружениях гражданской обороны.',
+        specs: [
+          { k: 'Назначение', v: 'Защитные сооружения ГО, бомбоубежища' },
+          { k: 'Грузоподъемность', v: 'до 450 кг' },
+          { k: 'Колесная база', v: 'Литые резиновые колеса усиленного типа 250 мм' },
+          { k: 'Покрытие рамы', v: 'Антикоррозийная порошковая эмаль спецсерии' },
+          { k: 'Сертификация', v: 'Соответствует стандартам оборудования ЗС ГО' }
+        ],
+        bulkPrices: [
+          { q: 'от 1 шт.', p: '18 900 ₽' },
+          { q: 'от 5 шт.', p: '17 200 ₽' },
+          { q: 'от 20 шт.', p: 'по запросу в счете' }
+        ]
+      }
+    };
+
+    // Открытие детальной карточки (Quick View)
+    function openProductDetails(sku) {
+      const item = productDatabase[sku];
+      if (!item) return;
+
+      const modal = document.getElementById('productModal');
+      const title = document.getElementById('productModalTitle');
+      const body = document.getElementById('productModalBody');
+
+      title.innerText = item.title;
+      body.innerHTML = `
+        <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+          АРТИКУЛ: ${item.sku} | <span style="color:var(--green-stock);font-weight:700;">● На складе в СПб</span>
+        </div>
+        <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;">${item.desc}</p>
+        
+        <h5 style="color:#0f172a;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;font-weight:800;">Технические параметры</h5>
+        <table class="specs-table">
+          ${item.specs.map(s => `<tr><td style="color:var(--text-muted);">\${s.k}</td><td style="font-weight:600;color:#0f172a;">\${s.v}</td></tr>`).join('')}
+        </table>
+
+        <h5 style="color:#0f172a;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;margin-top:16px;margin-bottom:8px;font-weight:800;">Оптовая сетка (с НДС 22%)</h5>
+        <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+          ${item.bulkPrices.map(b => `<div style="background:#f8fafc;border:1px solid var(--border);padding:8px 12px;border-radius:8px;font-size:12px;"><div style="color:var(--text-muted);">\${b.q}</div><div style="font-family:var(--font-mono);font-weight:700;color:#0369a1;">\${b.p}</div></div>`).join('')}
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <button class="btn-card btn-add" onclick="addToCart('${item.title}', ${item.price}, '${item.sku}'); closeModal('productModal');">Добавить в смету</button>
+          <button class="btn-card btn-buy-one" onclick="openOrderModal('${item.title}', '${item.sku}'); closeModal('productModal');">Заказать в 1 клик</button>
+        </div>
+      `;
+
+      modal.classList.add('active');
+      document.getElementById('drawerOverlay').style.display = 'block';
+    }
+
+    // Генерация и скачивание официального КП в Excel (.xls)
+    function exportCartToExcel() {
+      if (cart.length === 0) {
+        alert('Добавьте позиции в смету перед скачиванием!');
+        return;
+      }
+
+      let total = 0;
+      let rowsHtml = cart.map((item, idx) => {
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+        return `
+          <tr>
+            <td>${idx + 1}</td>
+            <td>${item.sku}</td>
+            <td>${item.title}</td>
+            <td>${item.qty}</td>
+            <td>${item.price}</td>
+            <td>${itemTotal}</td>
+          </tr>
+        `;
+      }).join('');
+
+      const vat22 = (total * 22 / 122).toFixed(2);
+
+      const excelTemplate = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head><meta charset="utf-8"/></head>
+        <body>
+          <table border="1">
+            <tr><th colspan="6" style="background:#1e252b;color:#ffffff;font-size:16px;">КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ — INTEKTRA ENGINEERING</th></tr>
+            <tr><td colspan="6">Поставщик: INTEKTRA | Телефон: 8 (911) 765-54-84 | Email: logist@tradeatm.ru | Склад: г. Санкт-Петербург</td></tr>
+            <tr><td colspan="6">Условия: Безналичный расчет, НДС 22% включен в стоимость</td></tr>
+            <tr style="background:#f2f2f2;font-weight:bold;">
+              <th>№</th>
+              <th>Артикул</th>
+              <th>Наименование оборудования</th>
+              <th>Кол-во</th>
+              <th>Цена за ед., руб.</th>
+              <th>Сумма с НДС 22%, руб.</th>
+            </tr>
+            ${rowsHtml}
+            <tr style="font-weight:bold;">
+              <td colspan="5" align="right">В том числе НДС 22%:</td>
+              <td>${vat22} руб.</td>
+            </tr>
+            <tr style="font-weight:bold;background:#e6f0fa;">
+              <td colspan="5" align="right">ИТОГО К ОПЛАТЕ:</td>
+              <td>${total} руб.</td>
+            </tr>
+          </table>
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob([excelTemplate], { type: 'application/vnd.ms-excel;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `KP_Intektra_${new Date().toISOString().slice(0,10)}.xls`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Заказ через Telegram
+    function checkoutTelegram() {
+      if (cart.length === 0) return;
+      const itemsList = cart.map(i => `• ${i.title} (${i.sku}) — ${i.qty} шт.`).join('%0A');
+      const total = document.getElementById('cartTotalSum').innerText;
+      const text = `Здравствуйте! Заявка с сайта Intektra:%0A%0A${itemsList}%0A%0AИтого с НДС 22%: ${total}%0A%0AПрошу выставить счет для нашей организации.`;
+      window.open(`https://t.me/share/url?url=&text=${text}`, '_blank');
+    }
+
+    function quickOrderTelegram() {
+      const comp = document.getElementById('orderModalCompany').value || 'Компания';
+      const phone = document.getElementById('orderModalPhone').value || 'Телефон';
+      const text = `Заказ в 1 клик (Intektra):%0AТовар: ${currentOrderProduct}%0AАртикул: ${currentOrderSku}%0AКомпания: ${comp}%0AТелефон: ${phone}`;
+      window.open(`https://t.me/share/url?url=&text=${text}`, '_blank');
+    }
+
+    function sendSpecTelegram() {
+      const comp = document.getElementById('specCompany').value || 'Компания';
+      const phone = document.getElementById('specPhone').value || 'Телефон';
+      const text = `Расчет сметы Intektra:%0AОрганизация: ${comp}%0AТелефон: ${phone}%0AГотовы прикрепить файл спецификации для расчета скидки.`;
+      window.open(`https://t.me/share/url?url=&text=${text}`, '_blank');
+    }
+
+    // Мега-меню каталога
+    function toggleMegaCatalog() {
+      const menu = document.getElementById('megaCatalogMenu');
+      const btn = document.getElementById('megaCatalogBtn');
+      const overlay = document.getElementById('drawerOverlay');
+      const header = document.getElementById('mainHeader');
+
+      const isActive = menu.classList.contains('active');
+      if (isActive) {
+        closeMegaCatalog();
+      } else {
+        menu.style.top = header.offsetHeight + 'px';
+        menu.classList.add('active');
+        btn.innerHTML = '<span>✕</span> Закрыть';
+        overlay.style.display = 'block';
+      }
+    }
+
+    function closeMegaCatalog() {
+      const menu = document.getElementById('megaCatalogMenu');
+      const btn = document.getElementById('megaCatalogBtn');
+      const overlay = document.getElementById('drawerOverlay');
+      menu.classList.remove('active');
+      btn.innerHTML = '<span>☰</span> Каталог';
+      if (!document.getElementById('cartDrawer').classList.contains('open') && 
+          !document.getElementById('quickOrderModal').classList.contains('active') && 
+          !document.getElementById('productModal').classList.contains('active') && 
+          !document.getElementById('infoModal').classList.contains('active')) {
+        overlay.style.display = 'none';
+      }
+    }
+
+    // Корзина
+    function toggleCart(open) {
+      const drawer = document.getElementById('cartDrawer');
+      const overlay = document.getElementById('drawerOverlay');
+      closeMegaCatalog();
+      if (open) {
+        drawer.classList.add('open');
+        overlay.style.display = 'block';
+      } else {
+        drawer.classList.remove('open');
+        overlay.style.display = 'none';
+      }
+    }
+
+    function addToCart(title, price, sku) {
+      const existing = cart.find(i => i.sku === sku);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ title, price, sku, qty: 1 });
+      }
+      renderCart();
+      toggleCart(true);
+    }
+
+    function changeQty(sku, delta) {
+      const item = cart.find(i => i.sku === sku);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.sku !== sku);
+      }
+      renderCart();
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cartItemsContainer');
+      const countBadge = document.getElementById('cartCount');
+      const totalSum = document.getElementById('cartTotalSum');
+      
+      const totalItems = cart.reduce((acc, i) => acc + i.qty, 0);
+      countBadge.innerText = totalItems;
+
+      if (cart.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);font-size:14px;">Ваша проектная спецификация пуста.</p>';
+        totalSum.innerText = '0 ₽';
+        return;
+      }
+
+      let sum = 0;
+      container.innerHTML = cart.map(item => {
+        const itemTotal = item.price * item.qty;
+        sum += itemTotal;
+        return `
+          <div class="cart-item">
+            <div>
+              <div class="cart-item-title">${item.title}</div>
+              <div class="cart-item-price">${item.price} ₽ × ${item.qty} = ${itemTotal.toLocaleString('ru-RU')} ₽</div>
+            </div>
+            <div class="cart-qty-ctrl">
+              <button class="cart-qty-btn" onclick="changeQty('${item.sku}', -1)">-</button>
+              <span style="font-family:var(--font-mono);font-size:13px;font-weight:700;">${item.qty}</span>
+              <button class="cart-qty-btn" onclick="changeQty('${item.sku}', 1)">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      totalSum.innerText = sum.toLocaleString('ru-RU') + ' ₽';
+    }
+
+    function checkoutCart() {
+      if (cart.length === 0) return;
+      const itemsList = cart.map(i => `${i.title} (${i.sku}) — ${i.qty} шт. на ${i.price * i.qty} ₽`).join('\n');
+      const total = document.getElementById('cartTotalSum').innerText;
+      
+      const subject = encodeURIComponent('Заказ спецификации с сайта Intektra');
+      const body = encodeURIComponent(`Сформированная спецификация:\n\n${itemsList}\n\nИТОГО С НДС 22%: ${total}\n\nРеквизиты нашей компании (ИНН, Название): `);
+      window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
+    }
+
+    // Модальное окно заказа в 1 клик
+    function openOrderModal(title, sku) {
+      currentOrderProduct = title;
+      currentOrderSku = sku;
+      document.getElementById('quickOrderProductLabel').innerText = `${title} (${sku})`;
+      document.getElementById('quickOrderModal').classList.add('active');
+      document.getElementById('drawerOverlay').style.display = 'block';
+    }
+
+    function handleQuickOrderSubmit(e) {
+      e.preventDefault();
+      const comp = document.getElementById('orderModalCompany').value;
+      const phone = document.getElementById('orderModalPhone').value;
+      
+      const subject = encodeURIComponent(`Быстрый заказ: ${currentOrderProduct} (${currentOrderSku})`);
+      const body = encodeURIComponent(`Товар: ${currentOrderProduct}\nАртикул: ${currentOrderSku}\nОрганизация: ${comp}\nТелефон: ${phone}`);
+      window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
+      
+      closeModal('quickOrderModal');
+    }
+
+    // Служебные модальные окна
+    function showInfo(type) {
+      const modal = document.getElementById('infoModal');
+      const title = document.getElementById('infoModalTitle');
+      const content = document.getElementById('infoModalContent');
+
+      const data = {
+        about: {
+          t: 'О компании INTEKTRA',
+          c: '<p><strong>INTEKTRA</strong> — инженерный дистрибьютор систем безопасности, слаботочных инженерных сетей, автоматического пожаротушения и оборудования для защитных сооружений ГО и ЧС.</p><p style="margin-top:10px;">Прямые контракты с производителями, логистический хаб в Санкт-Петербурге и отгрузки по безналичному расчету с НДС 22% по всей РФ.</p>'
+        },
+        delivery: {
+          t: 'Доставка и оплата',
+          c: '<p><strong>Оплата:</strong> безналичный расчет для юрлиц (УПД с НДС 22%).</p><p style="margin-top:10px;"><strong>Доставка:</strong> самовывоз со склада в Санкт-Петербурге, адресная доставка по городу и Ленобласти или отправка ведущими транспортными компаниями (Деловые Линии, ПЭК, СДЭК) по всей России.</p>'
+        },
+        designers: {
+          t: 'Проектировщикам и интеграторам',
+          c: '<p>Предоставляем технические паспорта, BIM-семейства оборудования, схемы подключений в DWG и помогаем с пересогласованием проектных спецификаций.</p>'
+        },
+        certs: {
+          t: 'Сертификаты соответствия',
+          c: '<p>Вся поставляемая номенклатура сертифицирована по ТР ТС и ГОСТ Р. Заверенные копии сертификатов и паспорта изделий передаются с каждой отгрузкой.</p>'
+        },
+        contacts: {
+          t: 'Контакты отдела снабжения',
+          c: '<p><strong>Склад и офис:</strong> г. Санкт-Петербург</p><p style="margin-top:8px;"><strong>Телефон отдела продаж:</strong> 8 (911) 765-54-84</p><p style="margin-top:8px;"><strong>Email для заявок и смет:</strong> logist@tradeatm.ru</p><p style="margin-top:8px;">График работы: Пн-Пт с 9:00 до 18:00 (отгрузка по согласованию 24/7).</p>'
+        },
+        requisites: {
+          t: 'Реквизиты компании',
+          c: '<p>Для выставления счета отправьте реквизиты вашей организации на почту <a href="mailto:logist@tradeatm.ru" style="color:#0369a1;font-weight:600;">logist@tradeatm.ru</a> или оформите заявку в корзине сайта.</p>'
+        },
+        contract: {
+          t: 'Типовой договор поставки',
+          c: '<p>Работаем по типовому договору оптовой поставки оборудования с гарантией заводов до 36 месяцев или по форме договора покупателя.</p>'
+        },
+        price: {
+          t: 'Полный прайс-лист',
+          c: '<p>Каталог включает более 15 000 артикулов. Отправьте спецификацию на <a href="mailto:logist@tradeatm.ru" style="color:#0369a1;font-weight:600;">logist@tradeatm.ru</a> для расчета объектной скидки.</p>'
+        }
+      };
+
+      if (data[type]) {
+        title.innerText = data[type].t;
+        content.innerHTML = data[type].c;
+        modal.classList.add('active');
+        document.getElementById('drawerOverlay').style.display = 'block';
+      }
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+      document.getElementById('drawerOverlay').style.display = 'none';
+    }
+
+    function closeAllDrawers() {
+      toggleCart(false);
+      closeModal('quickOrderModal');
+      closeModal('productModal');
+      closeModal('infoModal');
+      closeMegaCatalog();
+    }
+
+    // Живой поиск
+    function handleSearch(val) {
+      const q = val.trim().toLowerCase();
+      const clearBtn = document.getElementById('searchClear');
+      clearBtn.style.display = q.length > 0 ? 'block' : 'none';
+
+      document.querySelectorAll('.product-card').forEach(card => {
+        const text = (card.getAttribute('data-keywords') + ' ' + card.innerText).toLowerCase();
+        card.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+    }
+
+    function resetSearch() {
+      const input = document.getElementById('searchInput');
+      input.value = '';
+      handleSearch('');
+    }
+
+    function filterByKeyword(keyword) {
+      closeMegaCatalog();
+      const input = document.getElementById('searchInput');
+      input.value = keyword;
+      handleSearch(keyword);
+      document.getElementById('catalogSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function filterCategory(cat, btn) {
+      closeMegaCatalog();
+      if (btn) {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      document.querySelectorAll('.product-card').forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      document.getElementById('catalogSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Загрузка файла
+    function fileChosen(input) {
+      if (input.files.length > 0) {
+        document.getElementById('fileNameDisplay').innerText = '✓ Файл выбран: ' + input.files[0].name;
+      }
+    }
+
+    function handleSpecUpload(e) {
+      e.preventDefault();
+      const comp = document.getElementById('specCompany').value;
+      const phone = document.getElementById('specPhone').value;
+      const file = document.getElementById('fileInput').files[0];
+      const fileName = file ? file.name : 'Не прикреплен';
+
+      const subject = encodeURIComponent(`Спецификация на расчет от ${comp}`);
+      const body = encodeURIComponent(`Компания: ${comp}\nТелефон: ${phone}\nФайл: ${fileName}\n\n(Пожалуйста, прикрепите файл спецификации к письму)`);
+      window.location.href = `mailto:logist@tradeatm.ru?subject=${subject}&body=${body}`;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAllDrawers();
+    });
+  </script>
+</body>
+</html>
