@@ -35,12 +35,41 @@
         radial-gradient(ellipse 80% 40% at 50% -10%, rgba(225, 29, 72, 0.05), transparent 60%),
         radial-gradient(circle at 100% 30%, rgba(2, 132, 199, 0.04), transparent 40%);
       background-attachment: fixed;
+      position: relative;
     }
 
     .container {
       max-width: 1280px;
       margin: 0 auto;
       padding: 0 24px;
+      position: relative;
+    }
+
+    /* Интерактивная камера видеонаблюдения на фоне */
+    .bg-cctv-widget {
+      position: fixed;
+      top: 90px;
+      right: 40px;
+      width: 160px;
+      height: 160px;
+      z-index: 50;
+      pointer-events: none;
+      opacity: 0.85;
+      filter: drop-shadow(0 15px 30px rgba(15, 23, 42, 0.12));
+      transition: opacity 0.3s;
+    }
+    @media (max-width: 1100px) {
+      .bg-cctv-widget {
+        display: none;
+      }
+    }
+
+    .cctv-rec-indicator {
+      animation: cctvBlink 1.5s infinite;
+    }
+    @keyframes cctvBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
     }
 
     /* Верхняя сервисная строка */
@@ -50,6 +79,8 @@
       color: var(--text-muted);
       padding: 8px 0;
       background: #f1f5f9;
+      position: relative;
+      z-index: 1001;
     }
     .top-bar-inner {
       display: flex;
@@ -278,6 +309,7 @@
     /* Hero-секция */
     .hero {
       padding: 50px 0 30px;
+      position: relative;
     }
     .hero-grid {
       display: grid;
@@ -747,6 +779,38 @@
 </head>
 <body>
 
+  <!-- Интерактивная купольная камера видеонаблюдения -->
+  <div class="bg-cctv-widget" id="cctvWidget" title="Система мониторинга Intektra">
+    <svg viewBox="0 0 160 160" width="100%" height="100%">
+      <!-- Основание кронштейна (крепление к стене/потолку) -->
+      <path d="M50 15 L110 15 L115 28 L45 28 Z" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/>
+      <rect x="72" y="28" width="16" height="18" fill="#94a3b8" rx="2"/>
+
+      <!-- Корпус полусферы (купол) -->
+      <g id="cctvHead" style="transform-origin: 80px 75px; transition: transform 0.08s ease-out;">
+        <!-- Внешний купольный кожух -->
+        <circle cx="80" cy="75" r="42" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+        <circle cx="80" cy="75" r="34" fill="#0f172a"/>
+        
+        <!-- Светодиод REC (мигающий индикатор активности) -->
+        <circle cx="80" cy="48" r="3.5" fill="#e11d48" class="cctv-rec-indicator"/>
+        <text x="88" y="51" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="700">REC</text>
+
+        <!-- Поворотный объектив / линза с динамическим зрачком -->
+        <g id="cctvLens" style="transform-origin: 80px 75px;">
+          <!-- Оправа линзы -->
+          <circle cx="80" cy="78" r="20" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+          <!-- Сама оптика линзы -->
+          <circle cx="80" cy="78" r="14" fill="#0284c7" opacity="0.85"/>
+          <!-- Зрачок объектива (смещается за мышью) -->
+          <circle id="cctvPupil" cx="80" cy="78" r="7" fill="#030712"/>
+          <!-- Блик на стекле -->
+          <circle cx="76" cy="74" r="3.5" fill="#ffffff" opacity="0.6"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
   <!-- Затемнение -->
   <div class="drawer-overlay" id="drawerOverlay" onclick="closeAllDrawers()"></div>
 
@@ -1095,6 +1159,44 @@
     let cart = [];
     let currentOrderProduct = '';
     let currentOrderSku = '';
+
+    // ==========================================
+    // ИНТЕРАКТИВНАЯ КАМЕРА СЛЕЖЕНИЯ ЗА КУРСОРОМ
+    // ==========================================
+    const cctvWidget = document.getElementById('cctvWidget');
+    const cctvHead = document.getElementById('cctvHead');
+    const cctvPupil = document.getElementById('cctvPupil');
+
+    window.addEventListener('mousemove', (e) => {
+      if (!cctvWidget || !cctvHead) return;
+
+      const rect = cctvWidget.getBoundingClientRect();
+      const cameraCenterX = rect.left + rect.width / 2;
+      const cameraCenterY = rect.top + rect.height * 0.45;
+
+      const deltaX = e.clientX - cameraCenterX;
+      const deltaY = e.clientY - cameraCenterY;
+
+      // Угол поворота купола к мыши
+      let angleDeg = Math.atan2(deltaY, deltaX) * (180 / Math.PI) - 90;
+
+      // Ограничиваем угол поворота для реалистичности (-70° .. +70°)
+      if (angleDeg < -180) angleDeg += 360;
+      const clampedAngle = Math.max(-75, Math.min(75, angleDeg));
+
+      cctvHead.style.transform = `rotate(${clampedAngle}deg)`;
+
+      // Смещение зрачка линзы в сторону взгляда (эффект 3D-фокуса)
+      const dist = Math.hypot(deltaX, deltaY);
+      const maxOffset = 5;
+      const offsetX = (deltaX / Math.max(dist, 1)) * maxOffset;
+      const offsetY = (deltaY / Math.max(dist, 1)) * maxOffset;
+
+      if (cctvPupil) {
+        cctvPupil.setAttribute('cx', 80 + offsetX);
+        cctvPupil.setAttribute('cy', 78 + offsetY);
+      }
+    });
 
     // База детальных характеристик товаров
     const productDatabase = {
