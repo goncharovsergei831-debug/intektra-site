@@ -447,42 +447,6 @@
       box-shadow: 0 4px 15px var(--red-glow);
     }
 
-    /* Инженерный калькулятор АКБ для РИП */
-    .calc-section {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px;
-      margin-bottom: 40px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-    }
-    .calc-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 32px;
-      align-items: center;
-    }
-    .calc-inputs-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 16px;
-    }
-    .calc-result-box {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      text-align: center;
-    }
-    .calc-result-val {
-      font-family: var(--font-mono);
-      font-size: 32px;
-      font-weight: 800;
-      color: #0369a1;
-      margin: 8px 0;
-    }
-
     /* Навигация категорий (Chips) */
     .filter-chips {
       display: flex;
@@ -490,6 +454,7 @@
       overflow-x: auto;
       padding: 10px 0 20px;
       margin-bottom: 10px;
+      align-items: center;
     }
     .chip {
       background: #fff;
@@ -511,6 +476,26 @@
     .chip.active {
       background: var(--red-accent);
       color: #fff;
+    }
+    .btn-open-calc {
+      margin-left: auto;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .btn-open-calc:hover {
+      background: #dcfce7;
+      border-color: #86efac;
     }
 
     /* Каталог товаров */
@@ -817,7 +802,7 @@
       .header-inner { grid-template-columns: 1fr auto; }
       .search-wrapper, .btn-catalog { display: none; }
       .hero-grid { grid-template-columns: 1fr; }
-      .calc-grid { grid-template-columns: 1fr; }
+      .btn-open-calc { margin-left: 0; }
       .footer-grid { grid-template-columns: 1fr; }
       .mega-catalog-grid { grid-template-columns: 1fr; }
     }
@@ -942,6 +927,7 @@
           <li><a onclick="filterByKeyword('РИП')">Резервированные источники (РИП 12/24В)</a></li>
           <li><a onclick="filterByKeyword('АКБ')">Аккумуляторные батареи AGM 7-17 Ач</a></li>
           <li><a onclick="filterByKeyword('УЗИП')">Устройства грозозащиты (УЗИП)</a></li>
+          <li><a onclick="openBatteryCalcModal()" style="color:var(--cyan-accent);font-weight:700;">⚙ Калькулятор расчета АКБ (СП 484)</a></li>
         </ul>
       </div>
       <div class="mega-group">
@@ -1013,54 +999,6 @@
       </div>
     </section>
 
-    <!-- Инженерный калькулятор АКБ для РИП (СП 484) -->
-    <section class="calc-section">
-      <div class="calc-grid">
-        <div>
-          <span style="font-family:var(--font-mono);font-size:12px;color:var(--cyan-accent);font-weight:700;">ИНЖЕНЕРНЫЙ МОДУЛЬ РАСЧЕТА</span>
-          <h3 style="font-size:22px;color:#0f172a;margin-top:4px;">Подбор аккумулятора для РИП (СП 484 / СП 5)</h3>
-          <p style="font-size:14px;color:var(--text-muted);margin-top:6px;">
-            Рассчитайте емкость батареи резервного электропитания под токовую нагрузку вашей системы с учетом запаса емкости 25%.
-          </p>
-          <div class="calc-inputs-grid">
-            <div class="form-group">
-              <label>Ток в дежурном режиме (А):</label>
-              <input type="number" id="calcStandbyCurrent" class="form-ctrl" value="0.8" step="0.1" min="0.1" oninput="calculateBattery()">
-            </div>
-            <div class="form-group">
-              <label>Время дежурного режима (ч):</label>
-              <select id="calcStandbyHours" class="form-ctrl" onchange="calculateBattery()">
-                <option value="24" selected>24 часа (по нормам СП)</option>
-                <option value="48">48 часов (особые объекты)</option>
-                <option value="12">12 часов</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Ток в тревоге/пожаре (А):</label>
-              <input type="number" id="calcAlarmCurrent" class="form-ctrl" value="1.8" step="0.1" min="0.1" oninput="calculateBattery()">
-            </div>
-            <div class="form-group">
-              <label>Время в тревоге (ч):</label>
-              <select id="calcAlarmHours" class="form-ctrl" onchange="calculateBattery()">
-                <option value="3" selected>3 часа (СОУЭ / дымоудаление)</option>
-                <option value="1">1 час (стандарт ОПС)</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="calc-result-box">
-          <div style="font-size:13px;color:var(--text-muted);font-weight:600;">Расчетная минимальная емкость:</div>
-          <div class="calc-result-val" id="calcResultAh">30.8 А·ч</div>
-          <div style="font-size:14px;font-weight:700;color:#0f172a;" id="calcRecommendedAkb">Рекомендуемый комплект: 2 × АКБ 17 А·ч</div>
-          <p style="font-size:12px;color:var(--text-muted);margin:10px 0 16px;">С учетом коэффициента старения и потери емкости 1.25</p>
-          <button class="btn-card btn-buy-one" style="width:100%;" onclick="addCalculatedToCart()">
-            + Добавить РИП-12 и АКБ в смету
-          </button>
-        </div>
-      </div>
-    </section>
-
     <!-- Категории фильтрации -->
     <div class="filter-chips">
       <button class="chip active" onclick="filterCategory('all', this)">Все категории</button>
@@ -1068,6 +1006,11 @@
       <button class="chip" onclick="filterCategory('power', this)">Источники питания / АКБ</button>
       <button class="chip" onclick="filterCategory('cable', this)">Кабельные трассы</button>
       <button class="chip" onclick="filterCategory('go', this)">Оборудование ГО и ЧС</button>
+      
+      <!-- Кнопка вызова калькулятора АКБ -->
+      <button class="btn-open-calc" onclick="openBatteryCalcModal()">
+        <span>⚙ Калькулятор расчета АКБ</span>
+      </button>
     </div>
 
     <!-- Каталог товаров -->
@@ -1146,6 +1089,56 @@
       </div>
     </div>
   </main>
+
+  <!-- Модальное окно калькулятора расчета АКБ (группа АКБ) -->
+  <div class="info-modal" id="batteryCalcModal" style="max-width: 680px;">
+    <div class="info-modal-header">
+      <h3>Расчет емкости АКБ для РИП (СП 484 / СП 5)</h3>
+      <button onclick="closeModal('batteryCalcModal')" style="background:none;border:none;color:#0f172a;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">
+        Калькулятор вычисляет минимальную необходимую емкость батареи резервного электропитания с нормативным запасом 25%.
+      </p>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+        <div class="form-group">
+          <label>Ток в дежурном режиме (А):</label>
+          <input type="number" id="calcStandbyCurrent" class="form-ctrl" value="0.8" step="0.1" min="0.1" oninput="calculateBattery()">
+        </div>
+        <div class="form-group">
+          <label>Время дежурного режима (ч):</label>
+          <select id="calcStandbyHours" class="form-ctrl" onchange="calculateBattery()">
+            <option value="24" selected>24 часа (по нормам СП)</option>
+            <option value="48">48 часов (особые объекты)</option>
+            <option value="12">12 часов</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ток в тревоге/пожаре (А):</label>
+          <input type="number" id="calcAlarmCurrent" class="form-ctrl" value="1.8" step="0.1" min="0.1" oninput="calculateBattery()">
+        </div>
+        <div class="form-group">
+          <label>Время в тревоге (ч):</label>
+          <select id="calcAlarmHours" class="form-ctrl" onchange="calculateBattery()">
+            <option value="3" selected>3 часа (СОУЭ / дымоудаление)</option>
+            <option value="1">1 час (стандарт ОПС)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;">
+        <div style="font-size:13px;color:var(--text-muted);font-weight:600;">Расчетная минимальная емкость:</div>
+        <div style="font-family:var(--font-mono);font-size:32px;font-weight:800;color:#0369a1;margin:6px 0;" id="calcResultAh">30.8 А·ч</div>
+        <div style="font-size:14px;font-weight:700;color:#0f172a;" id="calcRecommendedAkb">Рекомендуемый комплект: 2 × АКБ 17 А·ч</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">С учетом коэффициента старения и потери емкости 1.25</div>
+      </div>
+
+      <button class="btn-card btn-buy-one" style="width:100%;padding:13px;" onclick="addCalculatedToCart()">
+        + Добавить РИП-12 и АКБ в смету заказа
+      </button>
+    </div>
+  </div>
 
   <!-- Боковая шторка Сметы / Корзины -->
   <div class="drawer" id="cartDrawer">
@@ -1296,13 +1289,19 @@
     // ==========================================
     // ИНЖЕНЕРНЫЙ КАЛЬКУЛЯТОР АКБ
     // ==========================================
+    function openBatteryCalcModal() {
+      closeMegaCatalog();
+      calculateBattery();
+      document.getElementById('batteryCalcModal').classList.add('active');
+      document.getElementById('drawerOverlay').style.display = 'block';
+    }
+
     function calculateBattery() {
       const iStandby = parseFloat(document.getElementById('calcStandbyCurrent').value) || 0;
       const tStandby = parseFloat(document.getElementById('calcStandbyHours').value) || 24;
       const iAlarm = parseFloat(document.getElementById('calcAlarmCurrent').value) || 0;
       const tAlarm = parseFloat(document.getElementById('calcAlarmHours').value) || 3;
 
-      // Формула СП: 1.25 * (Iдеж * Tдеж + Iпож * Tпож)
       const capacityRequired = 1.25 * ((iStandby * tStandby) + (iAlarm * tAlarm));
       const rounded = capacityRequired.toFixed(1);
 
@@ -1327,11 +1326,9 @@
     function addCalculatedToCart() {
       addToCart('Резервированный источник питания РИП-12 RS (12В, 3А)', 3420, 'ИНК-02319');
       addToCart('Аккумулятор AGM 12В 17Ач (для РИП)', 3200, 'ИНК-АКБ-17');
+      closeModal('batteryCalcModal');
       toggleCart(true);
     }
-
-    // Инициализация расчета при загрузке
-    calculateBattery();
 
     // База детальных характеристик товаров
     const productDatabase = {
@@ -1561,6 +1558,7 @@
       if (!document.getElementById('cartDrawer').classList.contains('open') && 
           !document.getElementById('quickOrderModal').classList.contains('active') && 
           !document.getElementById('productModal').classList.contains('active') && 
+          !document.getElementById('batteryCalcModal').classList.contains('active') && 
           !document.getElementById('infoModal').classList.contains('active')) {
         overlay.style.display = 'none';
       }
@@ -1726,6 +1724,7 @@
       toggleCart(false);
       closeModal('quickOrderModal');
       closeModal('productModal');
+      closeModal('batteryCalcModal');
       closeModal('infoModal');
       closeMegaCatalog();
     }
