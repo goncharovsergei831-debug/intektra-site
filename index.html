@@ -3,462 +3,404 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ИНТЕКТРА — Комплексные поставки систем безопасности, слаботочки, ГО и ЧС</title>
+  <title>ИНТЕКТРА ВЕКТОР — Российские системы речевого оповещения, СОУЭ и ГО ЧС</title>
   <style>
     :root {
-      --primary: #004b87;       /* Классический синий ТИНКО */
-      --primary-dark: #003366;
-      --accent: #e30613;        /* Акцентный красный */
-      --accent-hover: #b8050f;
-      --bg: #f4f6f8;
-      --text: #222;
-      --text-muted: #666;
-      --border: #d0d7de;
-      --card-bg: #ffffff;
-      --tag-bg: #eef3f8;
+      --brand-red: #e30613;
+      --brand-red-dark: #b8000b;
+      --dark-bg: #121820;
+      --dark-card: #1c2430;
+      --light-bg: #f8fafc;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --accent-blue: #0284c7;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); line-height: 1.4; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--light-bg); color: var(--text-main); line-height: 1.5; }
 
-    /* Верхняя информационная плашка */
-    .top-bar {
-      background: #1a2530;
-      color: #ccc;
+    /* Верхняя панель */
+    .top-strip {
+      background: #0b0f14;
+      color: #94a3b8;
       font-size: 0.8rem;
-      padding: 6px 2rem;
+      padding: 0.5rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid #1f2937;
     }
-    .top-bar a { color: #fff; text-decoration: none; margin-left: 15px; }
+    .top-strip a { color: #cbd5e1; text-decoration: none; margin-left: 1rem; }
 
-    /* Основная шапка */
+    /* Шапка в стиле LUIS+ */
     header {
-      background: #fff;
-      border-bottom: 2px solid var(--primary);
-      padding: 1rem 2rem;
+      background: #ffffff;
+      border-bottom: 2px solid var(--brand-red);
+      padding: 0.9rem 2rem;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      align-items: center;
       position: sticky;
       top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
     }
-    .brand { display: flex; flex-direction: column; }
-    .brand-title { font-size: 1.6rem; font-weight: 900; color: var(--primary); letter-spacing: 0.5px; }
-    .brand-sub { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+    .brand-wrap { display: flex; align-items: baseline; gap: 12px; }
+    .logo { font-size: 1.6rem; font-weight: 900; letter-spacing: 1px; color: #0b0f14; }
+    .logo span { color: var(--brand-red); }
+    .sub-brand { font-size: 0.85rem; font-weight: 700; color: var(--brand-red); text-transform: uppercase; letter-spacing: 1.5px; border-left: 2px solid #cbd5e1; padding-left: 10px; }
 
-    .search-bar {
-      flex: 1;
-      max-width: 600px;
-      display: flex;
-    }
-    .search-bar input {
-      width: 100%;
-      padding: 0.65rem 1rem;
-      border: 2px solid var(--primary);
-      border-right: none;
-      border-radius: 4px 0 0 4px;
-      outline: none;
-      font-size: 0.95rem;
-    }
-    .search-bar button {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 0 1.5rem;
-      border-radius: 0 4px 4px 0;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .header-nav { display: flex; gap: 10px; align-items: center; }
+    .nav-links { display: flex; gap: 8px; align-items: center; }
     .btn {
-      padding: 0.6rem 1.1rem;
+      padding: 0.55rem 1.1rem;
       border-radius: 4px;
+      font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
-      border: 1px solid transparent;
-      font-size: 0.9rem;
+      text-decoration: none;
       transition: all 0.2s ease;
+      border: 1px solid transparent;
       display: inline-flex;
       align-items: center;
       gap: 6px;
     }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-primary:hover { background: var(--primary-dark); }
-    .btn-accent { background: var(--accent); color: #fff; }
-    .btn-accent:hover { background: var(--accent-hover); }
-    .btn-outline { border-color: var(--border); background: #fff; color: var(--text); }
-    .btn-outline:hover, .btn-outline.active { border-color: var(--primary); color: var(--primary); background: #f0f7ff; }
+    .btn-red { background: var(--brand-red); color: #fff; }
+    .btn-red:hover { background: var(--brand-red-dark); }
+    .btn-ghost { background: transparent; color: var(--text-main); border-color: var(--border-color); }
+    .btn-ghost:hover, .btn-ghost.active { background: #f1f5f9; border-color: var(--text-main); }
+    .btn-admin { background: #0f172a; color: #fff; }
+    .btn-admin:hover { background: #1e293b; }
 
-    /* Навигационная полоса разделов ТИНКО */
-    .catalog-bar {
-      background: var(--primary);
+    /* Hero-секция как на промо-странице ВЕКТОР */
+    .hero-banner {
+      background: linear-gradient(135deg, #0b0f14 0%, #1e293b 100%);
       color: #fff;
-      padding: 0 2rem;
-      display: flex;
-      gap: 20px;
-      overflow-x: auto;
-      font-size: 0.88rem;
-      font-weight: 600;
+      padding: 3.5rem 2rem;
+      position: relative;
     }
-    .catalog-bar div {
-      padding: 10px 6px;
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      white-space: nowrap;
-    }
-    .catalog-bar div:hover, .catalog-bar div.active {
-      border-bottom-color: var(--accent);
-      background: rgba(255,255,255,0.08);
-    }
-
-    /* Макет страниц */
-    .container { max-width: 1440px; margin: 1.5rem auto; padding: 0 1rem; }
-    .main-grid { display: grid; grid-template-columns: 290px 1fr; gap: 1.5rem; }
-
-    /* Левое дерево каталога (ТИНКО-стиль) */
-    .tree-menu {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.8rem 0;
-    }
-    .tree-title {
-      padding: 0.6rem 1.2rem;
-      font-weight: 700;
-      font-size: 0.95rem;
+    .hero-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 3rem; align-items: center; }
+    .hero-badge {
+      display: inline-block;
+      background: var(--brand-red);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 3px;
       text-transform: uppercase;
-      color: var(--primary);
-      border-bottom: 2px solid #eee;
-      margin-bottom: 0.5rem;
-    }
-    .tree-item {
-      padding: 0.55rem 1.2rem;
-      font-size: 0.88rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      border-left: 3px solid transparent;
-    }
-    .tree-item:hover { background: #f5f8fc; color: var(--primary); }
-    .tree-item.active {
-      background: #eef4fb;
-      color: var(--primary);
-      font-weight: 700;
-      border-left-color: var(--primary);
-    }
-    .tree-count { font-size: 0.75rem; color: #888; background: #eee; padding: 1px 6px; border-radius: 10px; }
-
-    /* Сетка товаров */
-    .catalog-header {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.8rem 1.2rem;
+      letter-spacing: 1px;
       margin-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
-    .product-grid {
+    .hero-title { font-size: 2.5rem; font-weight: 900; line-height: 1.15; margin-bottom: 1rem; }
+    .hero-desc { font-size: 1.05rem; color: #94a3b8; margin-bottom: 1.5rem; max-width: 580px; }
+    .hero-specs {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-      gap: 1.2rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 1.5rem;
     }
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1rem;
+    .hero-spec-item strong { display: block; font-size: 1.2rem; color: #fff; }
+    .hero-spec-item span { font-size: 0.78rem; color: #94a3b8; }
+
+    /* Навигация по подсистемам линейки */
+    .section-nav-wrap {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 67px;
+      z-index: 90;
+    }
+    .section-nav {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      overflow-x: auto;
+    }
+    .section-tab {
+      padding: 1rem 1.4rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .section-tab:hover { color: var(--brand-red); }
+    .section-tab.active { color: var(--brand-red); border-bottom-color: var(--brand-red); font-weight: 700; }
+
+    /* Контейнер каталога */
+    .container { max-width: 1280px; margin: 2rem auto; padding: 0 1.5rem; }
+    
+    .section-head { margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-end; }
+    .section-head h2 { font-size: 1.6rem; font-weight: 800; color: #0f172a; }
+    .section-head p { font-size: 0.9rem; color: var(--text-muted); }
+
+    /* Сетка карточек оборудования */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .device-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.4rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
-    .card-sku { font-size: 0.75rem; color: #777; margin-bottom: 0.3rem; }
-    .card-title {
-      font-size: 0.98rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-      margin-bottom: 0.5rem;
-      line-height: 1.35;
-      min-height: 2.7em;
+    .device-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.06); }
+    .card-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; }
+    .card-sku { font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
+    .card-tag { font-size: 0.7rem; background: #fee2e2; color: var(--brand-red); padding: 2px 6px; border-radius: 3px; font-weight: 600; }
+    .card-title { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.7rem; line-height: 1.3; }
+    .card-specs {
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      padding: 0.7rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      color: #334155;
+      margin-bottom: 1rem;
+      white-space: pre-line;
+      line-height: 1.45;
     }
-    .card-category {
+    .docs-links { display: flex; gap: 8px; margin-bottom: 1rem; }
+    .doc-pill {
       font-size: 0.72rem;
-      background: var(--tag-bg);
-      color: var(--primary);
+      color: var(--accent-blue);
+      text-decoration: none;
+      background: #f0f9ff;
+      border: 1px solid #e0f2fe;
       padding: 2px 6px;
       border-radius: 3px;
-      width: fit-content;
-      margin-bottom: 0.6rem;
-    }
-    .card-specs {
-      font-size: 0.82rem;
-      color: #444;
-      background: #fcfcfc;
-      border: 1px solid #f0f0f0;
-      border-radius: 4px;
-      padding: 0.6rem;
-      margin-bottom: 0.8rem;
-      min-height: 5.5em;
-      white-space: pre-line;
-    }
-    .card-stock {
-      font-size: 0.78rem;
-      color: #2e7d32;
       font-weight: 600;
-      margin-bottom: 0.6rem;
-      display: flex;
-      align-items: center;
-      gap: 4px;
     }
-    .card-stock.low { color: #d84315; }
+    .doc-pill:hover { background: #e0f2fe; }
+
     .card-footer {
-      border-top: 1px solid #f0f0f0;
-      padding-top: 0.8rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 0.9rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .card-price { font-size: 1.25rem; font-weight: 800; color: var(--accent); }
-    .card-price span { font-size: 0.8rem; font-weight: normal; color: #777; }
+    .card-price { font-size: 1.35rem; font-weight: 800; color: var(--brand-red); }
+    .card-price small { font-size: 0.75rem; color: #64748b; font-weight: normal; }
 
-    /* Таблицы админки и корзины */
-    .panel {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
+    /* Админка / Редактор */
+    .admin-panel {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 2rem;
+      margin-bottom: 2rem;
     }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.88rem; }
-    th, td { padding: 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
-    th { background: #f7f9fa; font-weight: 700; color: #333; }
-
-    /* Формы */
-    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
-    .form-group { display: flex; flex-direction: column; }
-    .form-group label { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.3rem; color: #444; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.3rem; color: #334155; }
     .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
       padding: 0.6rem;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
+    table { width: 100%; border-collapse: collapse; margin-top: 1.2rem; font-size: 0.88rem; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+    th { background: #f8fafc; font-weight: 700; color: #334155; }
 
     /* Модальное окно редактирования */
-    .modal-overlay {
+    .modal-backdrop {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 2000;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 1000;
       justify-content: center;
       align-items: center;
     }
-    .modal {
+    .modal-box {
       background: #fff;
       width: 90%;
-      max-width: 650px;
-      padding: 1.8rem;
+      max-width: 680px;
       border-radius: 6px;
+      padding: 2rem;
       max-height: 90vh;
       overflow-y: auto;
     }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+
+    /* Футер */
+    footer {
+      background: #0b0f14;
+      color: #94a3b8;
+      padding: 3rem 2rem 1.5rem;
+      border-top: 1px solid #1f2937;
+      margin-top: 4rem;
+    }
+    .footer-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+    .footer-col h4 { color: #fff; font-size: 0.95rem; margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.5rem; font-size: 0.85rem; }
+    .footer-col a { color: #94a3b8; text-decoration: none; }
+    .footer-col a:hover { color: #fff; }
   </style>
 </head>
 <body>
 
-  <!-- Верхняя строка -->
-  <div class="top-bar">
-    <div>Поставки сертифицированного оборудования систем безопасности, ГОСТ и ТУ</div>
+  <!-- Служебная верхняя панель -->
+  <div class="top-strip">
+    <div>Российский разработчик и производитель систем СОУЭ 3–5 типов и ГО ЧС</div>
     <div>
-      <span>Тел: 8 (800) 555-35-35</span>
-      <a href="mailto:info@intektra.ru">info@intektra.ru</a>
+      <span>8 (800) 555-24-30 (Отдел проектных решений)</span>
+      <a href="mailto:vector@intektra.ru">vector@intektra.ru</a>
     </div>
   </div>
 
-  <!-- Главная шапка -->
+  <!-- Шапка сайта -->
   <header>
-    <div class="brand">
-      <div class="brand-title">ИНТЕКТРА</div>
-      <div class="brand-sub">ОПОРНЫЙ КАТАЛОГ СИСТЕМ БЕЗОПАСНОСТИ</div>
+    <div class="brand-wrap">
+      <div class="logo">ИНТЕКТРА <span>|</span></div>
+      <div class="sub-brand">ВЕКТОР</div>
     </div>
 
-    <div class="search-bar">
-      <input type="text" id="global-search" placeholder="Поиск по артикулу, марке или названию (например, ИП 212, Болид, СКУД)..." oninput="applyFilters()">
-      <button onclick="applyFilters()">Найти</button>
-    </div>
-
-    <div class="header-nav">
-      <button class="btn btn-outline active" id="btn-view-shop" onclick="switchTab('shop')">Каталог</button>
-      <button class="btn btn-outline" id="btn-view-cart" onclick="switchTab('cart')">
-        Спецификация / Корзина (<span id="cart-badge">0</span>)
-      </button>
-      <button class="btn btn-primary" id="btn-view-admin" onclick="switchTab('admin')">⚙️ Админка каталога</button>
+    <div class="nav-links">
+      <button class="btn btn-ghost active" id="btn-tab-main" onclick="switchView('main')">Линейка ВЕКТОР</button>
+      <button class="btn btn-ghost" id="btn-tab-cart" onclick="switchView('cart')">Спецификация проекта (<span id="cart-counter">0</span>)</button>
+      <button class="btn btn-admin" id="btn-tab-admin" onclick="switchView('admin')">⚙️ Админка каталога</button>
     </div>
   </header>
 
-  <!-- Горизонтальный классификатор ТИНКО -->
-  <div class="catalog-bar">
-    <div class="active" onclick="filterByGroup('all', this)">Все оборудование</div>
-    <div onclick="filterByGroup('ОПС', this)">Охранно-пожарная сигнализация</div>
-    <div onclick="filterByGroup('ГО и ЧС', this)">Системы оповещения, ГО и ЧС</div>
-    <div onclick="filterByGroup('Видеонаблюдение', this)">Видеонаблюдение</div>
-    <div onclick="filterByGroup('СКУД', this)">Контроль доступа (СКУД)</div>
-    <div onclick="filterByGroup('Источники питания', this)">Источники питания (РИП, ББП)</div>
-    <div onclick="filterByGroup('Кабельная продукция', this)">Кабель и провод монтажный</div>
-    <div onclick="filterByGroup('Автоматика', this)">Шкафы и автоматика</div>
+  <!-- Промо-блок линейки ВЕКТОР -->
+  <div id="view-hero" class="hero-banner">
+    <div class="hero-inner">
+      <div>
+        <span class="hero-badge">Сертифицировано ТР ЕАЭС 043/2017</span>
+        <h1 class="hero-title">Система оповещения и управления эвакуацией ВЕКТОР</h1>
+        <p class="hero-desc">
+          Профессиональный аппаратно-программный комплекс блочно-модульного типа для построения СОУЭ 3, 4 и 5 типов, трансляции звука и локального сопряжения с каналами РАСЦО / МЧС (ГО и ЧС).
+        </p>
+        <div class="hero-specs">
+          <div class="hero-spec-item">
+            <strong>До 128 зон</strong>
+            <span>Масштабирование</span>
+          </div>
+          <div class="hero-spec-item">
+            <strong>100 В линии</strong>
+            <span>Контроль целостности</span>
+          </div>
+          <div class="hero-spec-item">
+            <strong>100% ГОСТ</strong>
+            <span>Сделано в России</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); padding: 1.5rem; border-radius: 8px;">
+          <h3 style="margin-bottom: 0.8rem; font-size: 1.1rem;">Проектировщикам и интеграторам</h3>
+          <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 1rem;">
+            Скачайте готовые типовые проектные решения СОУЭ и шаблоны схем в формате DWG/AutoCAD прямо из каталога.
+          </p>
+          <button class="btn btn-red" onclick="filterByTab('Центральные блоки')">Подобрать моноблок ВЕКТОР</button>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <!-- Навигация по подсистемам LUIS+ ВЕКТОР -->
+  <div class="section-nav-wrap">
+    <div class="section-nav">
+      <div class="section-tab active" onclick="filterByTab('all', this)">Все оборудование линейки</div>
+      <div class="section-tab" onclick="filterByTab('Центральные блоки', this)">Центральные блоки и моноблоки</div>
+      <div class="section-tab" onclick="filterByTab('Усилители мощности', this)">Усилители мощности 100В</div>
+      <div class="section-tab" onclick="filterByTab('Громкоговорители ГО ЧС', this)">Громкоговорители и рупоры</div>
+      <div class="section-tab" onclick="filterByTab('Микрофонные пульты', this)">Микрофонные консоли</div>
+      <div class="section-tab" onclick="filterByTab('Блоки резервирования', this)">Питание и РИП</div>
+    </div>
+  </div>
+
+  <!-- ОСНОВНОЙ КОНТЕНТ -->
   <div class="container">
     
-    <!-- 1. ВИТРИНА КАТАЛОГА -->
-    <div id="tab-shop" class="main-grid">
-      
-      <!-- Левое дерево категорий в стиле ТИНКО -->
-      <aside class="tree-menu">
-        <div class="tree-title">Классификатор ТИНКО</div>
-        <div class="tree-item active" onclick="selectCategory('all', this)">
-          <span>Все подразделы</span>
-          <span class="tree-count" id="count-all">0</span>
+    <!-- 1. ВИТРИНА ПРОДУКЦИИ -->
+    <div id="view-main">
+      <div class="section-head">
+        <div>
+          <h2 id="current-tab-title">Номенклатурный состав системы</h2>
+          <p id="current-tab-desc">Оборудование сертифицировано для установки на объектах транспортной инфраструктуры, промышленности и социальной сферы</p>
         </div>
-        <div class="tree-item" onclick="selectCategory('Извещатели пожарные', this)">
-          <span>Извещатели пожарные</span>
-          <span class="tree-count" id="count-1">0</span>
+        <div>
+          <input type="text" id="filter-input" placeholder="Поиск по артикулу или названию..." style="padding: 0.5rem 0.8rem; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.85rem; min-width: 260px;" oninput="renderCards()">
         </div>
-        <div class="tree-item" onclick="selectCategory('Приборы приемно-контрольные (ППКП)', this)">
-          <span>Приборы ППКП и панели</span>
-          <span class="tree-count" id="count-2">0</span>
-        </div>
-        <div class="tree-item" onclick="selectCategory('Оповещатели и ГО ЧС', this)">
-          <span>Оповещатели, сирены, ГО ЧС</span>
-          <span class="tree-count" id="count-3">0</span>
-        </div>
-        <div class="tree-item" onclick="selectCategory('IP-видеонаблюдение', this)">
-          <span>IP-камеры и видеорегистраторы</span>
-          <span class="tree-count" id="count-4">0</span>
-        </div>
-        <div class="tree-item" onclick="selectCategory('СКУД и турникеты', this)">
-          <span>СКУД, считыватели, замки</span>
-          <span class="tree-count" id="count-5">0</span>
-        </div>
-        <div class="tree-item" onclick="selectCategory('Блоки питания РИП/ИБП', this)">
-          <span>Блоки бесперебойного питания</span>
-          <span class="tree-count" id="count-6">0</span>
-        </div>
-        <div class="tree-item" onclick="selectCategory('Огнестойкий кабель FRLS/FRHF', this)">
-          <span>Огнестойкий кабель ОПС</span>
-          <span class="tree-count" id="count-7">0</span>
-        </div>
-      </aside>
+      </div>
 
-      <!-- Основная витрина -->
-      <main>
-        <div class="catalog-header">
-          <div>
-            <h2 id="current-category-name" style="font-size: 1.25rem; color: var(--primary);">Все разделы оборудования</h2>
-            <div style="font-size: 0.8rem; color: #777;" id="current-category-desc">Комплексная поставка систем безопасности по оптовым ценам</div>
-          </div>
-          <div style="font-size: 0.85rem; color: var(--text-muted);">
-            Найдено номенклатурных позиций: <strong id="total-shown">0</strong>
-          </div>
-        </div>
-
-        <div class="product-grid" id="products-container"></div>
-      </main>
+      <div class="cards-grid" id="cards-container"></div>
     </div>
 
-    <!-- 2. ПАНЕЛЬ АДМИНИСТРАТОРА (СОЗДАНИЕ, ИМПОРТ/ЭКСПОРТ) -->
-    <div id="tab-admin" style="display: none;">
-      
-      <!-- Панель добавления карточки -->
-      <div class="panel">
-        <h2 style="color: var(--primary); margin-bottom: 1rem;">Создание новой карточки товара</h2>
-        <form id="admin-create-form" onsubmit="createProduct(event)">
-          <div class="form-row">
+    <!-- 2. ПАНЕЛЬ АДМИНИСТРАТОРА (СОЗДАНИЕ И РЕДАКТИРОВАНИЕ) -->
+    <div id="view-admin" style="display: none;">
+      <div class="admin-panel">
+        <h2 style="margin-bottom: 1rem; color: #0f172a;">Добавление новой позиции в линейку ВЕКТОР</h2>
+        <form onsubmit="handleCreateDevice(event)">
+          <div class="form-grid">
             <div class="form-group">
-              <label>Номенклатурный номер / Артикул (SKU)</label>
-              <input type="text" id="add-sku" required placeholder="Например: ТКО-11492">
+              <label>Артикул / Код изделия</label>
+              <input type="text" id="add-sku" required placeholder="Например: VCTR-IP-100">
             </div>
             <div class="form-group">
-              <label>Основная группа</label>
-              <select id="add-group">
-                <option value="ОПС">ОПС (Охранно-пожарная сигнализация)</option>
-                <option value="ГО и ЧС">ГО и ЧС (Оповещение)</option>
-                <option value="Видеонаблюдение">Видеонаблюдение</option>
-                <option value="СКУД">СКУД и автоматика</option>
-                <option value="Источники питания">Источники питания</option>
-                <option value="Кабельная продукция">Кабельная продукция</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Подкатегория каталога ТИНКО</label>
+              <label>Подсистема ВЕКТОР</label>
               <select id="add-category">
-                <option value="Извещатели пожарные">Извещатели пожарные</option>
-                <option value="Приборы приемно-контрольные (ППКП)">Приборы приемно-контрольные (ППКП)</option>
-                <option value="Оповещатели и ГО ЧС">Оповещатели и ГО ЧС</option>
-                <option value="IP-видеонаблюдение">IP-видеонаблюдение</option>
-                <option value="СКУД и турникеты">СКУД и турникеты</option>
-                <option value="Блоки питания РИП/ИБП">Блоки питания РИП/ИБП</option>
-                <option value="Огнестойкий кабель FRLS/FRHF">Огнестойкий кабель FRLS/FRHF</option>
+                <option value="Центральные блоки">Центральные блоки и моноблоки</option>
+                <option value="Усилители мощности">Усилители мощности 100В</option>
+                <option value="Громкоговорители ГО ЧС">Громкоговорители и рупоры</option>
+                <option value="Микрофонные пульты">Микрофонные консоли</option>
+                <option value="Блоки резервирования">Питание и РИП</option>
               </select>
+            </div>
+            <div class="form-group">
+              <label>Оптовая цена с НДС (руб.)</label>
+              <input type="number" step="0.01" id="add-price" required placeholder="45000.00">
+            </div>
+            <div class="form-group">
+              <label>Складской остаток (шт)</label>
+              <input type="number" id="add-stock" value="12" required>
             </div>
           </div>
-
-          <div class="form-row">
-            <div class="form-group" style="grid-column: span 2;">
-              <label>Полное торговое наименование</label>
-              <input type="text" id="add-title" required placeholder="Например: ИП 212-141 Извещатель пожарный дымовой оптико-электронный">
-            </div>
-            <div class="form-group">
-              <label>Цена за ед. с НДС (руб.)</label>
-              <input type="number" step="0.01" id="add-price" required placeholder="850.00">
-            </div>
-            <div class="form-group">
-              <label>Складской остаток (шт / м)</label>
-              <input type="number" id="add-stock" value="50" required>
-            </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Торговое наименование прибора</label>
+            <input type="text" id="add-title" required placeholder="Например: Блок управления и коммутации ВЕКТОР-БУК-100">
           </div>
 
           <div class="form-group" style="margin-bottom: 1rem;">
-            <label>Технические параметры и соответствие ГОСТ</label>
-            <textarea id="add-specs" rows="3" placeholder="Питание: 9-30 В; Ток потребления: 0.05 мА; Чувствительность: 0.05-0.2 дБ/м; Степень защиты: IP30; Сертификат ТР ЕАЭС 043/2017"></textarea>
+            <label>Параметры и характеристики (по ГОСТ Р 53325-2012)</label>
+            <textarea id="add-specs" rows="3" placeholder="Мощность: 250 Вт; Количество зон: 4; Контроль линий: по импедансу; Сопряжение с ГО и ЧС: сухие контакты / линейный вход"></textarea>
           </div>
 
           <div style="display: flex; gap: 10px;">
-            <button type="submit" class="btn btn-accent">+ Опубликовать карточку в каталог</button>
-            <button type="button" class="btn btn-outline" onclick="exportDatabaseJSON()">📥 Скачать базу каталога (JSON)</button>
-            <button type="button" class="btn btn-outline" onclick="restoreDefaults()">Сбросить на эталон ТИНКО</button>
+            <button type="submit" class="btn btn-red">+ Добавить прибор в линейку</button>
+            <button type="button" class="btn btn-ghost" onclick="exportDataJSON()">📥 Экспорт базы (JSON)</button>
+            <button type="button" class="btn btn-ghost" onclick="resetToVectorStandard()">Сбросить на заводские параметры LUIS+</button>
           </div>
         </form>
       </div>
 
-      <!-- Таблица управления всей номенклатурой -->
-      <div class="panel">
-        <h3>Управление номенклатурой базы данных</h3>
+      <div class="admin-panel">
+        <h3 style="margin-bottom: 0.8rem;">Таблица номенклатуры линейки</h3>
         <table>
           <thead>
             <tr>
-              <th style="width: 100px;">Артикул</th>
+              <th style="width: 120px;">Артикул</th>
               <th>Наименование оборудования</th>
-              <th>Категория ТИНКО</th>
-              <th style="width: 110px;">Цена с НДС</th>
+              <th>Категория</th>
+              <th style="width: 120px;">Цена с НДС</th>
               <th style="width: 70px;">Склад</th>
-              <th style="width: 120px;">Операции</th>
+              <th style="width: 130px;">Действия</th>
             </tr>
           </thead>
           <tbody id="admin-table-body"></tbody>
@@ -466,64 +408,60 @@
       </div>
     </div>
 
-    <!-- 3. СПЕЦИФИКАЦИЯ И ОФОРМЛЕНИЕ ЗАКАЗА -->
-    <div id="tab-cart" class="panel" style="display: none;">
-      <h2 style="color: var(--primary);">Спецификация оборудования к заказу</h2>
-      <div id="cart-table-wrapper" style="margin-top: 1rem;"></div>
-      
-      <div style="display: grid; grid-template-columns: 1fr 400px; gap: 2rem; margin-top: 2rem;">
+    <!-- 3. СПЕЦИФИКАЦИЯ ПРОЕКТА (B2B КОРЗИНА) -->
+    <div id="view-cart" class="admin-panel" style="display: none;">
+      <h2>Спецификация к проекту (СОУЭ / ГО ЧС)</h2>
+      <div id="cart-content-wrapper" style="margin-top: 1.2rem;"></div>
+
+      <div style="display: grid; grid-template-columns: 1fr 380px; gap: 2rem; margin-top: 2rem;">
         <div>
-          <button class="btn btn-outline" onclick="window.print()">🖨️ Распечатать спецификацию / Сохранить в PDF</button>
+          <button class="btn btn-ghost" onclick="window.print()">Распечатать ведомость оборудования</button>
         </div>
-        <div style="background: #fafafa; border: 1px solid var(--border); padding: 1.5rem; border-radius: 4px;">
-          <h3 style="margin-bottom: 1rem;">Оформление счёта (B2B)</h3>
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 6px;">
+          <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Запрос КП и резервирования</h3>
           <div class="form-group" style="margin-bottom: 0.8rem;">
-            <label>Наименование организации / ИНН</label>
-            <input type="text" id="order-org" placeholder="ООО Инженерные Сети, ИНН 7800000000">
+            <label>Проектная организация / Интегратор</label>
+            <input type="text" id="order-org" placeholder="ООО ИнжПроект / ИНН">
           </div>
           <div class="form-group" style="margin-bottom: 0.8rem;">
-            <label>Контактный телефон</label>
+            <label>Телефон ГИПа / Инженера</label>
             <input type="text" id="order-phone" placeholder="+7 (999) 000-00-00">
           </div>
-          <div class="form-group" style="margin-bottom: 1.2rem;">
-            <label>Электронная почта для получения счёта</label>
-            <input type="email" id="order-email" placeholder="zakaz@company.ru">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Email для отправки ТКП</label>
+            <input type="email" id="order-email" placeholder="project@company.ru">
           </div>
-          <button class="btn btn-accent" style="width: 100%; justify-content: center;" onclick="sendOrder()">Отправить заявку в отдел продаж</button>
+          <button class="btn btn-red" style="width: 100%; justify-content: center;" onclick="submitOrder()">Запросить коммерческое предложение</button>
         </div>
       </div>
     </div>
 
   </div>
 
-  <!-- Модальное окно редактирования позиции -->
-  <div class="modal-overlay" id="edit-modal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3 style="color: var(--primary);">Редактирование карточки оборудования</h3>
-        <span style="font-size: 1.5rem; cursor: pointer;" onclick="closeEditModal()">&times;</span>
+  <!-- Модальное окно редактирования -->
+  <div class="modal-backdrop" id="edit-modal">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">
+        <h3>Редактировать параметры изделия</h3>
+        <span style="cursor: pointer; font-size: 1.5rem;" onclick="closeEditModal()">&times;</span>
       </div>
-      <form onsubmit="saveProductEdit(event)">
+      <form onsubmit="handleSaveEdit(event)">
         <input type="hidden" id="edit-id">
-        <div class="form-row">
+        <div class="form-grid">
           <div class="form-group">
             <label>Артикул</label>
             <input type="text" id="edit-sku" required>
           </div>
           <div class="form-group">
-            <label>Категория ТИНКО</label>
+            <label>Подсистема</label>
             <select id="edit-category">
-              <option value="Извещатели пожарные">Извещатели пожарные</option>
-              <option value="Приборы приемно-контрольные (ППКП)">Приборы приемно-контрольные (ППКП)</option>
-              <option value="Оповещатели и ГО ЧС">Оповещатели и ГО ЧС</option>
-              <option value="IP-видеонаблюдение">IP-видеонаблюдение</option>
-              <option value="СКУД и турникеты">СКУД и турникеты</option>
-              <option value="Блоки питания РИП/ИБП">Блоки питания РИП/ИБП</option>
-              <option value="Огнестойкий кабель FRLS/FRHF">Огнестойкий кабель FRLS/FRHF</option>
+              <option value="Центральные блоки">Центральные блоки и моноблоки</option>
+              <option value="Усилители мощности">Усилители мощности 100В</option>
+              <option value="Громкоговорители ГО ЧС">Громкоговорители и рупоры</option>
+              <option value="Микрофонные пульты">Микрофонные консоли</option>
+              <option value="Блоки резервирования">Питание и РИП</option>
             </select>
           </div>
-        </div>
-        <div class="form-row">
           <div class="form-group">
             <label>Цена с НДС (руб.)</label>
             <input type="number" step="0.01" id="edit-price" required>
@@ -534,7 +472,7 @@
           </div>
         </div>
         <div class="form-group" style="margin-bottom: 1rem;">
-          <label>Наименование</label>
+          <label>Наименование прибора</label>
           <input type="text" id="edit-title" required>
         </div>
         <div class="form-group" style="margin-bottom: 1.2rem;">
@@ -542,214 +480,191 @@
           <textarea id="edit-specs" rows="4"></textarea>
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 10px;">
-          <button type="button" class="btn btn-outline" onclick="closeEditModal()">Отмена</button>
-          <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+          <button type="button" class="btn btn-ghost" onclick="closeEditModal()">Отмена</button>
+          <button type="submit" class="btn btn-red">Сохранить карточку</button>
         </div>
       </form>
     </div>
   </div>
 
+  <!-- Футер -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="logo" style="color: #fff; margin-bottom: 1rem;">ИНТЕКТРА <span>| ВЕКТОР</span></div>
+        <p style="font-size: 0.85rem; line-height: 1.6;">
+          Разработка и производство комплексных систем оповещения, управления эвакуацией людей при пожаре (СОУЭ) и систем локального оповещения ГО и ЧС.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>Документация</h4>
+        <ul>
+          <li><a href="#dwg">Типовые проекты в DWG</a></li>
+          <li><a href="#cert">Сертификаты ТР ЕАЭС 043/2017</a></li>
+          <li><a href="#calc">Калькулятор мощности СОУЭ</a></li>
+          <li><a href="#manual">Руководства по эксплуатации</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Центральный офис</h4>
+        <p style="font-size: 0.85rem;">Санкт-Петербург, Инженерный центр</p>
+        <p style="font-size: 0.85rem; margin-top: 5px;">Поставка оборудования по всей РФ и ЕАЭС</p>
+      </div>
+    </div>
+  </footer>
+
   <script>
-    // Первоначальная база оборудования (топовые позиции номенклатуры ТД ТИНКО)
-    const initialTinkoCatalog = [
+    // Базовая номенклатура линейки ВЕКТОР (как на сайте luis.ru/vector)
+    const initialVectorProducts = [
       {
         id: 1,
-        sku: "ТКО-00109",
-        group: "ОПС",
-        category: "Извещатели пожарные",
-        title: "ИП 212-141 Извещатель пожарный дымовой оптико-электронный",
-        price: 645,
-        stock: 450,
-        specs: "Чувствительность: 0.05-0.2 дБ/м\nПитание: 9-30 В\nТок в дежурном режиме: не более 0.05 мА\nБазовая розетка в комплекте"
+        sku: "VCTR-MB-250",
+        category: "Центральные блоки",
+        title: "Моноблок оповещения и управления ВЕКТОР-250",
+        price: 94500,
+        stock: 14,
+        specs: "Выходная мощность: 250 Вт / 100 В\nКоличество зон оповещения: 4 независимые зоны\nВстроенный модуль сообщений ГО и ЧС\nКонтроль линий: обрыв, КЗ, изменение импеданса"
       },
       {
         id: 2,
-        sku: "ТКО-00431",
-        group: "ОПС",
-        category: "Приборы приемно-контрольные (ППКП)",
-        title: "Сигнал-20М Прибор приемно-контрольный охранно-пожарный (Болид)",
-        price: 13950,
-        stock: 35,
-        specs: "20 радиальных шлейфов сигнализации\nИнтерфейс RS-485\nЖК-дисплей для индикации состояния\nПитание: 10.2 - 28.4 В"
+        sku: "VCTR-PA-500",
+        category: "Усилители мощности",
+        title: "Усилитель трансляционный мощности ВЕКТОР-УМ-500",
+        price: 78200,
+        stock: 8,
+        specs: "Номинальная мощность: 500 Вт\nВыходное напряжение: 100 В / 70 В\nЗащита от перегрузки и перегрева\nАвтоматический переход на резервное питание 24 В"
       },
       {
         id: 3,
-        sku: "ТКО-00782",
-        group: "ГО и ЧС",
-        category: "Оповещатели и ГО ЧС",
-        title: "Оповещатель комбинированный светозвуковой Маяк-12К",
-        price: 890,
-        stock: 190,
-        specs: "Уровень звукового сигнала: 105 дБ\nНапряжение: 12 В\nУличное исполнение: IP55\nДиапазон температур: -50...+55 °С"
+        sku: "VCTR-CS-10",
+        category: "Громкоговорители ГО ЧС",
+        title: "Громкоговоритель потолочный ВЕКТОР-ГП-10/100В",
+        price: 1850,
+        stock: 420,
+        specs: "Мощность: 10 / 5 / 2.5 Вт (отводы трансформатора)\nЗвуковое давление (1 Вт / 1 м): 92 дБ\nОгнезащитный колпак (металл)\nДиапазон частот: 110 - 18000 Гц"
       },
       {
         id: 4,
-        sku: "ТКО-01255",
-        group: "Видеонаблюдение",
-        category: "IP-видеонаблюдение",
-        title: "IP-камера уличная 4 Мп цилиндрическая с ИК-подсветкой 30м",
-        price: 5490,
-        stock: 62,
-        specs: "Матрица: 1/3 CMOS 4 Мп\nОбъектив: 2.8 мм (угол 104°)\nПоддержка PoE (802.3af)\nКласс защиты: IP67"
+        sku: "VCTR-HS-30",
+        category: "Громкоговорители ГО ЧС",
+        title: "Рупорный громкоговоритель уличный ВЕКТОР-ГР-30 (ГО ЧС)",
+        price: 4950,
+        stock: 160,
+        specs: "Мощность: 30 Вт / 100 В\nЗвуковое давление: не менее 118 дБ\nКласс защиты: IP66 (всепогодный)\nМатериал: ударопрочный ABS-пластик"
       },
       {
         id: 5,
-        sku: "ТКО-00623",
-        group: "СКУД",
-        category: "СКУД и турникеты",
-        title: "Контроллер СКУД Z-5R автономный на 1364 ключа (Iron Logic)",
-        price: 1320,
-        stock: 280,
-        specs: "Количество ключей: 1364 шт\nПротокол: Dallas Touch Memory / Wiegand 26\nСветовая и звуковая индикация\nТок коммутации: до 5 А"
+        sku: "VCTR-RM-04",
+        category: "Микрофонные пульты",
+        title: "Микрофонный пульт дистанционный ВЕКТОР-ПМ-4",
+        price: 24300,
+        stock: 22,
+        specs: "Количество зон прямого выбора: 4 зоны + Все зоны\nИнтерфейс связи: RS-485 (до 1000 метров)\nВстроенный сигнал привлечения внимания (Gong)\nПитание по линии связи"
       },
       {
         id: 6,
-        sku: "ТКО-00891",
-        group: "Источники питания",
-        category: "Блоки питания РИП/ИБП",
-        title: "РИП-12 исп. 05 (РИП-12-3/17М1) Источник резервированного питания (Болид)",
-        price: 7420,
-        stock: 48,
-        specs: "Выходное напряжение: 12 В\nНоминальный ток: 3 А\nПод аккумулятор: 17 А*ч\nИнтерфейс RS-485 для передачи телеметрии"
-      },
-      {
-        id: 7,
-        sku: "ТКО-00914",
-        group: "Кабельная продукция",
-        category: "Огнестойкий кабель FRLS/FRHF",
-        title: "Кабель КПСнг(А)-FRLS 1х2х0.75 мм огнестойкий (бухта 200м)",
-        price: 46.5,
-        stock: 4200,
-        specs: "Сохранение работоспособности в огне: 180 минут\nНизкое дымогазовыделение LS\nСертификат соответствия ГОСТ 31565-2012"
+        sku: "VCTR-BP-24",
+        category: "Блоки резервирования",
+        title: "Блок бесперебойного питания ВЕКТОР-БП-24/20",
+        price: 36400,
+        stock: 19,
+        specs: "Выходное напряжение: 24 В DC\nМаксимальный ток нагрузки: 20 А\nМесто под 2 АКБ по 40 А*ч\nКонтроль сетевого и резервного напряжения"
       }
     ];
 
-    let catalog = JSON.parse(localStorage.getItem('intektra_tinko_db')) || initialTinkoCatalog;
+    let products = JSON.parse(localStorage.getItem('intektra_vector_db')) || initialVectorProducts;
     let cart = [];
-    let activeCategory = 'all';
-    let activeGroup = 'all';
+    let activeFilter = 'all';
 
     function saveDB() {
-      localStorage.setItem('intektra_tinko_db', JSON.stringify(catalog));
-      updateCategoryCounts();
+      localStorage.setItem('intektra_vector_db', JSON.stringify(products));
     }
 
-    function restoreDefaults() {
-      if (confirm('Сбросить базу каталога к исходным заводским позициям ТИНКО?')) {
-        catalog = [...initialTinkoCatalog];
+    function resetToVectorStandard() {
+      if (confirm('Сбросить весь каталог к эталонной линейке ВЕКТОР?')) {
+        products = [...initialVectorProducts];
         saveDB();
-        applyFilters();
+        renderCards();
         renderAdminTable();
       }
     }
 
-    // Вкладки
-    function switchTab(tabId) {
-      document.getElementById('tab-shop').style.display = tabId === 'shop' ? 'grid' : 'none';
-      document.getElementById('tab-admin').style.display = tabId === 'admin' ? 'block' : 'none';
-      document.getElementById('tab-cart').style.display = tabId === 'cart' ? 'block' : 'none';
+    // Переключение вкладок
+    function switchView(view) {
+      document.getElementById('view-main').style.display = view === 'main' ? 'block' : 'none';
+      document.getElementById('view-admin').style.display = view === 'admin' ? 'block' : 'none';
+      document.getElementById('view-cart').style.display = view === 'cart' ? 'block' : 'none';
+      document.getElementById('view-hero').style.display = view === 'main' ? 'block' : 'none';
 
-      document.querySelectorAll('.header-nav .btn').forEach(b => b.classList.remove('active'));
-      const activeBtn = document.getElementById(`btn-view-${tabId}`);
+      document.querySelectorAll('.nav-links .btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`btn-tab-${view}`);
       if (activeBtn) activeBtn.classList.add('active');
 
-      if (tabId === 'shop') applyFilters();
-      if (tabId === 'admin') renderAdminTable();
-      if (tabId === 'cart') renderCartTable();
+      if (view === 'main') renderCards();
+      if (view === 'admin') renderAdminTable();
+      if (view === 'cart') renderCart();
     }
 
-    // Фильтрация
-    function filterByGroup(group, el) {
-      activeGroup = group;
-      activeCategory = 'all';
-      document.querySelectorAll('.catalog-bar div').forEach(d => d.classList.remove('active'));
-      el.classList.add('active');
-      document.querySelectorAll('.tree-item').forEach(i => i.classList.remove('active'));
-      document.querySelector('.tree-item').classList.add('active');
-      applyFilters();
+    function filterByTab(category, el) {
+      activeFilter = category;
+      if (el) {
+        document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+      }
+      renderCards();
     }
 
-    function selectCategory(cat, el) {
-      activeCategory = cat;
-      document.querySelectorAll('.tree-item').forEach(i => i.classList.remove('active'));
-      el.classList.add('active');
-      applyFilters();
-    }
+    function renderCards() {
+      const search = (document.getElementById('filter-input')?.value || '').toLowerCase().trim();
+      const container = document.getElementById('cards-container');
 
-    function applyFilters() {
-      const search = (document.getElementById('global-search').value || '').toLowerCase().trim();
-      const container = document.getElementById('products-container');
-
-      const filtered = catalog.filter(item => {
-        const matchesGroup = activeGroup === 'all' || item.group === activeGroup;
-        const matchesCat = activeCategory === 'all' || item.category === activeCategory;
-        const matchesSearch = item.title.toLowerCase().includes(search) || 
-                              item.sku.toLowerCase().includes(search) ||
-                              (item.specs && item.specs.toLowerCase().includes(search));
-        return matchesGroup && matchesCat && matchesSearch;
+      const filtered = products.filter(p => {
+        const matchesCategory = activeFilter === 'all' || p.category === activeFilter;
+        const matchesSearch = p.title.toLowerCase().includes(search) || p.sku.toLowerCase().includes(search);
+        return matchesCategory && matchesSearch;
       });
 
-      document.getElementById('total-shown').innerText = filtered.length;
-      document.getElementById('current-category-name').innerText = activeCategory === 'all' ? (activeGroup === 'all' ? 'Все разделы оборудования' : activeGroup) : activeCategory;
-
       if (filtered.length === 0) {
-        container.innerHTML = `<div style="grid-column: 1/-1; padding: 4rem; text-align: center; color: #888;">По заданным критериям оборудования не найдено.</div>`;
+        container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #888;">В данном разделе номенклатура отсутствует</div>`;
         return;
       }
 
       container.innerHTML = filtered.map(item => `
-        <div class="card">
+        <div class="device-card">
           <div>
-            <div class="card-sku">Арт: ${escapeHtml(item.sku)}</div>
-            <div class="card-category">${escapeHtml(item.category)}</div>
-            <div class="card-title">${escapeHtml(item.title)}</div>
-            <div class="card-specs">${escapeHtml(item.specs || 'Технические параметры уточняйте по запросу')}</div>
-            <div class="card-stock ${item.stock < 10 ? 'low' : ''}">
-              ✔ В наличии на складе: ${item.stock} шт
+            <div class="card-meta">
+              <span class="card-sku">${escapeHtml(item.sku)}</span>
+              <span class="card-tag">ТР ЕАЭС 043</span>
+            </div>
+            <h3 class="card-title">${escapeHtml(item.title)}</h3>
+            <div class="card-specs">${escapeHtml(item.specs)}</div>
+            <div class="docs-links">
+              <a href="#pdf" class="doc-pill" onclick="alert('Скачивание паспорта изделия ${item.sku}')">Паспорт PDF</a>
+              <a href="#dwg" class="doc-pill" onclick="alert('Скачивание схемы подключения DWG')">Схема DWG</a>
+              <a href="#cert" class="doc-pill" onclick="alert('Сертификат пожарной безопасности доступен для скачивания')">Сертификат</a>
             </div>
           </div>
           <div class="card-footer">
-            <div class="card-price">${Number(item.price).toLocaleString('ru-RU')} ₽ <span>с НДС</span></div>
-            <button class="btn btn-accent btn-sm" onclick="addToCart(${item.id})">+ В заказ</button>
+            <div class="card-price">${Number(item.price).toLocaleString('ru-RU')} ₽ <small>с НДС</small></div>
+            <button class="btn btn-red" style="padding: 0.45rem 0.8rem; font-size: 0.8rem;" onclick="addToCart(${item.id})">В проект</button>
           </div>
         </div>
       `).join('');
-
-      updateCategoryCounts();
     }
 
-    function updateCategoryCounts() {
-      document.getElementById('count-all').innerText = catalog.length;
-      const countMap = {
-        'Извещатели пожарные': 'count-1',
-        'Приборы приемно-контрольные (ППКП)': 'count-2',
-        'Оповещатели и ГО ЧС': 'count-3',
-        'IP-видеонаблюдение': 'count-4',
-        'СКУД и турникеты': 'count-5',
-        'Блоки питания РИП/ИБП': 'count-6',
-        'Огнестойкий кабель FRLS/FRHF': 'count-7'
-      };
-
-      for (let [catName, elementId] of Object.entries(countMap)) {
-        const el = document.getElementById(elementId);
-        if (el) el.innerText = catalog.filter(p => p.category === catName).length;
-      }
-    }
-
-    // Создание товара (Админка)
-    function createProduct(e) {
+    // Админка
+    function handleCreateDevice(e) {
       e.preventDefault();
       const sku = document.getElementById('add-sku').value.trim();
 
-      if (catalog.some(i => i.sku.toLowerCase() === sku.toLowerCase())) {
-        alert('Позиция с таким артикулом уже зарегистрирована!');
+      if (products.some(p => p.sku.toLowerCase() === sku.toLowerCase())) {
+        alert('Прибор с таким артикулом уже существует в базе!');
         return;
       }
 
       const item = {
         id: Date.now(),
         sku: sku,
-        group: document.getElementById('add-group').value,
         category: document.getElementById('add-category').value,
         title: document.getElementById('add-title').value.trim(),
         price: parseFloat(document.getElementById('add-price').value),
@@ -757,39 +672,34 @@
         specs: document.getElementById('add-specs').value.trim()
       };
 
-      catalog.unshift(item);
+      products.unshift(item);
       saveDB();
       e.target.reset();
       renderAdminTable();
-      alert(`Товар «${item.title}» успешно добавлен в каталог!`);
+      alert(`Прибор «${item.title}» успешно внесен в линейку ВЕКТОР!`);
     }
 
-    // Таблица админки
     function renderAdminTable() {
       const tbody = document.getElementById('admin-table-body');
-      tbody.innerHTML = catalog.map(item => `
+      tbody.innerHTML = products.map(item => `
         <tr>
           <td><strong>${escapeHtml(item.sku)}</strong></td>
-          <td>
-            <strong>${escapeHtml(item.title)}</strong>
-            <div style="font-size: 0.78rem; color: #666;">${escapeHtml(item.specs)}</div>
-          </td>
+          <td><strong>${escapeHtml(item.title)}</strong></td>
           <td>${escapeHtml(item.category)}</td>
           <td><strong>${Number(item.price).toLocaleString('ru-RU')} ₽</strong></td>
-          <td>${item.stock}</td>
+          <td>${item.stock} шт</td>
           <td>
-            <div style="display: flex; gap: 4px;">
-              <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.8rem;" onclick="openEditModal(${item.id})">Изм.</button>
-              <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.8rem; color: var(--accent);" onclick="deleteItem(${item.id})">&times;</button>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn btn-ghost" style="padding: 2px 8px; font-size: 0.78rem;" onclick="openEditModal(${item.id})">Изм.</button>
+              <button class="btn btn-ghost" style="padding: 2px 8px; font-size: 0.78rem; color: var(--brand-red);" onclick="deleteItem(${item.id})">&times;</button>
             </div>
           </td>
         </tr>
       `).join('');
     }
 
-    // Редактирование
     function openEditModal(id) {
-      const item = catalog.find(i => i.id === id);
+      const item = products.find(i => i.id === id);
       if (!item) return;
 
       document.getElementById('edit-id').value = item.id;
@@ -807,66 +717,63 @@
       document.getElementById('edit-modal').style.display = 'none';
     }
 
-    function saveProductEdit(e) {
+    function handleSaveEdit(e) {
       e.preventDefault();
       const id = parseInt(document.getElementById('edit-id').value);
-      const index = catalog.findIndex(i => i.id === id);
+      const index = products.findIndex(p => p.id === id);
 
       if (index !== -1) {
-        catalog[index].sku = document.getElementById('edit-sku').value.trim();
-        catalog[index].category = document.getElementById('edit-category').value;
-        catalog[index].price = parseFloat(document.getElementById('edit-price').value);
-        catalog[index].stock = parseInt(document.getElementById('edit-stock').value) || 0;
-        catalog[index].title = document.getElementById('edit-title').value.trim();
-        catalog[index].specs = document.getElementById('edit-specs').value.trim();
+        products[index].sku = document.getElementById('edit-sku').value.trim();
+        products[index].category = document.getElementById('edit-category').value;
+        products[index].price = parseFloat(document.getElementById('edit-price').value);
+        products[index].stock = parseInt(document.getElementById('edit-stock').value) || 0;
+        products[index].title = document.getElementById('edit-title').value.trim();
+        products[index].specs = document.getElementById('edit-specs').value.trim();
 
         saveDB();
         closeEditModal();
         renderAdminTable();
-        applyFilters();
+        renderCards();
+        alert('Данные карточки обновлены!');
       }
     }
 
     function deleteItem(id) {
-      if (confirm('Удалить эту позицию из номенклатуры?')) {
-        catalog = catalog.filter(i => i.id !== id);
+      if (confirm('Удалить эту позицию из номенклатуры ВЕКТОР?')) {
+        products = products.filter(i => i.id !== id);
         saveDB();
         renderAdminTable();
-        applyFilters();
+        renderCards();
       }
     }
 
-    // Экспорт в файл JSON
-    function exportDatabaseJSON() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(catalog, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", "intektra_catalog.json");
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
+    function exportDataJSON() {
+      const blob = new Blob([JSON.stringify(products, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "vector_equipment_catalog.json";
+      a.click();
+      URL.revokeObjectURL(url);
     }
 
-    // Корзина / Спецификация
+    // Спецификация (Корзина)
     function addToCart(id) {
-      const product = catalog.find(p => p.id === id);
-      if (!product) return;
+      const p = products.find(i => i.id === id);
+      if (!p) return;
 
-      const exist = cart.find(i => i.id === id);
-      if (exist) {
-        exist.qty++;
-      } else {
-        cart.push({ ...product, qty: 1 });
-      }
+      const item = cart.find(i => i.id === id);
+      if (item) item.qty++;
+      else cart.push({ ...p, qty: 1 });
 
-      document.getElementById('cart-badge').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
-      alert(`Позиция «${product.title}» добавлена в спецификацию`);
+      document.getElementById('cart-counter').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
+      alert(`Оборудование «${p.title}» добавлено в спецификацию проекта`);
     }
 
-    function renderCartTable() {
-      const wrapper = document.getElementById('cart-table-wrapper');
+    function renderCart() {
+      const box = document.getElementById('cart-content-wrapper');
       if (cart.length === 0) {
-        wrapper.innerHTML = '<p style="color: #777;">В спецификации пока нет оборудования. Перейдите в каталог для выбора.</p>';
+        box.innerHTML = '<p style="color: #64748b;">Спецификация пуста. Перейдите в каталог оборудования линейки ВЕКТОР для добавления позиций.</p>';
         return;
       }
 
@@ -876,10 +783,10 @@
           <thead>
             <tr>
               <th style="width: 120px;">Артикул</th>
-              <th>Наименование позиции</th>
-              <th style="width: 100px;">Кол-во</th>
-              <th style="width: 120px;">Цена с НДС</th>
-              <th style="width: 140px;">Сумма с НДС</th>
+              <th>Наименование оборудования</th>
+              <th style="width: 90px;">Кол-во</th>
+              <th style="width: 130px;">Цена с НДС</th>
+              <th style="width: 140px;">Сумма</th>
               <th style="width: 50px;"></th>
             </tr>
           </thead>
@@ -894,72 +801,59 @@
             <td><strong>${escapeHtml(item.sku)}</strong></td>
             <td>${escapeHtml(item.title)}</td>
             <td>
-              <input type="number" min="1" value="${item.qty}" style="width: 70px; padding: 4px;" onchange="updateCartQty(${item.id}, this.value)">
+              <input type="number" min="1" value="${item.qty}" style="width: 65px; padding: 4px;" onchange="updateQty(${item.id}, this.value)">
             </td>
             <td>${Number(item.price).toLocaleString('ru-RU')} ₽</td>
             <td><strong>${Number(sum).toLocaleString('ru-RU')} ₽</strong></td>
-            <td><button class="btn btn-outline" style="padding: 2px 6px; color: var(--accent);" onclick="removeFromCart(${item.id})">&times;</button></td>
+            <td><button class="btn btn-ghost" style="padding: 2px 6px; color: var(--brand-red);" onclick="removeFromCart(${item.id})">&times;</button></td>
           </tr>
         `;
       });
 
-      const nds = total * 0.2 / 1.2;
-
       html += `
           </tbody>
         </table>
-        <div style="text-align: right; margin-top: 1.5rem; font-size: 1.1rem;">
-          <div>В том числе НДС 20%: <strong>${Number(nds).toLocaleString('ru-RU', {maximumFractionDigits: 2})} ₽</strong></div>
-          <div style="font-size: 1.4rem; color: var(--accent); margin-top: 5px;">Итого к оплате: <strong>${Number(total).toLocaleString('ru-RU')} ₽</strong></div>
+        <div style="text-align: right; margin-top: 1.5rem; font-size: 1.25rem;">
+          Итого по спецификации: <strong style="color: var(--brand-red);">${Number(total).toLocaleString('ru-RU')} ₽</strong>
         </div>
       `;
-      wrapper.innerHTML = html;
+      box.innerHTML = html;
     }
 
-    function updateCartQty(id, val) {
+    function updateQty(id, val) {
       const item = cart.find(i => i.id === id);
       if (item) {
         item.qty = Math.max(1, parseInt(val) || 1);
-        renderCartTable();
-        document.getElementById('cart-badge').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
+        renderCart();
+        document.getElementById('cart-counter').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
       }
     }
 
     function removeFromCart(id) {
       cart = cart.filter(i => i.id !== id);
-      renderCartTable();
-      document.getElementById('cart-badge').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
+      renderCart();
+      document.getElementById('cart-counter').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
     }
 
-    function sendOrder() {
-      if (cart.length === 0) return alert('Спецификация пуста!');
+    function submitOrder() {
+      if (cart.length === 0) return alert('Спецификация пуста');
       const org = document.getElementById('order-org').value.trim();
       const phone = document.getElementById('order-phone').value.trim();
-      const email = document.getElementById('order-email').value.trim();
 
-      if (!org || !phone) {
-        alert('Пожалуйста, укажите реквизиты компании и телефон!');
-        return;
-      }
+      if (!org || !phone) return alert('Укажите наименование компании и телефон инженера!');
 
-      alert(`Заявка принята в обработку!\nСпецификация отправлена в отдел комплектации.\nМенеджер свяжется с вами по номеру ${phone}.`);
+      alert('Запрос на ТКП и резервирование оборудования ВЕКТОР успешно сформирован!');
       cart = [];
-      document.getElementById('cart-badge').innerText = 0;
-      switchTab('shop');
+      document.getElementById('cart-counter').innerText = 0;
+      switchView('main');
     }
 
     function escapeHtml(text) {
       if (!text) return '';
-      return text.toString()
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+      return text.toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
 
-    // Инициализация при старте
-    applyFilters();
+    renderCards();
   </script>
 </body>
 </html>
