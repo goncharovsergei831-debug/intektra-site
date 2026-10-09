@@ -3,533 +3,802 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ИНТЕКТРА — Инженерное оборудование, слаботочка, ГО и ЧС</title>
+  <title>ИНТЕКТРА — Комплексные поставки систем безопасности, слаботочки, ГО и ЧС</title>
   <style>
     :root {
-      --primary: #0f4c81;
-      --primary-dark: #0a3358;
-      --accent: #d84315;
-      --bg: #f5f7fa;
+      --primary: #004b87;       /* Классический синий ТИНКО */
+      --primary-dark: #003366;
+      --accent: #e30613;        /* Акцентный красный */
+      --accent-hover: #b8050f;
+      --bg: #f4f6f8;
+      --text: #222;
+      --text-muted: #666;
+      --border: #d0d7de;
       --card-bg: #ffffff;
-      --border: #dcdfe6;
-      --text: #2c3e50;
-      --muted: #606266;
+      --tag-bg: #eef3f8;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding-bottom: 60px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.4; }
 
-    /* Шапка */
+    /* Верхняя информационная плашка */
+    .top-bar {
+      background: #1a2530;
+      color: #ccc;
+      font-size: 0.8rem;
+      padding: 6px 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .top-bar a { color: #fff; text-decoration: none; margin-left: 15px; }
+
+    /* Основная шапка */
     header {
       background: #fff;
       border-bottom: 2px solid var(--primary);
-      padding: 0.8rem 2rem;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .brand { display: flex; flex-direction: column; }
+    .brand-title { font-size: 1.6rem; font-weight: 900; color: var(--primary); letter-spacing: 0.5px; }
+    .brand-sub { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+
+    .search-bar {
+      flex: 1;
+      max-width: 600px;
+      display: flex;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border: 2px solid var(--primary);
+      border-right: none;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+      font-size: 0.95rem;
+    }
+    .search-bar button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0 1.5rem;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .header-nav { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      padding: 0.6rem 1.1rem;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-accent { background: var(--accent); color: #fff; }
+    .btn-accent:hover { background: var(--accent-hover); }
+    .btn-outline { border-color: var(--border); background: #fff; color: var(--text); }
+    .btn-outline:hover, .btn-outline.active { border-color: var(--primary); color: var(--primary); background: #f0f7ff; }
+
+    /* Навигационная полоса разделов ТИНКО */
+    .catalog-bar {
+      background: var(--primary);
+      color: #fff;
+      padding: 0 2rem;
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .catalog-bar div {
+      padding: 10px 6px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .catalog-bar div:hover, .catalog-bar div.active {
+      border-bottom-color: var(--accent);
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* Макет страниц */
+    .container { max-width: 1440px; margin: 1.5rem auto; padding: 0 1rem; }
+    .main-grid { display: grid; grid-template-columns: 290px 1fr; gap: 1.5rem; }
+
+    /* Левое дерево каталога (ТИНКО-стиль) */
+    .tree-menu {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.8rem 0;
+    }
+    .tree-title {
+      padding: 0.6rem 1.2rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      color: var(--primary);
+      border-bottom: 2px solid #eee;
+      margin-bottom: 0.5rem;
+    }
+    .tree-item {
+      padding: 0.55rem 1.2rem;
+      font-size: 0.88rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .brand { display: flex; align-items: baseline; gap: 10px; }
-    .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); letter-spacing: 0.5px; }
-    .tagline { font-size: 0.85rem; color: var(--muted); }
-
-    .nav-actions { display: flex; gap: 10px; align-items: center; }
-    .btn {
-      padding: 0.55rem 1.1rem;
-      border-radius: 4px;
-      font-weight: 600;
-      font-size: 0.9rem;
       cursor: pointer;
-      border: 1px solid transparent;
-      transition: all 0.2s;
+      border-left: 3px solid transparent;
     }
-    .btn-outline { background: transparent; border-color: var(--primary); color: var(--primary); }
-    .btn-outline:hover, .btn-outline.active { background: var(--primary); color: #fff; }
-    .btn-accent { background: var(--accent); color: #fff; }
-    .btn-accent:hover { background: #bf360c; }
-    .btn-success { background: #2e7d32; color: #fff; }
-    .btn-danger { background: #c62828; color: #fff; }
-    .btn-sm { padding: 0.35rem 0.6rem; font-size: 0.8rem; }
+    .tree-item:hover { background: #f5f8fc; color: var(--primary); }
+    .tree-item.active {
+      background: #eef4fb;
+      color: var(--primary);
+      font-weight: 700;
+      border-left-color: var(--primary);
+    }
+    .tree-count { font-size: 0.75rem; color: #888; background: #eee; padding: 1px 6px; border-radius: 10px; }
 
-    /* Контейнер */
-    .container { max-width: 1300px; margin: 2rem auto; padding: 0 1rem; }
-
-    /* Вкладка: Каталог */
-    .catalog-layout { display: grid; grid-template-columns: 260px 1fr; gap: 1.5rem; }
-    
-    .sidebar {
+    /* Сетка товаров */
+    .catalog-header {
       background: #fff;
-      padding: 1.2rem;
-      border-radius: 6px;
       border: 1px solid var(--border);
-      height: fit-content;
-    }
-    .sidebar h3 { font-size: 1rem; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
-    .cat-btn {
-      display: block;
-      width: 100%;
-      text-align: left;
-      padding: 0.6rem 0.8rem;
-      margin-bottom: 0.4rem;
-      background: none;
-      border: none;
       border-radius: 4px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      color: var(--text);
+      padding: 0.8rem 1.2rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .cat-btn:hover, .cat-btn.active { background: #e3f2fd; color: var(--primary); font-weight: 600; }
-
-    .cards-grid {
+    .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
       gap: 1.2rem;
     }
-    .product-card {
+    .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.2rem;
+      border-radius: 4px;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: relative;
+      transition: transform 0.15s, box-shadow 0.15s;
     }
-    .card-sku { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; margin-bottom: 0.3rem; }
-    .card-title { font-size: 1.05rem; font-weight: 600; line-height: 1.35; margin-bottom: 0.6rem; }
-    .card-cat { display: inline-block; font-size: 0.75rem; background: #e8f0fe; color: var(--primary); padding: 2px 6px; border-radius: 3px; margin-bottom: 0.8rem; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
+    .card-sku { font-size: 0.75rem; color: #777; margin-bottom: 0.3rem; }
+    .card-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+      line-height: 1.35;
+      min-height: 2.7em;
+    }
+    .card-category {
+      font-size: 0.72rem;
+      background: var(--tag-bg);
+      color: var(--primary);
+      padding: 2px 6px;
+      border-radius: 3px;
+      width: fit-content;
+      margin-bottom: 0.6rem;
+    }
     .card-specs {
-      font-size: 0.83rem;
-      color: #555;
-      background: #fafafa;
-      border: 1px solid #eee;
+      font-size: 0.82rem;
+      color: #444;
+      background: #fcfcfc;
+      border: 1px solid #f0f0f0;
       border-radius: 4px;
-      padding: 0.5rem;
-      margin-bottom: 1rem;
-      line-height: 1.4;
+      padding: 0.6rem;
+      margin-bottom: 0.8rem;
+      min-height: 5.5em;
       white-space: pre-line;
     }
-    .card-stock { font-size: 0.8rem; color: #2e7d32; margin-bottom: 0.8rem; }
-    .card-stock.out { color: #c62828; }
-    .card-bottom {
+    .card-stock {
+      font-size: 0.78rem;
+      color: #2e7d32;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .card-stock.low { color: #d84315; }
+    .card-footer {
+      border-top: 1px solid #f0f0f0;
+      padding-top: 0.8rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-top: 1px solid #f0f0f0;
-      padding-top: 0.8rem;
     }
-    .card-price { font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+    .card-price { font-size: 1.25rem; font-weight: 800; color: var(--accent); }
+    .card-price span { font-size: 0.8rem; font-weight: normal; color: #777; }
 
-    /* Таблицы админки */
-    .panel-box {
+    /* Таблицы админки и корзины */
+    .panel {
       background: #fff;
-      padding: 1.5rem;
-      border-radius: 6px;
       border: 1px solid var(--border);
-      margin-bottom: 2rem;
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
     }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
-    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
-    th { background: #f8f9fa; color: #333; }
-    .actions-col { display: flex; gap: 6px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.88rem; }
+    th, td { padding: 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: #f7f9fa; font-weight: 700; color: #333; }
 
     /* Формы */
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-    .form-group { margin-bottom: 1rem; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem; }
-    .form-control {
-      width: 100%;
-      padding: 0.55rem;
+    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.3rem; color: #444; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 0.6rem;
       border: 1px solid var(--border);
       border-radius: 4px;
       font-size: 0.9rem;
     }
-    .form-control:focus { outline: none; border-color: var(--primary); }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
 
     /* Модальное окно редактирования */
     .modal-overlay {
       display: none;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      inset: 0;
       background: rgba(0,0,0,0.5);
-      z-index: 200;
+      z-index: 2000;
       justify-content: center;
       align-items: center;
     }
     .modal {
       background: #fff;
-      padding: 1.8rem;
-      border-radius: 8px;
-      max-width: 650px;
       width: 90%;
+      max-width: 650px;
+      padding: 1.8rem;
+      border-radius: 6px;
       max-height: 90vh;
       overflow-y: auto;
     }
-    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
   </style>
 </head>
 <body>
 
+  <!-- Верхняя строка -->
+  <div class="top-bar">
+    <div>Поставки сертифицированного оборудования систем безопасности, ГОСТ и ТУ</div>
+    <div>
+      <span>Тел: 8 (800) 555-35-35</span>
+      <a href="mailto:info@intektra.ru">info@intektra.ru</a>
+    </div>
+  </div>
+
+  <!-- Главная шапка -->
   <header>
     <div class="brand">
-      <div class="logo">ИНТЕКТРА</div>
-      <div class="tagline">Оборудование ОПС, СКУД, видеонаблюдения и ГО ЧС</div>
+      <div class="brand-title">ИНТЕКТРА</div>
+      <div class="brand-sub">ОПОРНЫЙ КАТАЛОГ СИСТЕМ БЕЗОПАСНОСТИ</div>
     </div>
-    <div class="nav-actions">
-      <button class="btn btn-outline active" id="btn-tab-shop" onclick="switchView('shop')">Витрина магазина</button>
-      <button class="btn btn-outline" id="btn-tab-admin" onclick="switchView('admin')">⚙️ Админка / Редактор</button>
-      <button class="btn btn-outline" id="btn-tab-cart" onclick="switchView('cart')">Корзина (<span id="cart-counter">0</span>)</button>
+
+    <div class="search-bar">
+      <input type="text" id="global-search" placeholder="Поиск по артикулу, марке или названию (например, ИП 212, Болид, СКУД)..." oninput="applyFilters()">
+      <button onclick="applyFilters()">Найти</button>
+    </div>
+
+    <div class="header-nav">
+      <button class="btn btn-outline active" id="btn-view-shop" onclick="switchTab('shop')">Каталог</button>
+      <button class="btn btn-outline" id="btn-view-cart" onclick="switchTab('cart')">
+        Спецификация / Корзина (<span id="cart-badge">0</span>)
+      </button>
+      <button class="btn btn-primary" id="btn-view-admin" onclick="switchTab('admin')">⚙️ Админка каталога</button>
     </div>
   </header>
 
+  <!-- Горизонтальный классификатор ТИНКО -->
+  <div class="catalog-bar">
+    <div class="active" onclick="filterByGroup('all', this)">Все оборудование</div>
+    <div onclick="filterByGroup('ОПС', this)">Охранно-пожарная сигнализация</div>
+    <div onclick="filterByGroup('ГО и ЧС', this)">Системы оповещения, ГО и ЧС</div>
+    <div onclick="filterByGroup('Видеонаблюдение', this)">Видеонаблюдение</div>
+    <div onclick="filterByGroup('СКУД', this)">Контроль доступа (СКУД)</div>
+    <div onclick="filterByGroup('Источники питания', this)">Источники питания (РИП, ББП)</div>
+    <div onclick="filterByGroup('Кабельная продукция', this)">Кабель и провод монтажный</div>
+    <div onclick="filterByGroup('Автоматика', this)">Шкафы и автоматика</div>
+  </div>
+
   <div class="container">
     
-    <!-- 1. ВИТРИНА МАГАЗИНА -->
-    <div id="view-shop" class="catalog-layout">
-      <aside class="sidebar">
-        <h3>Категории каталога</h3>
-        <button class="cat-btn active" onclick="filterCatalog('all', this)">Все категории</button>
-        <button class="cat-btn" onclick="filterCatalog('ОПС и ГО ЧС', this)">ОПС и ГО ЧС</button>
-        <button class="cat-btn" onclick="filterCatalog('Видеонаблюдение', this)">Видеонаблюдение</button>
-        <button class="cat-btn" onclick="filterCatalog('СКУД', this)">СКУД и автоматика</button>
-        <button class="cat-btn" onclick="filterCatalog('Кабельная продукция', this)">Кабель и крепеж</button>
+    <!-- 1. ВИТРИНА КАТАЛОГА -->
+    <div id="tab-shop" class="main-grid">
+      
+      <!-- Левое дерево категорий в стиле ТИНКО -->
+      <aside class="tree-menu">
+        <div class="tree-title">Классификатор ТИНКО</div>
+        <div class="tree-item active" onclick="selectCategory('all', this)">
+          <span>Все подразделы</span>
+          <span class="tree-count" id="count-all">0</span>
+        </div>
+        <div class="tree-item" onclick="selectCategory('Извещатели пожарные', this)">
+          <span>Извещатели пожарные</span>
+          <span class="tree-count" id="count-1">0</span>
+        </div>
+        <div class="tree-item" onclick="selectCategory('Приборы приемно-контрольные (ППКП)', this)">
+          <span>Приборы ППКП и панели</span>
+          <span class="tree-count" id="count-2">0</span>
+        </div>
+        <div class="tree-item" onclick="selectCategory('Оповещатели и ГО ЧС', this)">
+          <span>Оповещатели, сирены, ГО ЧС</span>
+          <span class="tree-count" id="count-3">0</span>
+        </div>
+        <div class="tree-item" onclick="selectCategory('IP-видеонаблюдение', this)">
+          <span>IP-камеры и видеорегистраторы</span>
+          <span class="tree-count" id="count-4">0</span>
+        </div>
+        <div class="tree-item" onclick="selectCategory('СКУД и турникеты', this)">
+          <span>СКУД, считыватели, замки</span>
+          <span class="tree-count" id="count-5">0</span>
+        </div>
+        <div class="tree-item" onclick="selectCategory('Блоки питания РИП/ИБП', this)">
+          <span>Блоки бесперебойного питания</span>
+          <span class="tree-count" id="count-6">0</span>
+        </div>
+        <div class="tree-item" onclick="selectCategory('Огнестойкий кабель FRLS/FRHF', this)">
+          <span>Огнестойкий кабель ОПС</span>
+          <span class="tree-count" id="count-7">0</span>
+        </div>
       </aside>
 
+      <!-- Основная витрина -->
       <main>
-        <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
-          <input type="text" id="catalog-search" class="form-control" style="max-width: 380px;" placeholder="Поиск по названию или артикулу..." oninput="renderCards()">
-          <span style="font-size: 0.85rem; color: var(--muted);" id="catalog-stat"></span>
+        <div class="catalog-header">
+          <div>
+            <h2 id="current-category-name" style="font-size: 1.25rem; color: var(--primary);">Все разделы оборудования</h2>
+            <div style="font-size: 0.8rem; color: #777;" id="current-category-desc">Комплексная поставка систем безопасности по оптовым ценам</div>
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">
+            Найдено номенклатурных позиций: <strong id="total-shown">0</strong>
+          </div>
         </div>
-        <div class="cards-grid" id="cards-container"></div>
+
+        <div class="product-grid" id="products-container"></div>
       </main>
     </div>
 
-    <!-- 2. АДМИН-ПАНЕЛЬ (СОЗДАНИЕ И РЕДАКТИРОВАНИЕ) -->
-    <div id="view-admin" style="display: none;">
-      <div class="panel-box">
-        <h2 style="margin-bottom: 1rem;">Добавить новый товар</h2>
-        <form id="create-form" onsubmit="handleCreateProduct(event)">
-          <div class="form-grid">
+    <!-- 2. ПАНЕЛЬ АДМИНИСТРАТОРА (СОЗДАНИЕ, ИМПОРТ/ЭКСПОРТ) -->
+    <div id="tab-admin" style="display: none;">
+      
+      <!-- Панель добавления карточки -->
+      <div class="panel">
+        <h2 style="color: var(--primary); margin-bottom: 1rem;">Создание новой карточки товара</h2>
+        <form id="admin-create-form" onsubmit="createProduct(event)">
+          <div class="form-row">
             <div class="form-group">
-              <label>Артикул / SKU</label>
-              <input type="text" id="new-sku" class="form-control" required placeholder="Например: ТКО-10294">
+              <label>Номенклатурный номер / Артикул (SKU)</label>
+              <input type="text" id="add-sku" required placeholder="Например: ТКО-11492">
             </div>
             <div class="form-group">
-              <label>Категория</label>
-              <select id="new-cat" class="form-control">
-                <option value="ОПС и ГО ЧС">ОПС и ГО ЧС</option>
+              <label>Основная группа</label>
+              <select id="add-group">
+                <option value="ОПС">ОПС (Охранно-пожарная сигнализация)</option>
+                <option value="ГО и ЧС">ГО и ЧС (Оповещение)</option>
                 <option value="Видеонаблюдение">Видеонаблюдение</option>
-                <option value="СКУД">СКУД</option>
+                <option value="СКУД">СКУД и автоматика</option>
+                <option value="Источники питания">Источники питания</option>
                 <option value="Кабельная продукция">Кабельная продукция</option>
               </select>
             </div>
             <div class="form-group">
-              <label>Цена (руб.)</label>
-              <input type="number" id="new-price" class="form-control" step="0.01" required placeholder="0.00">
+              <label>Подкатегория каталога ТИНКО</label>
+              <select id="add-category">
+                <option value="Извещатели пожарные">Извещатели пожарные</option>
+                <option value="Приборы приемно-контрольные (ППКП)">Приборы приемно-контрольные (ППКП)</option>
+                <option value="Оповещатели и ГО ЧС">Оповещатели и ГО ЧС</option>
+                <option value="IP-видеонаблюдение">IP-видеонаблюдение</option>
+                <option value="СКУД и турникеты">СКУД и турникеты</option>
+                <option value="Блоки питания РИП/ИБП">Блоки питания РИП/ИБП</option>
+                <option value="Огнестойкий кабель FRLS/FRHF">Огнестойкий кабель FRLS/FRHF</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" style="grid-column: span 2;">
+              <label>Полное торговое наименование</label>
+              <input type="text" id="add-title" required placeholder="Например: ИП 212-141 Извещатель пожарный дымовой оптико-электронный">
             </div>
             <div class="form-group">
-              <label>Остаток на складе</label>
-              <input type="number" id="new-stock" class="form-control" value="10" required>
+              <label>Цена за ед. с НДС (руб.)</label>
+              <input type="number" step="0.01" id="add-price" required placeholder="850.00">
+            </div>
+            <div class="form-group">
+              <label>Складской остаток (шт / м)</label>
+              <input type="number" id="add-stock" value="50" required>
             </div>
           </div>
-          <div class="form-group">
-            <label>Наименование оборудования</label>
-            <input type="text" id="new-title" class="form-control" required placeholder="Например: Извещатель пожарный дымовой оптико-электронный ИП 212-141">
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Технические параметры и соответствие ГОСТ</label>
+            <textarea id="add-specs" rows="3" placeholder="Питание: 9-30 В; Ток потребления: 0.05 мА; Чувствительность: 0.05-0.2 дБ/м; Степень защиты: IP30; Сертификат ТР ЕАЭС 043/2017"></textarea>
           </div>
-          <div class="form-group">
-            <label>Технические характеристики (параметры)</label>
-            <textarea id="new-specs" class="form-control" rows="3" placeholder="Чувствительность: 0.05-0.2 дБ/м&#10;Питание: 9-30 В&#10;Степень защиты: IP30"></textarea>
-          </div>
+
           <div style="display: flex; gap: 10px;">
-            <button type="submit" class="btn btn-accent">+ Создать карточку товара</button>
-            <button type="button" class="btn btn-outline" onclick="resetToDefaults()">Сбросить базу к эталону ТИНКО</button>
+            <button type="submit" class="btn btn-accent">+ Опубликовать карточку в каталог</button>
+            <button type="button" class="btn btn-outline" onclick="exportDatabaseJSON()">📥 Скачать базу каталога (JSON)</button>
+            <button type="button" class="btn btn-outline" onclick="restoreDefaults()">Сбросить на эталон ТИНКО</button>
           </div>
         </form>
       </div>
 
-      <div class="panel-box">
-        <h2>Список товаров в базе (Редактирование на лету)</h2>
-        <table id="admin-table">
+      <!-- Таблица управления всей номенклатурой -->
+      <div class="panel">
+        <h3>Управление номенклатурой базы данных</h3>
+        <table>
           <thead>
             <tr>
-              <th style="width: 110px;">Артикул</th>
-              <th>Наименование и характеристики</th>
-              <th style="width: 140px;">Категория</th>
-              <th style="width: 100px;">Цена</th>
+              <th style="width: 100px;">Артикул</th>
+              <th>Наименование оборудования</th>
+              <th>Категория ТИНКО</th>
+              <th style="width: 110px;">Цена с НДС</th>
               <th style="width: 70px;">Склад</th>
-              <th style="width: 130px;">Действия</th>
+              <th style="width: 120px;">Операции</th>
             </tr>
           </thead>
-          <tbody id="admin-tbody"></tbody>
+          <tbody id="admin-table-body"></tbody>
         </table>
       </div>
     </div>
 
-    <!-- 3. КОРЗИНА И СЧЕТ -->
-    <div id="view-cart" class="panel-box" style="display: none;">
-      <h2>Корзина заказов (Спецификация)</h2>
-      <div id="cart-content"></div>
-      <div style="margin-top: 2rem; max-width: 480px; background: #fafafa; padding: 1.2rem; border-radius: 6px; border: 1px solid var(--border);">
-        <h3 style="margin-bottom: 0.8rem;">Реквизиты для выставления счёта</h3>
-        <div class="form-group">
-          <label>Организация / ИНН / Контактное лицо</label>
-          <input type="text" id="checkout-org" class="form-control" placeholder="ООО Инжиниринг / 7801000000">
+    <!-- 3. СПЕЦИФИКАЦИЯ И ОФОРМЛЕНИЕ ЗАКАЗА -->
+    <div id="tab-cart" class="panel" style="display: none;">
+      <h2 style="color: var(--primary);">Спецификация оборудования к заказу</h2>
+      <div id="cart-table-wrapper" style="margin-top: 1rem;"></div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 400px; gap: 2rem; margin-top: 2rem;">
+        <div>
+          <button class="btn btn-outline" onclick="window.print()">🖨️ Распечатать спецификацию / Сохранить в PDF</button>
         </div>
-        <div class="form-group">
-          <label>Телефон / Email для отправки спецификации</label>
-          <input type="text" id="checkout-contact" class="form-control" placeholder="+7 (999) 000-00-00, info@company.ru">
+        <div style="background: #fafafa; border: 1px solid var(--border); padding: 1.5rem; border-radius: 4px;">
+          <h3 style="margin-bottom: 1rem;">Оформление счёта (B2B)</h3>
+          <div class="form-group" style="margin-bottom: 0.8rem;">
+            <label>Наименование организации / ИНН</label>
+            <input type="text" id="order-org" placeholder="ООО Инженерные Сети, ИНН 7800000000">
+          </div>
+          <div class="form-group" style="margin-bottom: 0.8rem;">
+            <label>Контактный телефон</label>
+            <input type="text" id="order-phone" placeholder="+7 (999) 000-00-00">
+          </div>
+          <div class="form-group" style="margin-bottom: 1.2rem;">
+            <label>Электронная почта для получения счёта</label>
+            <input type="email" id="order-email" placeholder="zakaz@company.ru">
+          </div>
+          <button class="btn btn-accent" style="width: 100%; justify-content: center;" onclick="sendOrder()">Отправить заявку в отдел продаж</button>
         </div>
-        <button class="btn btn-success" style="width: 100%; padding: 0.75rem;" onclick="checkoutOrder()">Сформировать заказ B2B</button>
       </div>
     </div>
 
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО РЕДАКТИРОВАНИЯ КАРТОЧКИ -->
+  <!-- Модальное окно редактирования позиции -->
   <div class="modal-overlay" id="edit-modal">
     <div class="modal">
-      <div class="modal-head">
-        <h3>Редактирование карточки товара</h3>
-        <button style="border: none; background: none; font-size: 1.4rem; cursor: pointer;" onclick="closeEditModal()">&times;</button>
+      <div class="modal-header">
+        <h3 style="color: var(--primary);">Редактирование карточки оборудования</h3>
+        <span style="font-size: 1.5rem; cursor: pointer;" onclick="closeEditModal()">&times;</span>
       </div>
-      <form id="edit-form" onsubmit="handleSaveEdit(event)">
+      <form onsubmit="saveProductEdit(event)">
         <input type="hidden" id="edit-id">
-        <div class="form-grid">
+        <div class="form-row">
           <div class="form-group">
             <label>Артикул</label>
-            <input type="text" id="edit-sku" class="form-control" required>
+            <input type="text" id="edit-sku" required>
           </div>
           <div class="form-group">
-            <label>Категория</label>
-            <select id="edit-cat" class="form-control">
-              <option value="ОПС и ГО ЧС">ОПС и ГО ЧС</option>
-              <option value="Видеонаблюдение">Видеонаблюдение</option>
-              <option value="СКУД">СКУД</option>
-              <option value="Кабельная продукция">Кабельная продукция</option>
+            <label>Категория ТИНКО</label>
+            <select id="edit-category">
+              <option value="Извещатели пожарные">Извещатели пожарные</option>
+              <option value="Приборы приемно-контрольные (ППКП)">Приборы приемно-контрольные (ППКП)</option>
+              <option value="Оповещатели и ГО ЧС">Оповещатели и ГО ЧС</option>
+              <option value="IP-видеонаблюдение">IP-видеонаблюдение</option>
+              <option value="СКУД и турникеты">СКУД и турникеты</option>
+              <option value="Блоки питания РИП/ИБП">Блоки питания РИП/ИБП</option>
+              <option value="Огнестойкий кабель FRLS/FRHF">Огнестойкий кабель FRLS/FRHF</option>
             </select>
           </div>
+        </div>
+        <div class="form-row">
           <div class="form-group">
-            <label>Цена (руб.)</label>
-            <input type="number" id="edit-price" class="form-control" step="0.01" required>
+            <label>Цена с НДС (руб.)</label>
+            <input type="number" step="0.01" id="edit-price" required>
           </div>
           <div class="form-group">
             <label>Остаток на складе</label>
-            <input type="number" id="edit-stock" class="form-control" required>
+            <input type="number" id="edit-stock" required>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 1rem;">
           <label>Наименование</label>
-          <input type="text" id="edit-title" class="form-control" required>
+          <input type="text" id="edit-title" required>
         </div>
-        <div class="form-group">
-          <label>Характеристики</label>
-          <textarea id="edit-specs" class="form-control" rows="4"></textarea>
+        <div class="form-group" style="margin-bottom: 1.2rem;">
+          <label>Технические характеристики</label>
+          <textarea id="edit-specs" rows="4"></textarea>
         </div>
-        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
           <button type="button" class="btn btn-outline" onclick="closeEditModal()">Отмена</button>
-          <button type="submit" class="btn btn-success">Сохранить изменения</button>
+          <button type="submit" class="btn btn-primary">Сохранить изменения</button>
         </div>
       </form>
     </div>
   </div>
 
   <script>
-    // Начальная база позиций в стиле ТД ТИНКО
-    const defaultProducts = [
+    // Первоначальная база оборудования (топовые позиции номенклатуры ТД ТИНКО)
+    const initialTinkoCatalog = [
       {
         id: 1,
-        sku: "ТКО-01492",
-        title: "ИП 212-141 Извещатель пожарный дымовой",
-        category: "ОПС и ГО ЧС",
-        price: 685,
-        stock: 340,
-        specs: "Чувствительность: 0.05-0.2 дБ/м\nПитание: 9-30 В по шлейфу\nТок в дежурном режиме: не более 0.05 мА"
+        sku: "ТКО-00109",
+        group: "ОПС",
+        category: "Извещатели пожарные",
+        title: "ИП 212-141 Извещатель пожарный дымовой оптико-электронный",
+        price: 645,
+        stock: 450,
+        specs: "Чувствительность: 0.05-0.2 дБ/м\nПитание: 9-30 В\nТок в дежурном режиме: не более 0.05 мА\nБазовая розетка в комплекте"
       },
       {
         id: 2,
-        sku: "ТКО-02541",
-        title: "Оповещатель звуковой комбинированный Маяк-12К",
-        category: "ОПС и ГО ЧС",
-        price: 940,
-        stock: 120,
-        specs: "Уровень звукового давления: не менее 105 дБ\nНапряжение питания: 12 В\nИсполнение: уличное IP55"
+        sku: "ТКО-00431",
+        group: "ОПС",
+        category: "Приборы приемно-контрольные (ППКП)",
+        title: "Сигнал-20М Прибор приемно-контрольный охранно-пожарный (Болид)",
+        price: 13950,
+        stock: 35,
+        specs: "20 радиальных шлейфов сигнализации\nИнтерфейс RS-485\nЖК-дисплей для индикации состояния\nПитание: 10.2 - 28.4 В"
       },
       {
         id: 3,
-        sku: "ТКО-08119",
-        title: "IP-камера цилиндрическая уличная 4 Мп с ИК-подсветкой",
-        category: "Видеонаблюдение",
-        price: 6890,
-        stock: 45,
-        specs: "Матрица: 1/3 Progressive Scan CMOS\nОбъектив: 2.8 мм (угол 103°)\nДальность ИК: до 30 м\nКласс защиты: IP67, PoE"
+        sku: "ТКО-00782",
+        group: "ГО и ЧС",
+        category: "Оповещатели и ГО ЧС",
+        title: "Оповещатель комбинированный светозвуковой Маяк-12К",
+        price: 890,
+        stock: 190,
+        specs: "Уровень звукового сигнала: 105 дБ\nНапряжение: 12 В\nУличное исполнение: IP55\nДиапазон температур: -50...+55 °С"
       },
       {
         id: 4,
-        sku: "ТКО-04183",
-        title: "Контроллер СКУД Z-5R на 1364 ключа",
-        category: "СКУД",
-        price: 1350,
-        stock: 210,
-        specs: "Количество ключей: 1364\nПротокол связи со считывателем: Dallas Touch Memory, Wiegand-26\nТок коммутации: до 5А"
+        sku: "ТКО-01255",
+        group: "Видеонаблюдение",
+        category: "IP-видеонаблюдение",
+        title: "IP-камера уличная 4 Мп цилиндрическая с ИК-подсветкой 30м",
+        price: 5490,
+        stock: 62,
+        specs: "Матрица: 1/3 CMOS 4 Мп\nОбъектив: 2.8 мм (угол 104°)\nПоддержка PoE (802.3af)\nКласс защиты: IP67"
       },
       {
         id: 5,
-        sku: "ТКО-09340",
-        title: "Кабель КПСнг(А)-FRLS 1х2х0.75 огнестойкий (бухта 200м)",
-        category: "Кабельная продукция",
-        price: 48,
-        stock: 3200,
-        specs: "Огнестойкость: 180 минут при 750°C\nОболочка: низкое дымогазовыделение LS\nПрименение: шлейфы ОПС и СОУЭ"
+        sku: "ТКО-00623",
+        group: "СКУД",
+        category: "СКУД и турникеты",
+        title: "Контроллер СКУД Z-5R автономный на 1364 ключа (Iron Logic)",
+        price: 1320,
+        stock: 280,
+        specs: "Количество ключей: 1364 шт\nПротокол: Dallas Touch Memory / Wiegand 26\nСветовая и звуковая индикация\nТок коммутации: до 5 А"
+      },
+      {
+        id: 6,
+        sku: "ТКО-00891",
+        group: "Источники питания",
+        category: "Блоки питания РИП/ИБП",
+        title: "РИП-12 исп. 05 (РИП-12-3/17М1) Источник резервированного питания (Болид)",
+        price: 7420,
+        stock: 48,
+        specs: "Выходное напряжение: 12 В\nНоминальный ток: 3 А\nПод аккумулятор: 17 А*ч\nИнтерфейс RS-485 для передачи телеметрии"
+      },
+      {
+        id: 7,
+        sku: "ТКО-00914",
+        group: "Кабельная продукция",
+        category: "Огнестойкий кабель FRLS/FRHF",
+        title: "Кабель КПСнг(А)-FRLS 1х2х0.75 мм огнестойкий (бухта 200м)",
+        price: 46.5,
+        stock: 4200,
+        specs: "Сохранение работоспособности в огне: 180 минут\nНизкое дымогазовыделение LS\nСертификат соответствия ГОСТ 31565-2012"
       }
     ];
 
-    // Инициализация LocalStorage
-    let products = JSON.parse(localStorage.getItem('intektra_products'));
-    if (!products || products.length === 0) {
-      products = defaultProducts;
-      saveProducts();
-    }
-
+    let catalog = JSON.parse(localStorage.getItem('intektra_tinko_db')) || initialTinkoCatalog;
     let cart = [];
-    let currentCategory = 'all';
+    let activeCategory = 'all';
+    let activeGroup = 'all';
 
-    function saveProducts() {
-      localStorage.setItem('intektra_products', JSON.stringify(products));
+    function saveDB() {
+      localStorage.setItem('intektra_tinko_db', JSON.stringify(catalog));
+      updateCategoryCounts();
     }
 
-    function resetToDefaults() {
-      if (confirm('Сбросить весь каталог к демонстрационным позициям ТИНКО?')) {
-        products = [...defaultProducts];
-        saveProducts();
-        renderCards();
+    function restoreDefaults() {
+      if (confirm('Сбросить базу каталога к исходным заводским позициям ТИНКО?')) {
+        catalog = [...initialTinkoCatalog];
+        saveDB();
+        applyFilters();
         renderAdminTable();
       }
     }
 
-    // Навигация
-    function switchView(tab) {
-      document.getElementById('view-shop').style.display = tab === 'shop' ? 'grid' : 'none';
-      document.getElementById('view-admin').style.display = tab === 'admin' ? 'block' : 'none';
-      document.getElementById('view-cart').style.display = tab === 'cart' ? 'block' : 'none';
+    // Вкладки
+    function switchTab(tabId) {
+      document.getElementById('tab-shop').style.display = tabId === 'shop' ? 'grid' : 'none';
+      document.getElementById('tab-admin').style.display = tabId === 'admin' ? 'block' : 'none';
+      document.getElementById('tab-cart').style.display = tabId === 'cart' ? 'block' : 'none';
 
-      document.querySelectorAll('.nav-actions .btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`btn-tab-${tab}`).classList.add('active');
+      document.querySelectorAll('.header-nav .btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`btn-view-${tabId}`);
+      if (activeBtn) activeBtn.classList.add('active');
 
-      if (tab === 'shop') renderCards();
-      if (tab === 'admin') renderAdminTable();
-      if (tab === 'cart') renderCart();
+      if (tabId === 'shop') applyFilters();
+      if (tabId === 'admin') renderAdminTable();
+      if (tabId === 'cart') renderCartTable();
     }
 
     // Фильтрация
-    function filterCatalog(category, el) {
-      currentCategory = category;
-      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+    function filterByGroup(group, el) {
+      activeGroup = group;
+      activeCategory = 'all';
+      document.querySelectorAll('.catalog-bar div').forEach(d => d.classList.remove('active'));
       el.classList.add('active');
-      renderCards();
+      document.querySelectorAll('.tree-item').forEach(i => i.classList.remove('active'));
+      document.querySelector('.tree-item').classList.add('active');
+      applyFilters();
     }
 
-    // Отображение витрины
-    function renderCards() {
-      const search = (document.getElementById('catalog-search').value || '').toLowerCase().trim();
-      const container = document.getElementById('cards-container');
+    function selectCategory(cat, el) {
+      activeCategory = cat;
+      document.querySelectorAll('.tree-item').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
+      applyFilters();
+    }
 
-      const filtered = products.filter(p => {
-        const matchesCategory = currentCategory === 'all' || p.category === currentCategory;
-        const matchesSearch = p.title.toLowerCase().includes(search) || p.sku.toLowerCase().includes(search);
-        return matchesCategory && matchesSearch;
+    function applyFilters() {
+      const search = (document.getElementById('global-search').value || '').toLowerCase().trim();
+      const container = document.getElementById('products-container');
+
+      const filtered = catalog.filter(item => {
+        const matchesGroup = activeGroup === 'all' || item.group === activeGroup;
+        const matchesCat = activeCategory === 'all' || item.category === activeCategory;
+        const matchesSearch = item.title.toLowerCase().includes(search) || 
+                              item.sku.toLowerCase().includes(search) ||
+                              (item.specs && item.specs.toLowerCase().includes(search));
+        return matchesGroup && matchesCat && matchesSearch;
       });
 
-      document.getElementById('catalog-stat').innerText = `Показано позиций: ${filtered.length}`;
+      document.getElementById('total-shown').innerText = filtered.length;
+      document.getElementById('current-category-name').innerText = activeCategory === 'all' ? (activeGroup === 'all' ? 'Все разделы оборудования' : activeGroup) : activeCategory;
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #888;">Позиций не найдено</div>`;
+        container.innerHTML = `<div style="grid-column: 1/-1; padding: 4rem; text-align: center; color: #888;">По заданным критериям оборудования не найдено.</div>`;
         return;
       }
 
-      container.innerHTML = filtered.map(p => `
-        <div class="product-card">
+      container.innerHTML = filtered.map(item => `
+        <div class="card">
           <div>
-            <div class="card-sku">Арт: ${escapeHtml(p.sku)}</div>
-            <div class="card-cat">${escapeHtml(p.category)}</div>
-            <h4 class="card-title">${escapeHtml(p.title)}</h4>
-            <div class="card-specs">${escapeHtml(p.specs || 'Технические параметры по запросу')}</div>
-            <div class="card-stock ${p.stock > 0 ? '' : 'out'}">
-              ${p.stock > 0 ? `● В наличии на складе (\${p.stock} шт)` : '○ Под заказ (1-3 дня)'}
+            <div class="card-sku">Арт: ${escapeHtml(item.sku)}</div>
+            <div class="card-category">${escapeHtml(item.category)}</div>
+            <div class="card-title">${escapeHtml(item.title)}</div>
+            <div class="card-specs">${escapeHtml(item.specs || 'Технические параметры уточняйте по запросу')}</div>
+            <div class="card-stock ${item.stock < 10 ? 'low' : ''}">
+              ✔ В наличии на складе: ${item.stock} шт
             </div>
           </div>
-          <div class="card-bottom">
-            <div class="card-price">${Number(p.price).toLocaleString('ru-RU')} ₽</div>
-            <button class="btn btn-accent btn-sm" onclick="addToCart(${p.id})">В корзину</button>
+          <div class="card-footer">
+            <div class="card-price">${Number(item.price).toLocaleString('ru-RU')} ₽ <span>с НДС</span></div>
+            <button class="btn btn-accent btn-sm" onclick="addToCart(${item.id})">+ В заказ</button>
           </div>
         </div>
       `).join('');
+
+      updateCategoryCounts();
     }
 
-    // Отображение таблицы в админке
+    function updateCategoryCounts() {
+      document.getElementById('count-all').innerText = catalog.length;
+      const countMap = {
+        'Извещатели пожарные': 'count-1',
+        'Приборы приемно-контрольные (ППКП)': 'count-2',
+        'Оповещатели и ГО ЧС': 'count-3',
+        'IP-видеонаблюдение': 'count-4',
+        'СКУД и турникеты': 'count-5',
+        'Блоки питания РИП/ИБП': 'count-6',
+        'Огнестойкий кабель FRLS/FRHF': 'count-7'
+      };
+
+      for (let [catName, elementId] of Object.entries(countMap)) {
+        const el = document.getElementById(elementId);
+        if (el) el.innerText = catalog.filter(p => p.category === catName).length;
+      }
+    }
+
+    // Создание товара (Админка)
+    function createProduct(e) {
+      e.preventDefault();
+      const sku = document.getElementById('add-sku').value.trim();
+
+      if (catalog.some(i => i.sku.toLowerCase() === sku.toLowerCase())) {
+        alert('Позиция с таким артикулом уже зарегистрирована!');
+        return;
+      }
+
+      const item = {
+        id: Date.now(),
+        sku: sku,
+        group: document.getElementById('add-group').value,
+        category: document.getElementById('add-category').value,
+        title: document.getElementById('add-title').value.trim(),
+        price: parseFloat(document.getElementById('add-price').value),
+        stock: parseInt(document.getElementById('add-stock').value) || 0,
+        specs: document.getElementById('add-specs').value.trim()
+      };
+
+      catalog.unshift(item);
+      saveDB();
+      e.target.reset();
+      renderAdminTable();
+      alert(`Товар «${item.title}» успешно добавлен в каталог!`);
+    }
+
+    // Таблица админки
     function renderAdminTable() {
-      const tbody = document.getElementById('admin-tbody');
-      tbody.innerHTML = products.map(p => `
+      const tbody = document.getElementById('admin-table-body');
+      tbody.innerHTML = catalog.map(item => `
         <tr>
-          <td><strong>${escapeHtml(p.sku)}</strong></td>
+          <td><strong>${escapeHtml(item.sku)}</strong></td>
           <td>
-            <strong>${escapeHtml(p.title)}</strong>
-            <div style="font-size: 0.8rem; color: #666; margin-top: 4px; white-space: pre-line;">${escapeHtml(p.specs)}</div>
+            <strong>${escapeHtml(item.title)}</strong>
+            <div style="font-size: 0.78rem; color: #666;">${escapeHtml(item.specs)}</div>
           </td>
-          <td>${escapeHtml(p.category)}</td>
-          <td><strong>${Number(p.price).toLocaleString('ru-RU')} ₽</strong></td>
-          <td>${p.stock}</td>
+          <td>${escapeHtml(item.category)}</td>
+          <td><strong>${Number(item.price).toLocaleString('ru-RU')} ₽</strong></td>
+          <td>${item.stock}</td>
           <td>
-            <div class="actions-col">
-              <button class="btn btn-outline btn-sm" onclick="openEditModal(${p.id})">Изм.</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">Удалить</button>
+            <div style="display: flex; gap: 4px;">
+              <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.8rem;" onclick="openEditModal(${item.id})">Изм.</button>
+              <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.8rem; color: var(--accent);" onclick="deleteItem(${item.id})">&times;</button>
             </div>
           </td>
         </tr>
       `).join('');
     }
 
-    // Создание товара
-    function handleCreateProduct(e) {
-      e.preventDefault();
-      const sku = document.getElementById('new-sku').value.trim();
-      
-      if (products.some(p => p.sku.toLowerCase() === sku.toLowerCase())) {
-        alert('Ошибка: Товар с таким артикулом уже существует!');
-        return;
-      }
-
-      const newProd = {
-        id: Date.now(),
-        sku: sku,
-        category: document.getElementById('new-cat').value,
-        price: parseFloat(document.getElementById('new-price').value),
-        stock: parseInt(document.getElementById('new-stock').value) || 0,
-        title: document.getElementById('new-title').value.trim(),
-        specs: document.getElementById('new-specs').value.trim()
-      };
-
-      products.unshift(newProd);
-      saveProducts();
-      e.target.reset();
-      renderAdminTable();
-      alert('Карточка товара успешно добавлена!');
-    }
-
-    // Редактирование товара
+    // Редактирование
     function openEditModal(id) {
-      const p = products.find(item => item.id === id);
-      if (!p) return;
+      const item = catalog.find(i => i.id === id);
+      if (!item) return;
 
-      document.getElementById('edit-id').value = p.id;
-      document.getElementById('edit-sku').value = p.sku;
-      document.getElementById('edit-cat').value = p.category;
-      document.getElementById('edit-price').value = p.price;
-      document.getElementById('edit-stock').value = p.stock;
-      document.getElementById('edit-title').value = p.title;
-      document.getElementById('edit-specs').value = p.specs || '';
+      document.getElementById('edit-id').value = item.id;
+      document.getElementById('edit-sku').value = item.sku;
+      document.getElementById('edit-category').value = item.category;
+      document.getElementById('edit-price').value = item.price;
+      document.getElementById('edit-stock').value = item.stock;
+      document.getElementById('edit-title').value = item.title;
+      document.getElementById('edit-specs').value = item.specs || '';
 
       document.getElementById('edit-modal').style.display = 'flex';
     }
@@ -538,60 +807,66 @@
       document.getElementById('edit-modal').style.display = 'none';
     }
 
-    function handleSaveEdit(e) {
+    function saveProductEdit(e) {
       e.preventDefault();
       const id = parseInt(document.getElementById('edit-id').value);
-      const index = products.findIndex(p => p.id === id);
+      const index = catalog.findIndex(i => i.id === id);
 
       if (index !== -1) {
-        products[index].sku = document.getElementById('edit-sku').value.trim();
-        products[index].category = document.getElementById('edit-cat').value;
-        products[index].price = parseFloat(document.getElementById('edit-price').value);
-        products[index].stock = parseInt(document.getElementById('edit-stock').value) || 0;
-        products[index].title = document.getElementById('edit-title').value.trim();
-        products[index].specs = document.getElementById('edit-specs').value.trim();
+        catalog[index].sku = document.getElementById('edit-sku').value.trim();
+        catalog[index].category = document.getElementById('edit-category').value;
+        catalog[index].price = parseFloat(document.getElementById('edit-price').value);
+        catalog[index].stock = parseInt(document.getElementById('edit-stock').value) || 0;
+        catalog[index].title = document.getElementById('edit-title').value.trim();
+        catalog[index].specs = document.getElementById('edit-specs').value.trim();
 
-        saveProducts();
+        saveDB();
         closeEditModal();
         renderAdminTable();
-        renderCards();
-        alert('Карточка обновлена!');
+        applyFilters();
       }
     }
 
-    // Удаление
-    function deleteProduct(id) {
-      if (confirm('Вы уверены, что хотите удалить эту позицию?')) {
-        products = products.filter(p => p.id !== id);
-        saveProducts();
+    function deleteItem(id) {
+      if (confirm('Удалить эту позицию из номенклатуры?')) {
+        catalog = catalog.filter(i => i.id !== id);
+        saveDB();
         renderAdminTable();
-        renderCards();
+        applyFilters();
       }
     }
 
-    // Корзина
+    // Экспорт в файл JSON
+    function exportDatabaseJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(catalog, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "intektra_catalog.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    // Корзина / Спецификация
     function addToCart(id) {
-      const product = products.find(p => p.id === id);
+      const product = catalog.find(p => p.id === id);
       if (!product) return;
 
-      const inCart = cart.find(i => i.id === id);
-      if (inCart) {
-        inCart.qty++;
+      const exist = cart.find(i => i.id === id);
+      if (exist) {
+        exist.qty++;
       } else {
         cart.push({ ...product, qty: 1 });
       }
-      updateCartBadge();
+
+      document.getElementById('cart-badge').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
+      alert(`Позиция «${product.title}» добавлена в спецификацию`);
     }
 
-    function updateCartBadge() {
-      const count = cart.reduce((acc, i) => acc + i.qty, 0);
-      document.getElementById('cart-counter').innerText = count;
-    }
-
-    function renderCart() {
-      const box = document.getElementById('cart-content');
+    function renderCartTable() {
+      const wrapper = document.getElementById('cart-table-wrapper');
       if (cart.length === 0) {
-        box.innerHTML = '<p style="color: #777; margin-top: 1rem;">Корзина спецификации пуста. Перейдите в каталог для добавления позиций.</p>';
+        wrapper.innerHTML = '<p style="color: #777;">В спецификации пока нет оборудования. Перейдите в каталог для выбора.</p>';
         return;
       }
 
@@ -600,73 +875,77 @@
         <table>
           <thead>
             <tr>
-              <th>Артикул</th>
-              <th>Наименование</th>
-              <th>Количество</th>
-              <th>Цена за ед.</th>
-              <th>Итого</th>
-              <th></th>
+              <th style="width: 120px;">Артикул</th>
+              <th>Наименование позиции</th>
+              <th style="width: 100px;">Кол-во</th>
+              <th style="width: 120px;">Цена с НДС</th>
+              <th style="width: 140px;">Сумма с НДС</th>
+              <th style="width: 50px;"></th>
             </tr>
           </thead>
           <tbody>
       `;
 
       cart.forEach(item => {
-        const sub = item.price * item.qty;
-        total += sub;
+        const sum = item.price * item.qty;
+        total += sum;
         html += `
           <tr>
-            <td>${escapeHtml(item.sku)}</td>
-            <td><strong>${escapeHtml(item.title)}</strong></td>
+            <td><strong>${escapeHtml(item.sku)}</strong></td>
+            <td>${escapeHtml(item.title)}</td>
             <td>
-              <input type="number" min="1" value="${item.qty}" style="width: 60px; padding: 4px;" onchange="changeCartQty(${item.id}, this.value)">
+              <input type="number" min="1" value="${item.qty}" style="width: 70px; padding: 4px;" onchange="updateCartQty(${item.id}, this.value)">
             </td>
             <td>${Number(item.price).toLocaleString('ru-RU')} ₽</td>
-            <td><strong>${Number(sub).toLocaleString('ru-RU')} ₽</strong></td>
-            <td><button class="btn btn-danger btn-sm" onclick="removeFromCart(${item.id})">&times;</button></td>
+            <td><strong>${Number(sum).toLocaleString('ru-RU')} ₽</strong></td>
+            <td><button class="btn btn-outline" style="padding: 2px 6px; color: var(--accent);" onclick="removeFromCart(${item.id})">&times;</button></td>
           </tr>
         `;
       });
 
+      const nds = total * 0.2 / 1.2;
+
       html += `
           </tbody>
         </table>
-        <div style="text-align: right; margin-top: 1rem; font-size: 1.3rem;">
-          Всего по спецификации: <strong style="color: var(--accent);">${Number(total).toLocaleString('ru-RU')} ₽</strong>
+        <div style="text-align: right; margin-top: 1.5rem; font-size: 1.1rem;">
+          <div>В том числе НДС 20%: <strong>${Number(nds).toLocaleString('ru-RU', {maximumFractionDigits: 2})} ₽</strong></div>
+          <div style="font-size: 1.4rem; color: var(--accent); margin-top: 5px;">Итого к оплате: <strong>${Number(total).toLocaleString('ru-RU')} ₽</strong></div>
         </div>
       `;
-      box.innerHTML = html;
+      wrapper.innerHTML = html;
     }
 
-    function changeCartQty(id, val) {
+    function updateCartQty(id, val) {
       const item = cart.find(i => i.id === id);
       if (item) {
         item.qty = Math.max(1, parseInt(val) || 1);
-        renderCart();
-        updateCartBadge();
+        renderCartTable();
+        document.getElementById('cart-badge').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
       }
     }
 
     function removeFromCart(id) {
       cart = cart.filter(i => i.id !== id);
-      renderCart();
-      updateCartBadge();
+      renderCartTable();
+      document.getElementById('cart-badge').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
     }
 
-    function checkoutOrder() {
-      if (cart.length === 0) return alert('Корзина пуста');
-      const org = document.getElementById('checkout-org').value.trim();
-      const contact = document.getElementById('checkout-contact').value.trim();
+    function sendOrder() {
+      if (cart.length === 0) return alert('Спецификация пуста!');
+      const org = document.getElementById('order-org').value.trim();
+      const phone = document.getElementById('order-phone').value.trim();
+      const email = document.getElementById('order-email').value.trim();
 
-      if (!org || !contact) {
-        alert('Пожалуйста, заполните реквизиты компании и контакты!');
+      if (!org || !phone) {
+        alert('Пожалуйста, укажите реквизиты компании и телефон!');
         return;
       }
 
-      alert(`Заявка успешно сформирована!\nСпецификация на сумму ${cart.reduce((s, i) => s + i.price * i.qty, 0).toLocaleString('ru-RU')} ₽ принята в обработку.\nСчёт будет отправлен на ${contact}.`);
+      alert(`Заявка принята в обработку!\nСпецификация отправлена в отдел комплектации.\nМенеджер свяжется с вами по номеру ${phone}.`);
       cart = [];
-      updateCartBadge();
-      switchView('shop');
+      document.getElementById('cart-badge').innerText = 0;
+      switchTab('shop');
     }
 
     function escapeHtml(text) {
@@ -679,8 +958,8 @@
         .replace(/'/g, "&#039;");
     }
 
-    // Первый запуск
-    renderCards();
+    // Инициализация при старте
+    applyFilters();
   </script>
 </body>
 </html>
