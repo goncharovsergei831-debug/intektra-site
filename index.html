@@ -1,1382 +1,2370 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ИНТЕКТРА ВЕКТОР — Российская система СОУЭ, речевого оповещения и ГО ЧС</title>
-  <style>
-    :root {
-      --primary: #0a192f;
-      --secondary: #172a45;
-      --accent: #e30613;
-      --accent-hover: #b8050f;
-      --text-dark: #1e293b;
-      --text-light: #f8fafc;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --green: #15803d;
-      --blue: #0284c7;
+import React, { useState, useMemo } from 'react';
+import {
+  LayoutGrid,
+  List,
+  Calendar as CalendarIcon,
+  Archive,
+  Search,
+  Plus,
+  MoreHorizontal,
+  MessageSquare,
+  AlignLeft,
+  Clock,
+  AlertCircle,
+  CheckCircle2,
+  Truck,
+  TrendingUp,
+  Filter,
+  Sun,
+  Moon,
+  X,
+  CheckSquare,
+  Building2,
+  CreditCard,
+  User,
+  ArrowRight,
+  ArrowLeft,
+  Download,
+  SlidersHorizontal,
+  Sparkles,
+  FileText,
+  Package,
+  Send,
+  Trash2,
+  RotateCcw,
+  ChevronRight,
+  Eye
+} from 'lucide-react';
+
+// Текущая опорная дата (14 октября 2026)
+const CURRENT_DATE = '2026-10-14';
+
+const TAG_DEFS = {
+  red: {
+    id: 'red',
+    name: 'В работе / Контроль',
+    barClass: 'bg-[#ef6461]',
+    badgeClass: 'bg-rose-100 text-rose-700 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800'
+  },
+  teal: {
+    id: 'teal',
+    name: 'Оплачено / Активно',
+    barClass: 'bg-[#8ee3c8]',
+    badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
+  },
+  amber: {
+    id: 'amber',
+    name: 'Ожидание ТК',
+    barClass: 'bg-amber-400',
+    badgeClass: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800'
+  },
+  blue: {
+    id: 'blue',
+    name: 'Спецзаказ / Тендер',
+    barClass: 'bg-sky-400',
+    badgeClass: 'bg-sky-100 text-sky-800 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800'
+  }
+};
+
+const INITIAL_CARDS = [
+  // ================= КОЛОНКА 1: В РАБОТЕ (Ровно 10 карточек: 7 видимых на скрине + 3 ниже скролла) =================
+  {
+    id: 'c-11268',
+    company: 'БИС ООО',
+    orderNum: '11268',
+    columnId: 'in_progress',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Комплектная поставка промышленного оборудования по спецификации №44-БИС. Требуется предварительная проверка упаковки перед передачей экспедитору.',
+    dueDate: '2026-10-16',
+    amount: 485000,
+    manager: 'А. Смирнов',
+    inn: '7701984210',
+    carrier: 'Деловые Линии',
+    tracking: 'Ожидает присвоения',
+    checklist: [
+      { id: 1, text: 'Счет оплачен 100%', done: true },
+      { id: 2, text: 'Комплектация на складе', done: true },
+      { id: 3, text: 'Проверка ОТК и паспорта изделий', done: false },
+      { id: 4, text: 'Передача в ТК и отправка УПД в ЭДО', done: false }
+    ],
+    comments: [
+      { id: 101, author: 'Алексей Смирнов', time: '14 окт, 10:15', text: 'Клиент просил отгрузить строго до пятницы 16 октября, машина уже заказана.' }
+    ]
+  },
+  {
+    id: 'c-11038',
+    company: 'СТРОЙПРОМТОРГ ООО',
+    orderNum: '11038',
+    columnId: 'in_progress',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Срочный заказ по дополнительному соглашению. Задержка возникла из-за ожидания комплектующих с завода-изготовителя.',
+    dueDate: '2026-10-13', // Просрочено относительно 14 окт 2026 — подсвечивается красным!
+    amount: 1240000,
+    manager: 'Е. Волкова',
+    inn: '7728451092',
+    carrier: 'ПЭК',
+    tracking: 'Приоритетная отгрузка',
+    checklist: [
+      { id: 1, text: 'Оплата по договору получена', done: true },
+      { id: 2, text: 'Поступление недостающей позиции', done: true },
+      { id: 3, text: 'Сборка и маркировка тары', done: false }
+    ],
+    comments: [
+      { id: 102, author: 'Елена Волкова', time: '13 окт, 17:40', text: 'Связалась с отделом снабжения СТРОЙПРОМТОРГ: согласовали фактическую подачу машины на 14 октября после обеда.' }
+    ]
+  },
+  {
+    id: 'c-9557',
+    company: 'АТРИКС ООО',
+    orderNum: '9557',
+    columnId: 'in_progress',
+    tags: ['red', 'teal'], // Исправлено: обе метки (красная + мятная) строго как на скриншоте!
+    hasDescription: true,
+    description: 'Стандартная номенклатура по счету №9557. Ожидаем подтверждение доверенности от водителя.',
+    dueDate: '2026-10-20',
+    amount: 310500,
+    manager: 'Д. Морозов',
+    inn: '5024119844',
+    carrier: 'Самовывоз',
+    tracking: '—',
+    checklist: [
+      { id: 1, text: 'Запуск в работу', done: true },
+      { id: 2, text: 'Резерв на центральном складе', done: false }
+    ],
+    comments: []
+  },
+  {
+    id: 'c-10819',
+    company: 'АЛЬЯНС-Л ООО',
+    orderNum: '10819',
+    columnId: 'in_progress',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Отгрузка в г. Екатеринбург. Упаковка в жесткую паллетную раму.',
+    dueDate: '2026-10-20',
+    amount: 790000,
+    manager: 'А. Смирнов',
+    inn: '6671093812',
+    carrier: 'Деловые Линии',
+    tracking: 'В подготовке',
+    checklist: [
+      { id: 1, text: 'Предоплата получена', done: true },
+      { id: 2, text: 'Сборка заказа', done: true },
+      { id: 3, text: 'Оформление УПД в Диадок', done: false }
+    ],
+    comments: []
+  },
+  {
+    id: 'c-10551',
+    company: 'МСЗ АО',
+    orderNum: '10551',
+    columnId: 'in_progress',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Крупный тендерный контракт с Машиностроительным заводом. Полный пакет сертификатов соответствия обязателен в оригинале внутри коробки №1.',
+    dueDate: '2026-10-22',
+    amount: 2150000,
+    manager: 'Е. Волкова',
+    inn: '7714009281',
+    carrier: 'Спецтранс Выделенная фура',
+    tracking: 'Заявка №884-М',
+    checklist: [
+      { id: 1, text: 'Согласование ТЗ и чертежей', done: true },
+      { id: 2, text: 'Комплектация партии (3 паллеты)', done: true },
+      { id: 3, text: 'Подготовка паспортов и сертификатов', done: false },
+      { id: 4, text: 'Финальный контроль перед пломбировкой', done: false }
+    ],
+    comments: []
+  },
+  {
+    id: 'c-8907',
+    company: 'ЗАВОД ЭНЕРГОМАШ ООО',
+    orderNum: '8907',
+    columnId: 'in_progress',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Поставка узлов автоматики и шкафов управления по заказу 8907.',
+    dueDate: '2026-10-27',
+    amount: 640000,
+    manager: 'Д. Морозов',
+    inn: '7804551920',
+    carrier: 'ПЭК',
+    tracking: 'В плане сборки',
+    checklist: [
+      { id: 1, text: 'Счет оплачен', done: true },
+      { id: 2, text: 'Передано на сборку', done: false }
+    ],
+    comments: []
+  },
+  {
+    id: 'c-10396',
+    company: 'СТРОЙ ДЕВЕЛОПМЕНТ ООО',
+    orderNum: '10396',
+    columnId: 'in_progress',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Комплектация строительного объекта (очередь 2). Доставка до терминала в г. Казань.',
+    dueDate: '2026-10-29',
+    amount: 920000,
+    manager: 'А. Смирнов',
+    inn: '1655391044',
+    carrier: 'Байкал Сервис',
+    tracking: 'Ожидает сборки',
+    checklist: [
+      { id: 1, text: 'Аванс зачислен', done: true },
+      { id: 2, text: 'Заказ комплектующих', done: true },
+      { id: 3, text: 'Упаковка груза', done: false }
+    ],
+    comments: []
+  },
+  // Карточки 8–10 в колонке "В работе" (находятся ниже видимой области скриншота, чтобы сумма карточек равнялась ровно 10):
+  {
+    id: 'c-10412',
+    company: 'ТЕХНОПРОМ ООО',
+    orderNum: '10412',
+    columnId: 'in_progress',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Плановая комплектация насосной группы по спецификации №19.',
+    dueDate: '2026-10-30',
+    amount: 540000,
+    manager: 'Д. Морозов',
+    inn: '7718904123',
+    carrier: 'Деловые Линии',
+    tracking: 'В графике сборки',
+    checklist: [
+      { id: 1, text: 'Предоплата получена', done: true },
+      { id: 2, text: 'Комплектация на складе', done: false }
+    ],
+    comments: []
+  },
+  {
+    id: 'c-10890',
+    company: 'УРАЛСНАБ АО',
+    orderNum: '10890',
+    columnId: 'in_progress',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Отгрузка кабельно-проводниковой продукции и автоматики.',
+    dueDate: '2026-11-02',
+    amount: 1180000,
+    manager: 'Е. Волкова',
+    inn: '6670412980',
+    carrier: 'ПЭК',
+    tracking: 'Сборка на следующей неделе',
+    checklist: [
+      { id: 1, text: 'Оплата получена', done: true },
+      { id: 2, text: 'Резерв позиций', done: true },
+      { id: 3, text: 'Упаковка на паллеты', done: false }
+    ],
+    comments: [
+      { id: 108, author: 'Елена Волкова', time: '14 окт, 09:30', text: 'Спецификация согласована с главным инженером.' }
+    ]
+  },
+  {
+    id: 'c-11305',
+    company: 'СЕВЕРСТАЛЬ-ИНВЕСТ ООО',
+    orderNum: '11305',
+    columnId: 'in_progress',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Поставка комплекта датчиков давления и блоков питания.',
+    dueDate: '2026-11-05',
+    amount: 860000,
+    manager: 'А. Смирнов',
+    inn: '3528190411',
+    carrier: 'Деловые Линии',
+    tracking: 'Ожидает поступления со склада',
+    checklist: [
+      { id: 1, text: 'Счет оплачен', done: true },
+      { id: 2, text: 'Комплектация', done: false }
+    ],
+    comments: []
+  },
+
+  // ================= КОЛОНКА 2: В ДОСТАВКЕ (Ровно 5 карточек со скриншота) =================
+  {
+    id: 'c-9819',
+    company: 'ТД СТРАТЕГ ООО',
+    orderNum: '9819',
+    columnId: 'in_delivery',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Груз передан экспедитору Деловых Линий. Межтерминальная перевозка Москва — Новосибирск.',
+    dueDate: null,
+    amount: 530000,
+    manager: 'А. Смирнов',
+    inn: '5406719230',
+    carrier: 'Деловые Линии',
+    tracking: '26-00981904112',
+    checklist: [
+      { id: 1, text: 'Сборка и упаковка', done: true },
+      { id: 2, text: 'Отгрузка со склада', done: true },
+      { id: 3, text: 'Подписание УПД клиентом в ЭДО', done: false }
+    ],
+    comments: []
+  },
+  {
+    id: 'c-9777',
+    company: 'СИБИРСКОЕ КУПЕЧЕСТВО ООО',
+    orderNum: '9777',
+    columnId: 'in_delivery',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Отправлено через ТК ПЭК (обрешетка + страхование груза). Ориентировочное прибытие на терминал: 18 октября.',
+    dueDate: null,
+    amount: 890000,
+    manager: 'Е. Волкова',
+    inn: '2460098123',
+    carrier: 'ПЭК',
+    tracking: 'МВКРЭКВ-2/1410',
+    checklist: [
+      { id: 1, text: 'Сборка и проверка ОТК', done: true },
+      { id: 2, text: 'Сдача в ТК ПЭК', done: true },
+      { id: 3, text: 'Получение груза контрагентом', done: false }
+    ],
+    comments: []
+  },
+  {
+    id: 'c-8902',
+    company: 'ГАЗСТРОЙПРОМ АО',
+    orderNum: '8902',
+    columnId: 'in_delivery',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Спецпоставка промышленной запорной арматуры и датчиков. Прямая машина до склада заказчика.',
+    dueDate: null,
+    amount: 3400000,
+    manager: 'Е. Волкова',
+    inn: '7842165501',
+    carrier: 'СДЭК Профи / Спецборт',
+    tracking: 'GSP-8902-RU',
+    checklist: [
+      { id: 1, text: 'Оплата 100%', done: true },
+      { id: 2, text: 'Инспекция представителем заказчика', done: true },
+      { id: 3, text: 'В пути (контроль GPS)', done: true },
+      { id: 4, text: 'Закрывающие документы подписаны', done: false }
+    ],
+    comments: []
+  },
+  {
+    id: 'c-8605',
+    company: 'ФОРТУНА-ПЛЮС ООО',
+    orderNum: '8605',
+    columnId: 'in_delivery',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Плановая доставка до двери клиента. Машина на маршруте.',
+    dueDate: '2026-10-16',
+    amount: 275000,
+    manager: 'Д. Морозов',
+    inn: '6164092811',
+    carrier: 'Деловые Линии',
+    tracking: '26-00860511990',
+    checklist: [
+      { id: 1, text: 'Комплектация', done: true },
+      { id: 2, text: 'Передано курьеру ТК', done: true },
+      { id: 3, text: 'Вручение грузополучателю', done: false }
+    ],
+    comments: []
+  },
+  {
+    id: 'c-11133',
+    company: 'УЦСБ ООО',
+    orderNum: '11133',
+    columnId: 'in_delivery',
+    tags: ['red', 'teal'],
+    hasDescription: true,
+    description: 'Уральский центр систем безопасности. Отгрузка телекоммуникационных шкафов и ИБП.',
+    dueDate: '2026-10-21',
+    amount: 1120000,
+    manager: 'А. Смирнов',
+    inn: '6658290114',
+    carrier: 'ЖелДорЭкспедиция',
+    tracking: 'ЖДЭ-11133-ЕКБ',
+    checklist: [
+      { id: 1, text: 'Сборка и паллетирование', done: true },
+      { id: 2, text: 'Отправлено с терминала', done: true },
+      { id: 3, text: 'Приемка по накладной ТОРГ-12', done: false }
+    ],
+    comments: []
+  },
+
+  // ================= КОЛОНКА 3: ГОТОВО (Ровно 21 карточка: 7 со скриншота + 14 закрытых ниже скролла) =================
+  {
+    id: 'c-8832',
+    company: 'ПРОМСТРОЙ ООО',
+    orderNum: '8832',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Заказ полностью укомплектован, доставлен и принят по ЭДО без замечаний.',
+    dueDate: null,
+    amount: 670000,
+    manager: 'А. Смирнов',
+    inn: '7719402188',
+    carrier: 'Деловые Линии',
+    tracking: 'Доставлено 11 окт',
+    checklist: [
+      { id: 1, text: 'Оплата получена', done: true },
+      { id: 2, text: 'Отгрузка выполнена', done: true },
+      { id: 3, text: 'УПД подписан обеими сторонами', done: true }
+    ],
+    comments: [
+      { id: 103, author: 'Бухгалтерия', time: '12 окт, 14:20', text: 'Оригиналы закрывающих документов проведены в ЭДО Контур.Диадок.' }
+    ]
+  },
+  {
+    id: 'c-10761',
+    company: 'АСЦВ ЗАО',
+    orderNum: '10761',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Выполнена отгрузка со склада в Москве. Доверенность получена.',
+    dueDate: null,
+    amount: 445000,
+    manager: 'Д. Морозов',
+    inn: '7705918230',
+    carrier: 'Самовывоз',
+    tracking: 'Выдано по дов. №41',
+    checklist: [
+      { id: 1, text: 'Оплата', done: true },
+      { id: 2, text: 'Отгрузка', done: true },
+      { id: 3, text: 'Закрытие сделки', done: true }
+    ],
+    comments: []
+  },
+  {
+    id: 'c-10950',
+    company: 'ЭСБ-КОНТАКТ ООО',
+    orderNum: '10950',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Поставка электрощитового оборудования завершена в срок.',
+    dueDate: null,
+    amount: 1580000,
+    manager: 'Е. Волкова',
+    inn: '7810449215',
+    carrier: 'ПЭК',
+    tracking: 'Доставлено',
+    checklist: [
+      { id: 1, text: 'Оплата 100%', done: true },
+      { id: 2, text: 'Доставка до терминала СПб', done: true },
+      { id: 3, text: 'Акт сверки подписан', done: true }
+    ],
+    comments: [
+      { id: 104, author: 'Елена Волкова', time: '11 окт, 16:05', text: 'Заказчик доволен качеством сборки, готовят новую заявку на ноябрь.' }
+    ]
+  },
+  {
+    id: 'c-10329',
+    company: 'КАЭМ ООО',
+    orderNum: '10329',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Отгружено в полном объеме.',
+    dueDate: null,
+    amount: 390000,
+    manager: 'А. Смирнов',
+    inn: '5047119023',
+    carrier: 'СДЭК',
+    tracking: 'Вручено',
+    checklist: [
+      { id: 1, text: 'Оплата', done: true },
+      { id: 2, text: 'Отгрузка', done: true }
+    ],
+    comments: []
+  },
+  {
+    id: 'c-10990',
+    company: 'ГЕЛИОС ООО',
+    orderNum: '10990',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Поставка солнечных инверторов и аккумуляторных блоков.',
+    dueDate: null,
+    amount: 810000,
+    manager: 'Д. Морозов',
+    inn: '2310948120',
+    carrier: 'Деловые Линии',
+    tracking: 'Доставлено',
+    checklist: [
+      { id: 1, text: 'Оплата', done: true },
+      { id: 2, text: 'Отгрузка', done: true },
+      { id: 3, text: 'ЭДО закрыт', done: true }
+    ],
+    comments: [
+      { id: 105, author: 'Дмитрий Морозов', time: '10 окт, 11:30', text: 'Гарантийные талоны отправлены вместе с грузом.' }
+    ]
+  },
+  {
+    id: 'c-10728',
+    company: 'КМЗ ООО',
+    orderNum: '10728',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Красногорский механический завод — партия принята ОТК клиента.',
+    dueDate: null,
+    amount: 2050000,
+    manager: 'Е. Волкова',
+    inn: '5024001928',
+    carrier: 'Спецтранс',
+    tracking: 'Сдано на склад',
+    checklist: [
+      { id: 1, text: 'Оплата', done: true },
+      { id: 2, text: 'Отгрузка', done: true },
+      { id: 3, text: 'УПД подписан', done: true }
+    ],
+    comments: []
+  },
+  {
+    id: 'c-9780',
+    company: 'ЗТО ООО',
+    orderNum: '9780',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Завод теплообменного оборудования. Сделка успешно закрыта.',
+    dueDate: null,
+    amount: 515000,
+    manager: 'А. Смирнов',
+    inn: '7451092834',
+    carrier: 'ПЭК',
+    tracking: 'Выдано',
+    checklist: [
+      { id: 1, text: 'Оплата', done: true },
+      { id: 2, text: 'Отгрузка', done: true }
+    ],
+    comments: []
+  },
+  // Остальные 14 выполненных карточек в колонке "Готово" (для точного соответствия счетчику 21 в заголовке):
+  {
+    id: 'c-9640',
+    company: 'ЭЛЕКТРОЩИТ-СМ ООО',
+    orderNum: '9640',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Отгрузка трансформаторных подстанций завершена.',
+    dueDate: null,
+    amount: 1420000,
+    manager: 'Е. Волкова',
+    inn: '6319048122',
+    carrier: 'Деловые Линии',
+    tracking: 'Выдано',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9612',
+    company: 'ТРАНсмаш-СНАБ АО',
+    orderNum: '9612',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Поставка реле и контакторов.',
+    dueDate: null,
+    amount: 380000,
+    manager: 'А. Смирнов',
+    inn: '7708192044',
+    carrier: 'ПЭК',
+    tracking: 'Доставлено',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9588',
+    company: 'ГИДРОПРИВОД ООО',
+    orderNum: '9588',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Отгружено со склада по доверенности.',
+    dueDate: null,
+    amount: 295000,
+    manager: 'Д. Морозов',
+    inn: '3664091822',
+    carrier: 'Самовывоз',
+    tracking: 'Получено',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9510',
+    company: 'СЕВЕР-АВТОМАТИКА ООО',
+    orderNum: '9510',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Поставка КИПиА в г. Мурманск.',
+    dueDate: null,
+    amount: 910000,
+    manager: 'Е. Волкова',
+    inn: '5190418200',
+    carrier: 'ПЭК',
+    tracking: 'Доставлено',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9485',
+    company: 'ПРОМВЕНТ ЗАО',
+    orderNum: '9485',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Частотные преобразователи для вентиляции.',
+    dueDate: null,
+    amount: 605000,
+    manager: 'А. Смирнов',
+    inn: '7720194811',
+    carrier: 'Деловые Линии',
+    tracking: 'Доставлено',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9419',
+    company: 'УРАЛХИММАШ ПАО',
+    orderNum: '9419',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Поставка взрывозащищенных датчиков.',
+    dueDate: null,
+    amount: 1750000,
+    manager: 'Е. Волкова',
+    inn: '6674019283',
+    carrier: 'Спецтранс',
+    tracking: 'Принято на складе',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9390',
+    company: 'БЕЛЭНЕРГОСЕТЬ ООО',
+    orderNum: '9390',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Шкафы телемеханики.',
+    dueDate: null,
+    amount: 840000,
+    manager: 'Д. Морозов',
+    inn: '3123094811',
+    carrier: 'Деловые Линии',
+    tracking: 'Доставлено',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9344',
+    company: 'ВОЛГА-СТАНКОСТРОЙ ООО',
+    orderNum: '9344',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Сервоприводы и блоки ЧПУ.',
+    dueDate: null,
+    amount: 1190000,
+    manager: 'А. Смирнов',
+    inn: '6315092831',
+    carrier: 'Байкал Сервис',
+    tracking: 'Доставлено',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9298',
+    company: 'АГРОТЕХХОЛДИНГ АО',
+    orderNum: '9298',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Датчики уровня и весовые терминалы.',
+    dueDate: null,
+    amount: 460000,
+    manager: 'Д. Морозов',
+    inn: '2308192041',
+    carrier: 'ПЭК',
+    tracking: 'Доставлено',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9250',
+    company: 'МОСВОДОКАНАЛ-СЕРВИС ООО',
+    orderNum: '9250',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Задвижки с электроприводом.',
+    dueDate: null,
+    amount: 1320000,
+    manager: 'Е. Волкова',
+    inn: '7701492019',
+    carrier: 'Самовывоз',
+    tracking: 'Выдано',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9195',
+    company: 'СИБНЕФТЕАВТОМАТИКА ООО',
+    orderNum: '9195',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Расходомеры промышленные.',
+    dueDate: null,
+    amount: 980000,
+    manager: 'А. Смирнов',
+    inn: '7203194820',
+    carrier: 'Деловые Линии',
+    tracking: 'Доставлено',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9140',
+    company: 'КАЗАНЬКОМПРЕССОРМАШ АО',
+    orderNum: '9140',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Комплект вибродатчиков.',
+    dueDate: null,
+    amount: 570000,
+    manager: 'Е. Волкова',
+    inn: '1660019284',
+    carrier: 'ПЭК',
+    tracking: 'Доставлено',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9082',
+    company: 'ТЕПЛОЭНЕРГОРЕМОНТ ООО',
+    orderNum: '9082',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Манометры и термопреобразователи.',
+    dueDate: null,
+    amount: 315000,
+    manager: 'Д. Морозов',
+    inn: '7814092819',
+    carrier: 'СДЭК',
+    tracking: 'Доставлено',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  },
+  {
+    id: 'c-9015',
+    company: 'НОВОЛИПЕЦКИЙ МК-СНАБ ООО',
+    orderNum: '9015',
+    columnId: 'done',
+    tags: ['teal'],
+    hasDescription: true,
+    description: 'Промышленные контроллеры ПЛК.',
+    dueDate: null,
+    amount: 1640000,
+    manager: 'Е. Волкова',
+    inn: '4823019481',
+    carrier: 'Деловые Линии',
+    tracking: 'Доставлено',
+    checklist: [{ id: 1, text: 'Сделка закрыта', done: true }],
+    comments: []
+  }
+];
+
+const COLUMNS = [
+  {
+    id: 'in_progress',
+    title: 'В работе',
+    initialVisibleCount: 7, // На скриншоте видны первые 7 карточек, всего в колонке 10
+    bgLight: 'bg-[#f4d0d6] border-[#eac2c9]',
+    bgDark: 'dark:bg-rose-950/35 dark:border-rose-900/60',
+    headerText: 'text-[#2c333a] dark:text-rose-100',
+    countText: 'text-[#6c6f75] dark:text-rose-300',
+    accentColor: 'rose'
+  },
+  {
+    id: 'in_delivery',
+    title: 'В доставке',
+    initialVisibleCount: 5, // На скриншоте видны все 5 карточек
+    bgLight: 'bg-[#faecc8] border-[#f0dfc5]',
+    bgDark: 'dark:bg-amber-950/35 dark:border-amber-900/60',
+    headerText: 'text-[#2c333a] dark:text-amber-100',
+    countText: 'text-[#6c6f75] dark:text-amber-300',
+    accentColor: 'amber'
+  },
+  {
+    id: 'done',
+    title: 'Готово',
+    initialVisibleCount: 7, // На скриншоте видны первые 7 карточек, всего в колонке 21
+    bgLight: 'bg-[#cde5dc] border-[#bad8cd]',
+    bgDark: 'dark:bg-emerald-950/35 dark:border-emerald-900/60',
+    headerText: 'text-[#2c333a] dark:text-emerald-100',
+    countText: 'text-[#6c6f75] dark:text-emerald-300',
+    accentColor: 'emerald'
+  }
+];
+
+// Форматирование даты в стиль "16 окт 2026"
+function formatRussianDate(dateStr) {
+  if (!dateStr) return '';
+  const months = [
+    'янв', 'фев', 'мар', 'апр', 'мая', 'июн',
+    'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'
+  ];
+  const parts = dateStr.split('-');
+  if (parts.length !== 3) return dateStr;
+  const year = parts[0];
+  const monthIdx = parseInt(parts[1], 10) - 1;
+  const day = parseInt(parts[2], 10);
+  return `${day} ${months[monthIdx]} ${year}`;
+}
+
+// Форматирование валюты
+function formatMoney(num) {
+  if (!num && num !== 0) return '—';
+  return new Intl.NumberFormat('ru-RU').format(num) + ' ₽';
+}
+
+export default function App() {
+  const [cards, setCards] = useState(INITIAL_CARDS);
+  const [archivedCards, setArchivedCards] = useState([
+    {
+      id: 'arch-8410',
+      company: 'СЕВЕРСТАЛЬ-ИНВЕСТ АО',
+      orderNum: '8410',
+      columnId: 'done',
+      tags: ['teal'],
+      hasDescription: true,
+      description: 'Архивный заказ за сентябрь 2026. Полностью закрыт.',
+      dueDate: '2026-09-28',
+      amount: 1890000,
+      manager: 'Е. Волкова',
+      inn: '3528001920',
+      carrier: 'Деловые Линии',
+      tracking: 'Доставлено',
+      checklist: [{ id: 1, text: 'Полный цикл завершен', done: true }],
+      comments: []
+    },
+    {
+      id: 'arch-8392',
+      company: 'ТЕХНОНИКОЛЬ-СНАБ ООО',
+      orderNum: '8392',
+      columnId: 'done',
+      tags: ['teal'],
+      hasDescription: true,
+      description: 'Архивный заказ. Документы в бухгалтерии.',
+      dueDate: '2026-09-24',
+      amount: 740000,
+      manager: 'А. Смирнов',
+      inn: '7702819201',
+      carrier: 'ПЭК',
+      tracking: 'Доставлено',
+      checklist: [{ id: 1, text: 'Полный цикл завершен', done: true }],
+      comments: []
     }
+  ]);
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
-    body { background-color: var(--bg); color: var(--text-dark); line-height: 1.5; scroll-behavior: smooth; }
+  // Режимы отображения (по умолчанию 'classic' — 1:1 со скриншотом, с переключателем в 'pro')
+  const [activeTab, setActiveTab] = useState('board'); // 'board' | 'list' | 'calendar' | 'archive'
+  const [cardMode, setCardMode] = useState('classic'); // 'classic' (1:1 Planno) | 'pro' (ERP PRO)
+  const [darkMode, setDarkMode] = useState(false);
+  const [showKpiBar, setShowKpiBar] = useState(false);
+  const [expandedCols, setExpandedCols] = useState({
+    in_progress: false,
+    in_delivery: false,
+    done: false
+  });
 
-    /* Верхняя информационная полоса */
-    .top-strip {
-      background: var(--primary);
-      color: #94a3b8;
-      font-size: 0.8rem;
-      padding: 6px 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    .top-strip a { color: #cbd5e1; text-decoration: none; margin-left: 15px; font-weight: 500; }
-    .top-strip a:hover { color: #fff; }
+  // Поиск и фильтры
+  const [searchQuery, setSearchQuery] = useState('');
+  const [quickFilter, setQuickFilter] = useState('all'); // 'all' | 'overdue' | 'comments' | 'high_value'
+  const [managerFilter, setManagerFilter] = useState('all');
 
-    /* Главная шапка */
-    header {
-      background: #ffffff;
-      border-bottom: 2px solid var(--accent);
-      padding: 0.8rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .brand-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-    .brand-logo { font-size: 1.55rem; font-weight: 900; color: var(--primary); letter-spacing: 0.5px; }
-    .brand-logo span { color: var(--accent); }
-    .brand-badge {
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: var(--accent);
-      border-left: 2px solid var(--border);
-      padding-left: 10px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
+  // Drag & Drop стейт
+  const [draggedCardId, setDraggedCardId] = useState(null);
+  const [dragOverColId, setDragOverColId] = useState(null);
 
-    /* Навигация шапки */
-    nav { display: flex; gap: 6px; align-items: center; }
-    .nav-link {
-      padding: 0.5rem 0.9rem;
-      color: var(--text-dark);
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 600;
-      border-radius: 4px;
-      transition: all 0.2s ease;
-    }
-    .nav-link:hover, .nav-link.active {
-      color: var(--accent);
-      background: #fee2e2;
-    }
-    .btn {
-      padding: 0.55rem 1.1rem;
-      font-size: 0.88rem;
-      font-weight: 600;
-      border-radius: 4px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border: 1px solid transparent;
-      transition: all 0.2s;
-    }
-    .btn-red { background: var(--accent); color: #fff; }
-    .btn-red:hover { background: var(--accent-hover); }
-    .btn-outline { border-color: var(--border); background: #fff; color: var(--text-dark); }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-    .btn-dark { background: var(--secondary); color: #fff; }
-    .btn-dark:hover { background: var(--primary); }
-    .btn-sm { padding: 0.35rem 0.65rem; font-size: 0.78rem; }
+  // Модальное окно детальной карточки
+  const [selectedCardId, setSelectedCardId] = useState(null);
+  const [newCommentText, setNewCommentText] = useState('');
+  const [newChecklistText, setNewChecklistText] = useState('');
 
-    /* Контейнер */
-    .container { max-width: 1380px; margin: 0 auto; padding: 2rem 1.5rem; }
+  // Быстрое создание карточки в колонке
+  const [addingToCol, setAddingToCol] = useState(null);
+  const [newCardCompany, setNewCardCompany] = useState('');
+  const [newCardOrderNum, setNewCardOrderNum] = useState('');
+  const [newCardAmount, setNewCardAmount] = useState('');
+  const [newCardDate, setNewCardDate] = useState('2026-10-23');
 
-    /* Секции (SPA страницы) */
-    .view-section { display: none; }
-    .view-section.active { display: block; }
+  // Сортировка в режиме "Список"
+  const [sortField, setSortField] = useState('orderNum');
+  const [sortAsc, setSortAsc] = useState(false);
 
-    /* Главный экран (Hero) */
-    .hero {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      color: #fff;
-      padding: 4.5rem 2rem;
-      border-radius: 8px;
-      margin-bottom: 2.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-content { max-width: 850px; position: relative; z-index: 2; }
-    .hero-tag {
-      display: inline-block;
-      background: var(--accent);
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 800;
-      padding: 4px 12px;
-      border-radius: 3px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 1.2rem;
-    }
-    .hero h1 { font-size: 2.8rem; font-weight: 900; line-height: 1.15; margin-bottom: 1.2rem; }
-    .hero p { font-size: 1.1rem; color: #cbd5e1; margin-bottom: 2rem; line-height: 1.6; }
-    .hero-metrics {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.5rem;
-      border-top: 1px solid rgba(255,255,255,0.15);
-      padding-top: 2rem;
-      margin-top: 2rem;
-    }
-    .hero-metrics strong { font-size: 1.7rem; color: #fff; display: block; }
-    .hero-metrics span { font-size: 0.85rem; color: #94a3b8; }
+  // Проверка просрочки (дата меньше 14 окт 2026 и не в колонке "Готово")
+  const isCardOverdue = (card) => {
+    if (!card.dueDate || card.columnId === 'done') return false;
+    return card.dueDate < CURRENT_DATE;
+  };
 
-    /* Блоки преимуществ */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 3rem;
-    }
-    .feature-card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.5rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .feature-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
-    .feature-icon { font-size: 1.8rem; margin-bottom: 0.8rem; color: var(--accent); }
-    .feature-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--primary); }
-    .feature-card p { font-size: 0.88rem; color: var(--text-muted); }
-
-    /* Подразделы каталога */
-    .catalog-bar {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.8rem 1rem;
-      margin-bottom: 1.5rem;
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      align-items: center;
-    }
-    .cat-pill {
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-dark);
-      background: #f1f5f9;
-      border-radius: 4px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
-      border: none;
-    }
-    .cat-pill:hover, .cat-pill.active { background: var(--accent); color: #fff; }
-
-    /* Карточки оборудования */
-    .grid-products {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-      gap: 1.5rem;
-    }
-    .product-card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.4rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: all 0.2s;
-    }
-    .product-card:hover { border-color: var(--accent); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
-    .card-top { margin-bottom: 1rem; }
-    .card-sku-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-    .card-sku { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
-    .card-tag { font-size: 0.7rem; background: #e0f2fe; color: var(--blue); padding: 2px 6px; border-radius: 3px; font-weight: 700; }
-    .card-title { font-size: 1.05rem; font-weight: 700; color: var(--primary); margin-bottom: 0.6rem; line-height: 1.35; }
-    .card-specs {
-      background: #f8fafc;
-      border: 1px solid #f1f5f9;
-      padding: 0.75rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      color: #334155;
-      white-space: pre-line;
-      line-height: 1.4;
-      margin-bottom: 0.8rem;
-    }
-    .card-docs-row { display: flex; gap: 6px; margin-bottom: 0.8rem; }
-    .doc-badge {
-      font-size: 0.72rem;
-      color: var(--blue);
-      background: #f0f9ff;
-      border: 1px solid #bae6fd;
-      padding: 2px 6px;
-      border-radius: 3px;
-      text-decoration: none;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .card-bottom {
-      border-top: 1px solid var(--border);
-      padding-top: 0.9rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .card-price { font-size: 1.3rem; font-weight: 900; color: var(--accent); }
-    .card-price small { font-size: 0.75rem; color: var(--text-muted); font-weight: normal; }
-
-    /* Типовые решения */
-    .solution-card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.8rem;
-      margin-bottom: 1.5rem;
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 2rem;
-    }
-    .solution-card h3 { font-size: 1.25rem; color: var(--primary); margin-bottom: 0.6rem; }
-    .solution-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; }
-    .solution-list { list-style: none; font-size: 0.85rem; margin-bottom: 1rem; }
-    .solution-list li { margin-bottom: 0.35rem; display: flex; align-items: center; gap: 6px; }
-
-    /* Калькулятор СОУЭ */
-    .calc-box {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 2rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2.5rem;
-    }
-    .calc-inputs { display: flex; flex-direction: column; gap: 1.2rem; }
-    .calc-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--primary); }
-    .calc-group input, .calc-group select {
-      width: 100%;
-      padding: 0.65rem;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      font-size: 0.95rem;
-    }
-    .calc-results {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.8rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .calc-metric { margin-bottom: 1.2rem; }
-    .calc-metric strong { font-size: 1.8rem; color: var(--accent); display: block; }
-    .calc-metric span { font-size: 0.85rem; color: var(--text-muted); }
-
-    /* Таблицы админки, корзины, документации */
-    .table-card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.8rem;
-      margin-bottom: 1.5rem;
-    }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.88rem; }
-    th, td { padding: 0.75rem 0.9rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
-    th { background: #f8fafc; font-weight: 700; color: var(--primary); }
-
-    /* Формы */
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
-    .form-group label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.3rem; }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      padding: 0.6rem;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      font-size: 0.88rem;
-    }
-
-    /* Модальные окна */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(10, 25, 47, 0.7);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-      padding: 1rem;
-    }
-    .modal-window {
-      background: #fff;
-      border-radius: 6px;
-      max-width: 650px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 1.8rem;
-      position: relative;
-    }
-    .modal-close {
-      position: absolute;
-      top: 1rem;
-      right: 1.2rem;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--text-muted);
-      border: none;
-      background: none;
-    }
-
-    /* Футер */
-    footer {
-      background: var(--primary);
-      color: #94a3b8;
-      padding: 3rem 2rem 1.5rem;
-      border-top: 1px solid #1e293b;
-      margin-top: 4rem;
-    }
-    .footer-grid {
-      max-width: 1380px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2.5rem;
-      margin-bottom: 2rem;
-    }
-    .footer-col h4 { color: #fff; font-size: 0.95rem; margin-bottom: 1.2rem; }
-    .footer-col ul { list-style: none; }
-    .footer-col li { margin-bottom: 0.5rem; }
-    .footer-col a { color: #94a3b8; text-decoration: none; font-size: 0.85rem; }
-    .footer-col a:hover { color: #fff; }
-    .footer-bottom {
-      max-width: 1380px;
-      margin: 0 auto;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding-top: 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Верхняя сервисная плашка -->
-  <div class="top-strip">
-    <div>Сертифицированное оборудование СОУЭ 3–5 типов и сопряжения с ГО и ЧС (РАСЦО)</div>
-    <div>
-      <span>Единый проектный отдел:</span>
-      <a href="tel:+78005552430">8 (800) 555-24-30</a>
-      <a href="mailto:vector@intektra.ru">vector@intektra.ru</a>
-    </div>
-  </div>
-
-  <!-- Главная шапка -->
-  <header>
-    <a href="#home" class="brand-wrap">
-      <div class="brand-logo">ИНТЕКТРА <span>|</span> ВЕКТОР</div>
-      <div class="brand-badge">СИСТЕМА СОУЭ</div>
-    </a>
-
-    <nav>
-      <a href="#home" class="nav-link" id="nav-home">О линейке</a>
-      <a href="#catalog" class="nav-link" id="nav-catalog">Оборудование</a>
-      <a href="#solutions" class="nav-link" id="nav-solutions">Типовые решения</a>
-      <a href="#calc" class="nav-link" id="nav-calc">Калькулятор СОУЭ</a>
-      <a href="#docs" class="nav-link" id="nav-docs">Документация</a>
-      <a href="#cart" class="btn btn-outline" id="nav-cart">Спецификация (<span id="cart-counter">0</span>)</a>
-      <a href="#admin" class="btn btn-dark" id="nav-admin">⚙️ Админка</a>
-    </nav>
-  </header>
-
-  <!-- ОСНОВНОЙ КОНТЕНТНЫЙ БЛОК -->
-  <div class="container">
-
-    <!-- 1. ГЛАВНАЯ СТРАНИЦА О СИСТЕМЕ ВЕКТОР (#home) -->
-    <section id="view-home" class="view-section active">
-      <div class="hero">
-        <div class="hero-content">
-          <span class="hero-tag">ТР ЕАЭС 043/2017 • ГОСТ Р 53325-2012</span>
-          <h1>Оборудование речевого оповещения и управления эвакуацией ВЕКТОР</h1>
-          <p>
-            Отечественная блочно-модульная система для оснащения объектов любой этажности и площади: от локальных моноблоков на 2–4 зоны до распределенных сетевых комплексов с прямым сопряжением с каналами МЧС и РАСЦО.
-          </p>
-          <div style="display: flex; gap: 12px;">
-            <a href="#catalog" class="btn btn-red" style="padding: 0.75rem 1.4rem;">Перейти в каталог оборудования</a>
-            <a href="#calc" class="btn btn-outline" style="color: #fff; border-color: rgba(255,255,255,0.4); background: transparent;">Рассчитать мощность системы</a>
-          </div>
-
-          <div class="hero-metrics">
-            <div>
-              <strong>До 128 зон</strong>
-              <span>Масштабируемость системы</span>
-            </div>
-            <div>
-              <strong>100 В линии</strong>
-              <span>Непрерывный контроль импеданса</span>
-            </div>
-            <div>
-              <strong>Интеграция ГО ЧС</strong>
-              <span>Приоритетный перехват РАСЦО</span>
-            </div>
-            <div>
-              <strong>100% РФ</strong>
-              <span>Сделано в Санкт-Петербурге</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🛡️</div>
-          <h3>Соответствие 123-ФЗ и СП 3.13130</h3>
-          <p>Полный пакет действующей разрешительной документации и сертификатов пожарной безопасности для сдачи объекта органам МЧС с первого предъявления.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3>Горячее резервирование 100В</h3>
-          <p>Автоматический ввод резервного усилителя за 0.1 секунды при отказе основного канала и встроенный контроль линий оповещения на обрыв и КЗ.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📐</div>
-          <h3>Готовая база для проектировщиков</h3>
-          <p>Библиотека структурных и принципиальных схем подключения в формате AutoCAD (DWG) и типовые шаблоны спецификаций.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. КАТАЛОГ ОБОРУДОВАНИЯ (#catalog) -->
-    <section id="view-catalog" class="view-section">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <div>
-          <h2 style="font-size: 1.6rem; color: var(--primary);">Номенклатурный каталог линейки ВЕКТОР</h2>
-          <p style="color: var(--text-muted); font-size: 0.9rem;">Выберите необходимый подраздел или воспользуйтесь быстрым поиском</p>
-        </div>
-        <div>
-          <input type="text" id="catalog-search-input" placeholder="Поиск по артикулу или названию..." style="padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 4px; width: 280px;" oninput="renderCatalog()">
-        </div>
-      </div>
-
-      <div class="catalog-bar">
-        <button class="cat-pill active" onclick="setCatalogFilter('all', this)">Все оборудование</button>
-        <button class="cat-pill" onclick="setCatalogFilter('Центральные блоки', this)">Моноблоки и Центральные приборы</button>
-        <button class="cat-pill" onclick="setCatalogFilter('Усилители', this)">Усилители мощности 100В</button>
-        <button class="cat-pill" onclick="setCatalogFilter('Громкоговорители', this)">Громкоговорители и рупоры ГО ЧС</button>
-        <button class="cat-pill" onclick="setCatalogFilter('Пульты', this)">Микрофонные консоли</button>
-        <button class="cat-pill" onclick="setCatalogFilter('Питание', this)">Блоки питания и РИП</button>
-      </div>
-
-      <div class="grid-products" id="catalog-products-container"></div>
-    </section>
-
-    <!-- 3. ТИПОВЫЕ РЕШЕНИЯ (#solutions) -->
-    <section id="view-solutions" class="view-section">
-      <div style="margin-bottom: 2rem;">
-        <h2 style="font-size: 1.6rem; color: var(--primary);">Типовые проектные решения СОУЭ</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Готовые конфигурации оборудования под типовые объекты защиты с автоматическим добавлением в спецификацию</p>
-      </div>
-
-      <!-- Решение 1 -->
-      <div class="solution-card">
-        <div>
-          <span style="font-size: 0.75rem; background: #fee2e2; color: var(--accent); padding: 3px 8px; border-radius: 3px; font-weight: 700;">СОУЭ 3 ТИПА</span>
-          <h3 style="margin-top: 0.5rem;">Общеобразовательная школа / Детский сад (до 1000 человек)</h3>
-          <p>Решение на базе моноблока ВЕКТОР-250 с разделением на 4 зоны: учебные классы, пути эвакуации, административная зона и уличные территории. Включает сопряжение с автоматической пожарной сигнализацией и приоритетный пульт дежурного.</p>
-          <ul class="solution-list">
-            <li>✔ Моноблок оповещения ВЕКТОР-250 (250 Вт) — 1 шт.</li>
-            <li>✔ Микрофонный пульт ВЕКТОР-ПМ-04 — 1 шт.</li>
-            <li>✔ Громкоговоритель потолочный 6 Вт — 30 шт.</li>
-            <li>✔ Рупорный громкоговоритель 30 Вт для спортплощадок — 2 шт.</li>
-            <li>✔ Блок питания РИП-24/20 с АКБ — 1 шт.</li>
-          </ul>
-        </div>
-        <div style="display: flex; flex-direction: column; justify-content: center; background: #f8fafc; border: 1px solid var(--border); padding: 1.5rem; border-radius: 6px;">
-          <div style="font-size: 0.85rem; color: var(--text-muted);">Стоимость базового комплекта:</div>
-          <div style="font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 1rem;">198 500 ₽</div>
-          <button class="btn btn-red" onclick="loadSolutionPreset(1)">Загрузить комплект в спецификацию</button>
-        </div>
-      </div>
-
-      <!-- Решение 2 -->
-      <div class="solution-card">
-        <div>
-          <span style="font-size: 0.75rem; background: #e0f2fe; color: var(--blue); padding: 3px 8px; border-radius: 3px; font-weight: 700;">СОУЭ 4–5 ТИПА + ГО И ЧС</span>
-          <h3 style="margin-top: 0.5rem;">Производственно-складской логистический комплекс</h3>
-          <p>Многозонная распределенная система с высокой мощностью звукового давления в цехах и складских пролетах. Предусмотрено прямое сопряжение с городской системой оповещения РАСЦО через блок линейного перехвата.</p>
-          <ul class="solution-list">
-            <li>✔ Центральный блок управления ВЕКТОР-ЦБ-500 — 1 шт.</li>
-            <li>✔ Трансляционный усилитель ВЕКТОР-УМ-1000 — 2 шт.</li>
-            <li>✔ Рупорные уличные громкоговорители 50 Вт (122 дБ) — 16 шт.</li>
-            <li>✔ Микрофонный пульт на 8 зон ВЕКТОР-ПМ-08 — 2 шт.</li>
-          </ul>
-        </div>
-        <div style="display: flex; flex-direction: column; justify-content: center; background: #f8fafc; border: 1px solid var(--border); padding: 1.5rem; border-radius: 6px;">
-          <div style="font-size: 0.85rem; color: var(--text-muted);">Стоимость комплекта:</div>
-          <div style="font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 1rem;">482 000 ₽</div>
-          <button class="btn btn-red" onclick="loadSolutionPreset(2)">Загрузить комплект в спецификацию</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. ИНЖЕНЕРНЫЙ КАЛЬКУЛЯТОР СОУЭ (#calc) -->
-    <section id="view-calc" class="view-section">
-      <div style="margin-bottom: 2rem;">
-        <h2 style="font-size: 1.6rem; color: var(--primary);">Инженерный расчет мощности и кабельных линий 100В</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Расчет суммарной мощности и сечения кабеля по методике СП 3.13130.2009 с нормативным запасом 20%</p>
-      </div>
-
-      <div class="calc-box">
-        <div class="calc-inputs">
-          <div class="calc-group">
-            <label>Количество зон оповещения</label>
-            <input type="number" id="calc-zones" value="4" min="1" max="64" oninput="runCalculator()">
-          </div>
-          <div class="calc-group">
-            <label>Количество громкоговорителей на зону (шт)</label>
-            <input type="number" id="calc-speakers-count" value="15" min="1" oninput="runCalculator()">
-          </div>
-          <div class="calc-group">
-            <label>Мощность одного громкоговорителя (Вт)</label>
-            <select id="calc-speaker-power" onchange="runCalculator()">
-              <option value="3">3 Вт (тихий офис, коридор)</option>
-              <option value="6" selected>6 Вт (стандартное потолочное)</option>
-              <option value="10">10 Вт (настенное помещение)</option>
-              <option value="30">30 Вт (рупор цех/склад)</option>
-              <option value="50">50 Вт (мощный уличный рупор)</option>
-            </select>
-          </div>
-          <div class="calc-group">
-            <label>Максимальная протяженность линии оповещения (м)</label>
-            <input type="number" id="calc-length" value="250" min="10" max="3000" oninput="runCalculator()">
-          </div>
-        </div>
-
-        <div class="calc-results">
-          <div>
-            <h3 style="margin-bottom: 1.5rem; color: var(--primary);">Результаты расчета:</h3>
-            <div class="calc-metric">
-              <strong id="calc-res-nominal">0 Вт</strong>
-              <span>Номинальная акустическая мощность нагрузки</span>
-            </div>
-            <div class="calc-metric">
-              <strong id="calc-res-total">0 Вт</strong>
-              <span>Требуемая мощность усилителя (+20% запас по СП 3.13130)</span>
-            </div>
-            <div class="calc-metric">
-              <strong id="calc-res-cable">1.5 мм²</strong>
-              <span>Рекомендуемое минимальное сечение медного кабеля КПСнг-FRLS</span>
-            </div>
-            <div style="background: #e0f2fe; padding: 0.8rem; border-radius: 4px; font-size: 0.85rem; color: var(--blue);">
-              <strong>Рекомендуемый прибор:</strong> <span id="calc-res-device">Моноблок ВЕКТОР-250</span>
-            </div>
-          </div>
-
-          <button class="btn btn-red" style="margin-top: 1.5rem;" onclick="addCalculatedDeviceToCart()">Добавить рекомендованный блок в заказ</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. ЦЕНТР ДОКУМЕНТАЦИИ (#docs) -->
-    <section id="view-docs" class="view-section">
-      <div style="margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1.6rem; color: var(--primary);">Технический центр и сертификация</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Паспорта изделий, схемы подключения в формате AutoCAD и сертификаты ТР ЕАЭС 043/2017</p>
-      </div>
-
-      <div class="table-card">
-        <table>
-          <thead>
-            <tr>
-              <th>Наименование документа</th>
-              <th>Формат</th>
-              <th>Размер</th>
-              <th>Назначение</th>
-              <th>Действие</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Сертификат соответствия ТР ЕАЭС 043/2017 (ВЕКТОР)</strong></td>
-              <td>PDF</td>
-              <td>2.4 МБ</td>
-              <td>Обязательный сертификат для сдачи органам МЧС</td>
-              <td><button class="btn btn-outline btn-sm" onclick="downloadVirtualDoc('certificate_eaes_043.pdf', 'Сертификат ТР ЕАЭС 043/2017 на серию ВЕКТОР')">Скачать PDF</button></td>
-            </tr>
-            <tr>
-              <td><strong>Типовой проект СОУЭ 3-го типа (DWG-схемы)</strong></td>
-              <td>DWG / ZIP</td>
-              <td>8.1 МБ</td>
-              <td>Структурные схемы и кабельные журналы в AutoCAD</td>
-              <td><button class="btn btn-outline btn-sm" onclick="downloadVirtualDoc('project_soue_type3.dwg', 'Чертеж AutoCAD DWG схемы СОУЭ ВЕКТОР')">Скачать DWG</button></td>
-            </tr>
-            <tr>
-              <td><strong>Руководство по эксплуатации моноблока ВЕКТОР-250</strong></td>
-              <td>PDF</td>
-              <td>3.8 МБ</td>
-              <td>Паспорт прибора, схемы клеммных колодок и программирование</td>
-              <td><button class="btn btn-outline btn-sm" onclick="downloadVirtualDoc('manual_vektor_250.pdf', 'Паспорт и РЭ ВЕКТОР-250')">Скачать PDF</button></td>
-            </tr>
-            <tr>
-              <td><strong>Таблица расчета емкости аккумуляторных батарей</strong></td>
-              <td>XLSX</td>
-              <td>420 КБ</td>
-              <td>Инженерный расчет резервирования питания (24 часа деж. + 1 час тревоги)</td>
-              <td><button class="btn btn-outline btn-sm" onclick="downloadVirtualDoc('calc_battery_soue.xlsx', 'Расчет АКБ ГОСТ Р 53325')">Скачать XLSX</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- 6. СПЕЦИФИКАЦИЯ И ОФОРМЛЕНИЕ ЗАКАЗА (#cart) -->
-    <section id="view-cart" class="view-section">
-      <div style="margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1.6rem; color: var(--primary);">Спецификация к проекту (Корзина B2B)</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Формирование сметной ведомости оборудования и выгрузка счёта для юридических лиц</p>
-      </div>
-
-      <div class="table-card" id="cart-table-wrapper"></div>
-
-      <div style="display: grid; grid-template-columns: 1fr 380px; gap: 2rem; margin-top: 1.5rem;">
-        <div style="display: flex; gap: 10px; align-items: flex-start;">
-          <button class="btn btn-outline" onclick="window.print()">Распечатать спецификацию</button>
-          <button class="btn btn-outline" onclick="exportCartToCSV()">Выгрузить в Excel (CSV)</button>
-          <button class="btn btn-outline" style="color: var(--accent);" onclick="clearCart()">Очистить</button>
-        </div>
-
-        <div style="background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem;">
-          <h3 style="margin-bottom: 1rem; color: var(--primary); font-size: 1.1rem;">Оформление заявки на поставку</h3>
-          <form onsubmit="handleSendOrder(event)">
-            <div class="form-group" style="margin-bottom: 0.8rem;">
-              <label>Наименование организации и ИНН</label>
-              <input type="text" id="order-org" required placeholder="ООО Инжиниринг, ИНН 7800000000">
-            </div>
-            <div class="form-group" style="margin-bottom: 0.8rem;">
-              <label>Телефон ответственного инженера / ГИПа</label>
-              <input type="text" id="order-phone" required placeholder="+7 (999) 000-00-00">
-            </div>
-            <div class="form-group" style="margin-bottom: 1rem;">
-              <label>Email для отправки счёта и резерва</label>
-              <input type="email" id="order-email" required placeholder="project@company.ru">
-            </div>
-            <button type="submit" class="btn btn-red" style="width: 100%; justify-content: center;">Отправить в отдел комплектации</button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- 7. ПАНЕЛЬ УПРАВЛЕНИЯ КАТАЛОГОМ (#admin) -->
-    <section id="view-admin" class="view-section">
-      <div style="margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1.6rem; color: var(--primary);">Панель администратора каталога ВЕКТОР</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Создание новых карточек, изменение цен, остатков и параметров в реальном времени</p>
-      </div>
-
-      <div class="table-card">
-        <h3 style="margin-bottom: 1rem; color: var(--primary);">Добавить новое оборудование</h3>
-        <form onsubmit="handleCreateProduct(event)">
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Артикул изделия (SKU)</label>
-              <input type="text" id="admin-add-sku" required placeholder="VCTR-MB-300">
-            </div>
-            <div class="form-group">
-              <label>Подсистема</label>
-              <select id="admin-add-cat">
-                <option value="Центральные блоки">Центральные блоки и моноблоки</option>
-                <option value="Усилители">Усилители мощности 100В</option>
-                <option value="Громкоговорители">Громкоговорители и рупоры</option>
-                <option value="Пульты">Микрофонные консоли</option>
-                <option value="Питание">Блоки питания и РИП</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Цена с НДС (руб.)</label>
-              <input type="number" step="0.01" id="admin-add-price" required placeholder="55000">
-            </div>
-            <div class="form-group">
-              <label>Складской остаток (шт)</label>
-              <input type="number" id="admin-add-stock" value="10" required>
-            </div>
-          </div>
-          <div class="form-group" style="margin-bottom: 1rem;">
-            <label>Полное наименование оборудования</label>
-            <input type="text" id="admin-add-title" required placeholder="Блок контроля линий оповещения ВЕКТОР-БКЛ-8">
-          </div>
-          <div class="form-group" style="margin-bottom: 1rem;">
-            <label>Технические характеристики (для карточки)</label>
-            <textarea id="admin-add-specs" rows="3" placeholder="Мощность: 300 Вт; Число зон: 8; Контроль КЗ/обрыв; Линейный вход ГО ЧС"></textarea>
-          </div>
-          <div style="display: flex; gap: 10px;">
-            <button type="submit" class="btn btn-red">+ Опубликовать карточку</button>
-            <button type="button" class="btn btn-outline" onclick="exportDatabaseJSON()">📥 Скачать базу JSON</button>
-            <button type="button" class="btn btn-outline" onclick="restoreInitialCatalog()">Восстановить заводскую базу</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="table-card">
-        <h3 style="margin-bottom: 1rem; color: var(--primary);">Текущая номенклатурная база</h3>
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 120px;">Артикул</th>
-              <th>Наименование</th>
-              <th>Категория</th>
-              <th style="width: 120px;">Цена с НДС</th>
-              <th style="width: 80px;">Склад</th>
-              <th style="width: 120px;">Управление</th>
-            </tr>
-          </thead>
-          <tbody id="admin-table-tbody"></tbody>
-        </table>
-      </div>
-    </section>
-
-  </div>
-
-  <!-- МОДАЛЬНОЕ ОКНО ПРОСМОТРА КАРТОЧКИ ТОВАРА / ПАСПОРТА -->
-  <div class="modal-overlay" id="product-modal">
-    <div class="modal-window">
-      <button class="modal-close" onclick="closeProductModal()">&times;</button>
-      <div id="product-modal-content"></div>
-    </div>
-  </div>
-
-  <!-- МОДАЛЬНОЕ ОКНО РЕДАКТИРОВАНИЯ ТОВАРА В АДМИНКЕ -->
-  <div class="modal-overlay" id="edit-modal">
-    <div class="modal-window">
-      <button class="modal-close" onclick="closeEditModal()">&times;</button>
-      <h3 style="margin-bottom: 1rem; color: var(--primary);">Редактирование карточки товара</h3>
-      <form onsubmit="handleSaveEditProduct(event)">
-        <input type="hidden" id="edit-id">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Артикул</label>
-            <input type="text" id="edit-sku" required>
-          </div>
-          <div class="form-group">
-            <label>Категория</label>
-            <select id="edit-cat">
-              <option value="Центральные блоки">Центральные блоки и моноблоки</option>
-              <option value="Усилители">Усилители мощности 100В</option>
-              <option value="Громкоговорители">Громкоговорители и рупоры</option>
-              <option value="Пульты">Микрофонные консоли</option>
-              <option value="Питание">Блоки питания и РИП</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Цена с НДС (руб.)</label>
-            <input type="number" step="0.01" id="edit-price" required>
-          </div>
-          <div class="form-group">
-            <label>Остаток на складе</label>
-            <input type="number" id="edit-stock" required>
-          </div>
-        </div>
-        <div class="form-group" style="margin-bottom: 1rem;">
-          <label>Наименование</label>
-          <input type="text" id="edit-title" required>
-        </div>
-        <div class="form-group" style="margin-bottom: 1.2rem;">
-          <label>Характеристики</label>
-          <textarea id="edit-specs" rows="4"></textarea>
-        </div>
-        <div style="display: flex; justify-content: flex-end; gap: 10px;">
-          <button type="button" class="btn btn-outline" onclick="closeEditModal()">Отмена</button>
-          <button type="submit" class="btn btn-red">Сохранить изменения</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Подвал сайта -->
-  <footer>
-    <div class="footer-grid">
-      <div class="footer-col">
-        <h4 style="font-size: 1.2rem; color: #fff;">ИНТЕКТРА <span>| ВЕКТОР</span></h4>
-        <p style="font-size: 0.85rem; line-height: 1.6;">
-          Комплексные поставки сертифицированного оборудования СОУЭ 3, 4 и 5 типов, локальных систем оповещения ГО и ЧС, трансляционных усилителей и акустических систем.
-        </p>
-      </div>
-      <div class="footer-col">
-        <h4>Навигация по разделам</h4>
-        <ul>
-          <li><a href="#home">О системе ВЕКТОР</a></li>
-          <li><a href="#catalog">Каталог оборудования</a></li>
-          <li><a href="#solutions">Типовые проектные решения</a></li>
-          <li><a href="#calc">Калькулятор мощности СОУЭ</a></li>
-          <li><a href="#docs">Сертификаты и чертежи DWG</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Контакты техподдержки</h4>
-        <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Санкт-Петербург, Инженерный отдел</p>
-        <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Телефон: <a href="tel:+78005552430">8 (800) 555-24-30</a></p>
-        <p style="font-size: 0.85rem;">Email: <a href="mailto:vector@intektra.ru">vector@intektra.ru</a></p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div>© 2026 ИНТЕКТРА. Все права защищены. Соответствие ТР ЕАЭС 043/2017.</div>
-      <div>Сделано для GitHub Pages</div>
-    </div>
-  </footer>
-
-  <script>
-    // Исходная эталонная база позиций линейки ВЕКТОР (как у ЛУИС+)
-    const initialVectorProducts = [
-      {
-        id: 1,
-        sku: "VCTR-MB-250",
-        category: "Центральные блоки",
-        title: "Моноблок оповещения и управления ВЕКТОР-250",
-        price: 94500,
-        stock: 14,
-        specs: "Выходная мощность: 250 Вт (100 В)\nКоличество зон: 4 независимые зоны\nВстроенный блок ГО и ЧС: приоритетный вход РАСЦО\nКонтроль линий: обрыв, КЗ, изменение импеданса"
-      },
-      {
-        id: 2,
-        sku: "VCTR-CB-500",
-        category: "Центральные блоки",
-        title: "Центральный блок управления ВЕКТОР-ЦБ-500",
-        price: 138000,
-        stock: 6,
-        specs: "Выходная мощность: 500 Вт (100 В)\nКоличество зон: 8 зон оповещения с расширением до 128\nИнтерфейс связи: Ethernet / RS-485\nЖК-дисплей состояния шлейфов и питания"
-      },
-      {
-        id: 3,
-        sku: "VCTR-PA-500",
-        category: "Усилители",
-        title: "Усилитель мощности трансляционный ВЕКТОР-УМ-500",
-        price: 78200,
-        stock: 11,
-        specs: "Номинальная мощность: 500 Вт\nВыходное напряжение: 100 В / 70 В\nЗащита от перегрузки, КЗ и перегрева\nАвтоматический переход на резервное питание 24 В"
-      },
-      {
-        id: 4,
-        sku: "VCTR-PA-1000",
-        category: "Усилители",
-        title: "Усилитель трансляционный ВЕКТОР-УМ-1000",
-        price: 115000,
-        stock: 5,
-        specs: "Номинальная мощность: 1000 Вт\nВыходное напряжение: 100 В\nКласс энергоэффективности: Class-D\nКонтроль целостности усилительного тракта"
-      },
-      {
-        id: 5,
-        sku: "VCTR-CS-06",
-        category: "Громкоговорители",
-        title: "Громкоговоритель потолочный ВЕКТОР-ГП-06 (6 Вт)",
-        price: 1450,
-        stock: 350,
-        specs: "Мощность: 6 / 3 / 1.5 Вт (100 В)\nЗвуковое давление: 92 дБ\nОгнезащитный металлический купол\nДиапазон частот: 100 - 16000 Гц"
-      },
-      {
-        id: 6,
-        sku: "VCTR-WS-10",
-        category: "Громкоговорители",
-        title: "Громкоговоритель настенный ВЕКТОР-ГН-10 (10 Вт)",
-        price: 1980,
-        stock: 210,
-        specs: "Мощность: 10 / 5 Вт (100 В)\nЗвуковое давление: 94 дБ\nМатериал корпуса: ударопрочный ABS-пластик\nИсполнение по ГОСТ: IP41"
-      },
-      {
-        id: 7,
-        sku: "VCTR-HS-30",
-        category: "Громкоговорители",
-        title: "Рупорный громкоговоритель уличный ВЕКТОР-ГР-30 (ГО ЧС)",
-        price: 5200,
-        stock: 95,
-        specs: "Мощность: 30 / 15 Вт (100 В)\nЗвуковое давление: 118 дБ\nКласс защиты: IP66 (всепогодный)\nРабочая температура: -55...+60 °С"
-      },
-      {
-        id: 8,
-        sku: "VCTR-HS-50",
-        category: "Громкоговорители",
-        title: "Рупорный громкоговоритель ВЕКТОР-ГР-50 (122 дБ)",
-        price: 7600,
-        stock: 45,
-        specs: "Мощность: 50 Вт (100 В)\nМаксимальное давление: 122 дБ\nВысокая разборчивость речевых сообщений ГО и ЧС\nАлюминиевый герметичный корпус"
-      },
-      {
-        id: 9,
-        sku: "VCTR-RM-04",
-        category: "Пульты",
-        title: "Микрофонный пульт дистанционный ВЕКТОР-ПМ-04",
-        price: 24500,
-        stock: 18,
-        specs: "Прямой выбор зон: 4 зоны + Общий вызов\nИнтерфейс: RS-485 (дальность линии до 1000 м)\nВстроенный сигнал привлечения внимания (гонг)\nПитание по сигнальному кабелю"
-      },
-      {
-        id: 10,
-        sku: "VCTR-RM-08",
-        category: "Пульты",
-        title: "Микрофонный пульт ВЕКТОР-ПМ-08 с селектором зон",
-        price: 36000,
-        stock: 12,
-        specs: "Количество зон: 8 зон + клавиша тревожного вещания\nСветодиодная индикация состояния каждой зоны\nЛинейный вход для подключения внешнего источника"
-      },
-      {
-        id: 11,
-        sku: "VCTR-BP-24",
-        category: "Питание",
-        title: "Блок бесперебойного питания ВЕКТОР-БП-24/20",
-        price: 38900,
-        stock: 22,
-        specs: "Выходное напряжение: 24 В DC\nМаксимальный ток нагрузки: 20 А\nОтсек под 2 АКБ по 40 А*ч\nИнтеллектуальный контроль заряда и сетевого ввода"
-      }
-    ];
-
-    let products = JSON.parse(localStorage.getItem('intektra_vector_master_db')) || initialVectorProducts;
-    let cart = JSON.parse(localStorage.getItem('intektra_vector_cart')) || [];
-    let currentCatalogFilter = 'all';
-
-    function saveDB() {
-      localStorage.setItem('intektra_vector_master_db', JSON.stringify(products));
-      renderCatalog();
-      renderAdminTable();
-    }
-
-    function saveCart() {
-      localStorage.setItem('intektra_vector_cart', JSON.stringify(cart));
-      updateCartBadge();
-      renderCartTable();
-    }
-
-    function restoreInitialCatalog() {
-      if (confirm('Сбросить базу каталога к исходным заводским позициям ВЕКТОР?')) {
-        products = [...initialVectorProducts];
-        saveDB();
-        alert('Каталог успешно восстановлен');
-      }
-    }
-
-    // SPA Маршрутизатор по ХЭШАМ (#home, #catalog, #solutions, #calc, #docs, #cart, #admin)
-    function handleRoute() {
-      const hash = window.location.hash || '#home';
-      const targetId = 'view-' + hash.replace('#', '');
-
-      document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-      const activeSec = document.getElementById(targetId);
-      if (activeSec) {
-        activeSec.classList.add('active');
-      } else {
-        document.getElementById('view-home').classList.add('active');
+  // Фильтрация карточек
+  const filteredCards = useMemo(() => {
+    return cards.filter((card) => {
+      const q = searchQuery.trim().toLowerCase();
+      if (q) {
+        const matchCompany = card.company.toLowerCase().includes(q);
+        const matchOrder = card.orderNum.toLowerCase().includes(q);
+        const matchInn = (card.inn || '').toLowerCase().includes(q);
+        const matchCarrier = (card.carrier || '').toLowerCase().includes(q);
+        if (!matchCompany && !matchOrder && !matchInn && !matchCarrier) return false;
       }
 
-      document.querySelectorAll('nav .nav-link').forEach(link => {
-        if (link.getAttribute('href') === hash) link.classList.add('active');
-        else link.classList.remove('active');
-      });
+      if (managerFilter !== 'all' && card.manager !== managerFilter) {
+        return false;
+      }
 
-      window.scrollTo(0, 0);
+      if (quickFilter === 'overdue' && !isCardOverdue(card)) return false;
+      if (quickFilter === 'comments' && (!card.comments || card.comments.length === 0)) return false;
+      if (quickFilter === 'high_value' && (card.amount || 0) < 1000000) return false;
 
-      if (hash === '#catalog') renderCatalog();
-      if (hash === '#cart') renderCartTable();
-      if (hash === '#admin') renderAdminTable();
-      if (hash === '#calc') runCalculator();
-    }
-
-    window.addEventListener('hashchange', handleRoute);
-    window.addEventListener('DOMContentLoaded', () => {
-      handleRoute();
-      updateCartBadge();
-      runCalculator();
+      return true;
     });
+  }, [cards, searchQuery, quickFilter, managerFilter]);
 
-    // Каталог: фильтрация и рендер
-    function setCatalogFilter(cat, btn) {
-      currentCatalogFilter = cat;
-      document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderCatalog();
+  // Живая аналитика KPI
+  const kpiStats = useMemo(() => {
+    const inProgress = cards.filter((c) => c.columnId === 'in_progress');
+    const inDelivery = cards.filter((c) => c.columnId === 'in_delivery');
+    const done = cards.filter((c) => c.columnId === 'done');
+    const overdue = cards.filter((c) => isCardOverdue(c));
+
+    const sumInProgress = inProgress.reduce((acc, c) => acc + (c.amount || 0), 0);
+    const sumInDelivery = inDelivery.reduce((acc, c) => acc + (c.amount || 0), 0);
+    const sumDone = done.reduce((acc, c) => acc + (c.amount || 0), 0);
+    const totalPortfolio = sumInProgress + sumInDelivery + sumDone;
+
+    return {
+      inProgressCount: inProgress.length,
+      inDeliveryCount: inDelivery.length,
+      doneCount: done.length,
+      overdueCount: overdue.length,
+      sumInProgress,
+      sumInDelivery,
+      sumDone,
+      totalPortfolio
+    };
+  }, [cards]);
+
+  // Активная карточка для модального окна
+  const selectedCard = useMemo(
+    () => cards.find((c) => c.id === selectedCardId) || null,
+    [cards, selectedCardId]
+  );
+
+  // Обработчики Drag and Drop
+  const handleDragStart = (e, cardId) => {
+    setDraggedCardId(cardId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e, colId) => {
+    e.preventDefault();
+    if (dragOverColId !== colId) {
+      setDragOverColId(colId);
     }
+  };
 
-    function renderCatalog() {
-      const search = (document.getElementById('catalog-search-input')?.value || '').toLowerCase().trim();
-      const container = document.getElementById('catalog-products-container');
-      if (!container) return;
+  const handleDrop = (e, targetColId) => {
+    e.preventDefault();
+    if (draggedCardId) {
+      moveCardToColumn(draggedCardId, targetColId);
+    }
+    setDraggedCardId(null);
+    setDragOverColId(null);
+  };
 
-      const filtered = products.filter(item => {
-        const matchesCat = currentCatalogFilter === 'all' || item.category === currentCatalogFilter;
-        const matchesSearch = item.title.toLowerCase().includes(search) || item.sku.toLowerCase().includes(search);
-        return matchesCat && matchesSearch;
-      });
+  const moveCardToColumn = (cardId, targetColId) => {
+    setCards((prev) =>
+      prev.map((c) => {
+        if (c.id !== cardId) return c;
+        let updatedTags = [...c.tags];
+        if (targetColId === 'done') {
+          updatedTags = ['teal'];
+        } else if (!updatedTags.includes('red')) {
+          updatedTags = ['red', 'teal'];
+        }
+        return { ...c, columnId: targetColId, tags: updatedTags };
+      })
+    );
+  };
 
-      if (filtered.length === 0) {
-        container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #888;">По заданным критериям оборудования не найдено.</div>`;
-        return;
-      }
+  // Быстрое создание новой карточки
+  const handleCreateCard = (e, colId) => {
+    e.preventDefault();
+    if (!newCardCompany.trim()) return;
 
-      container.innerHTML = filtered.map(item => `
-        <div class="product-card">
-          <div class="card-top">
-            <div class="card-sku-row">
-              <span class="card-sku">${escapeHtml(item.sku)}</span>
-              <span class="card-tag">ТР ЕАЭС 043</span>
+    const orderNumber = newCardOrderNum.trim() || String(Math.floor(11300 + Math.random() * 500));
+    const formattedCompany = newCardCompany.trim().toUpperCase();
+    const numericAmount = parseInt(String(newCardAmount).replace(/\D/g, ''), 10) || 450000;
+
+    const newCard = {
+      id: `c-${Date.now()}`,
+      company: formattedCompany,
+      orderNum: orderNumber,
+      columnId: colId,
+      tags: colId === 'done' ? ['teal'] : ['red', 'teal'],
+      hasDescription: true,
+      description: `Заказ №${orderNumber} для контрагента ${formattedCompany}. Сформирован в системе TRADEATM PRO.`,
+      dueDate: colId === 'done' ? null : newCardDate || '2026-10-25',
+      amount: numericAmount,
+      manager: 'А. Смирнов',
+      inn: '7701000000',
+      carrier: 'Деловые Линии',
+      tracking: 'На оформлении',
+      checklist: [
+        { id: 1, text: 'Проверка оплаты счета', done: true },
+        { id: 2, text: 'Комплектация заказа на складе', done: false },
+        { id: 3, text: 'Отгрузка в транспортную компанию', done: false }
+      ],
+      comments: []
+    };
+
+    setCards((prev) => [newCard, ...prev]);
+    setNewCardCompany('');
+    setNewCardOrderNum('');
+    setNewCardAmount('');
+    setAddingToCol(null);
+  };
+
+  // Добавление комментария в карточку
+  const handleAddComment = (e) => {
+    e.preventDefault();
+    if (!newCommentText.trim() || !selectedCard) return;
+
+    const commentObj = {
+      id: Date.now(),
+      author: 'Вы (Руководитель проектов)',
+      time: '14 окт, сейчас',
+      text: newCommentText.trim()
+    };
+
+    setCards((prev) =>
+      prev.map((c) =>
+        c.id === selectedCard.id
+          ? { ...c, comments: [...(c.comments || []), commentObj] }
+          : c
+      )
+    );
+    setNewCommentText('');
+  };
+
+  // Переключение пункта чек-листа
+  const toggleChecklistItem = (cardId, itemId) => {
+    setCards((prev) =>
+      prev.map((c) => {
+        if (c.id !== cardId) return c;
+        return {
+          ...c,
+          checklist: (c.checklist || []).map((item) =>
+            item.id === itemId ? { ...item, done: !item.done } : item
+          )
+        };
+      })
+    );
+  };
+
+  // Добавление пункта в чек-лист
+  const handleAddChecklistItem = (e) => {
+    e.preventDefault();
+    if (!newChecklistText.trim() || !selectedCard) return;
+    const newItem = {
+      id: Date.now(),
+      text: newChecklistText.trim(),
+      done: false
+    };
+    setCards((prev) =>
+      prev.map((c) =>
+        c.id === selectedCard.id
+          ? { ...c, checklist: [...(c.checklist || []), newItem] }
+          : c
+      )
+    );
+    setNewChecklistText('');
+  };
+
+  // Переключение цветного тега на карточке
+  const toggleCardTag = (cardId, tagKey) => {
+    setCards((prev) =>
+      prev.map((c) => {
+        if (c.id !== cardId) return c;
+        const exists = c.tags.includes(tagKey);
+        const nextTags = exists
+          ? c.tags.filter((t) => t !== tagKey)
+          : [...c.tags, tagKey];
+        return { ...c, tags: nextTags };
+      })
+    );
+  };
+
+  // Обновление поля карточки
+  const updateCardField = (cardId, field, value) => {
+    setCards((prev) =>
+      prev.map((c) => (c.id === cardId ? { ...c, [field]: value } : c))
+    );
+  };
+
+  // Отправка карточки в архив
+  const archiveCard = (cardId) => {
+    const target = cards.find((c) => c.id === cardId);
+    if (!target) return;
+    setArchivedCards((prev) => [target, ...prev]);
+    setCards((prev) => prev.filter((c) => c.id !== cardId));
+    setSelectedCardId(null);
+  };
+
+  // Восстановление из архива
+  const restoreFromArchive = (cardId) => {
+    const target = archivedCards.find((c) => c.id === cardId);
+    if (!target) return;
+    setCards((prev) => [target, ...prev]);
+    setArchivedCards((prev) => prev.filter((c) => c.id !== cardId));
+  };
+
+  // Экспорт текущих заказов в CSV
+  const exportToCSV = () => {
+    const headers = ['Номер заказа', 'Контрагент', 'ИНН', 'Статус', 'Срок отгрузки', 'Сумма (руб)', 'Менеджер', 'ТК'];
+    const statusMap = {
+      in_progress: 'В работе',
+      in_delivery: 'В доставке',
+      done: 'Готово'
+    };
+    const rows = filteredCards.map((c) => [
+      c.orderNum,
+      `"${c.company}"`,
+      c.inn || '',
+      statusMap[c.columnId] || c.columnId,
+      c.dueDate || 'Без срока',
+      c.amount || 0,
+      c.manager || '',
+      `"${c.carrier || ''}"`
+    ]);
+
+    const csvContent =
+      'data:text/csv;charset=utf-8,\uFEFF' +
+      [headers.join(';'), ...rows.map((e) => e.join(';'))].join('\n');
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `TRADEATM_Orders_${CURRENT_DATE}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  return (
+    <div className={darkMode ? 'dark' : ''}>
+      <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
+        
+        {/* ВЕРХНЯЯ ШАПКА САЙТА (Точное соответствие скриншоту TRADEATM + панель PRO-инструментов) */}
+        <header className="sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 lg:px-7 pt-3.5 pb-0">
+          <div className="max-w-[1440px] mx-auto">
+            
+            {/* Верхний ряд: Иконка папки с вкладками + TRADEATM + ... + Переключатели режимов */}
+            <div className="flex flex-wrap items-center justify-between gap-4 pb-3">
+              
+              {/* Логотип 1-в-1 как на скриншоте: желтая папка с цветными закладками + TRADEATM + три точки */}
+              <div className="flex items-center gap-2.5">
+                <div className="relative w-7 h-7 flex items-center justify-center select-none" title="Проект TRADEATM">
+                  {/* Цветные закладки внутри папки как на иконке Planno */}
+                  <span className="absolute top-0.5 left-1 w-2 h-2 rounded-xs bg-rose-400 rotate-[-8deg]" />
+                  <span className="absolute top-0.5 left-2.5 w-2 h-2 rounded-xs bg-emerald-400" />
+                  <span className="absolute top-0.5 right-1 w-2 h-2 rounded-xs bg-sky-400 rotate-[8deg]" />
+                  {/* Корпус папки */}
+                  <svg className="w-6 h-6 relative z-10 drop-shadow-2xs" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M3 7.5C3 6.39543 3.89543 5.5 5 5.5H9.17157C9.70201 5.5 10.2107 5.71071 10.5858 6.08579L11.9142 7.41421C12.2893 7.78929 12.798 8 13.3284 8H19C20.1046 8 21 8.89543 21 10V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V7.5Z"
+                      fill="#FACC15"
+                    />
+                    <path
+                      d="M3 10.5C3 9.67157 3.67157 9 4.5 9H19.5C20.3284 9 21 9.67157 21 10.5V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V10.5Z"
+                      fill="#FDE047"
+                    />
+                  </svg>
+                </div>
+
+                <h1 className="text-[19px] font-bold tracking-tight text-slate-900 dark:text-white">
+                  TRADEATM
+                </h1>
+
+                <button
+                  onClick={() => setShowKpiBar(!showKpiBar)}
+                  className="p-1 rounded-md text-slate-500 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  title="Меню доски / Показать аналитику"
+                >
+                  <MoreHorizontal className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Поиск и быстрые фильтры */}
+              <div className="flex flex-1 max-w-md items-center gap-2">
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Быстрый фильтр по компании или № (11268, МСЗ)..."
+                    className="w-full pl-9 pr-8 py-1.5 text-xs rounded-lg bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:bg-white dark:focus:bg-slate-800 transition-all"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Правая панель инструментов: Переключение 1:1 Скриншот vs PRO ERP */}
+              <div className="flex items-center gap-2">
+                <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200/80 dark:border-slate-700">
+                  <button
+                    onClick={() => {
+                      setCardMode('classic');
+                      setShowKpiBar(false);
+                    }}
+                    className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                      cardMode === 'classic'
+                        ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-2xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                    }`}
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    Оригинал 1:1
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCardMode('pro');
+                      setShowKpiBar(true);
+                    }}
+                    className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                      cardMode === 'pro'
+                        ? 'bg-indigo-600 text-white shadow-2xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                    }`}
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    PRO ERP
+                  </button>
+                </div>
+
+                {/* Кнопка показа/скрытия аналитики */}
+                <button
+                  onClick={() => setShowKpiBar(!showKpiBar)}
+                  className={`p-1.5 rounded-lg border text-xs font-medium transition-colors flex items-center gap-1 ${
+                    showKpiBar
+                      ? 'bg-indigo-50 border-indigo-200 text-indigo-700 dark:bg-indigo-950/60 dark:border-indigo-800 dark:text-indigo-300'
+                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
+                  }`}
+                  title="Показать / скрыть финансовую сводку KPI"
+                >
+                  <TrendingUp className="w-4 h-4" />
+                  <span className="hidden xl:inline">Аналитика</span>
+                </button>
+
+                {/* Экспорт CSV */}
+                <button
+                  onClick={exportToCSV}
+                  className="p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-1 text-xs font-medium"
+                  title="Выгрузить таблицу заказов в CSV / Excel"
+                >
+                  <Download className="w-4 h-4" />
+                </button>
+
+                {/* Переключатель темы */}
+                <button
+                  onClick={() => setDarkMode(!darkMode)}
+                  className="p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                  title="Темная / Светлая тема"
+                >
+                  {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
-            <h3 class="card-title">${escapeHtml(item.title)}</h3>
-            <div class="card-specs">${escapeHtml(item.specs)}</div>
-            <div class="card-docs-row">
-              <span class="doc-badge" onclick="openProductModal(${item.id})">Паспорт изделия</span>
-              <span class="doc-badge" onclick="downloadVirtualDoc('${item.sku}_scheme.dwg', 'Схема подключения ${item.title}')">DWG схема</span>
-            </div>
-            <div style="font-size: 0.78rem; color: var(--green); font-weight: 600;">
-              ✔ На складе в СПб: ${item.stock} шт.
+
+            {/* Нижний ряд шапки: 4 основные вкладки из скриншота + быстрые фильтры */}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              {/* Навигационные вкладки (Доска, Список, Календарь, Архив) — точь-в-точь как на скриншоте */}
+              <nav className="flex items-center gap-5">
+                <button
+                  onClick={() => setActiveTab('board')}
+                  className={`flex items-center gap-2 py-2.5 text-[14px] font-medium border-b-2 transition-all ${
+                    activeTab === 'board'
+                      ? 'border-slate-800 dark:border-white text-slate-900 dark:text-white font-semibold'
+                      : 'border-transparent text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
+                  }`}
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                  <span>Доска</span>
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('list')}
+                  className={`flex items-center gap-2 py-2.5 text-[14px] font-medium border-b-2 transition-all ${
+                    activeTab === 'list'
+                      ? 'border-slate-800 dark:border-white text-slate-900 dark:text-white font-semibold'
+                      : 'border-transparent text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
+                  }`}
+                >
+                  <List className="w-4 h-4" />
+                  <span>Список</span>
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('calendar')}
+                  className={`flex items-center gap-2 py-2.5 text-[14px] font-medium border-b-2 transition-all ${
+                    activeTab === 'calendar'
+                      ? 'border-slate-800 dark:border-white text-slate-900 dark:text-white font-semibold'
+                      : 'border-transparent text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
+                  }`}
+                >
+                  <CalendarIcon className="w-4 h-4" />
+                  <span>Календарь</span>
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('archive')}
+                  className={`flex items-center gap-2 py-2.5 text-[14px] font-medium border-b-2 transition-all ${
+                    activeTab === 'archive'
+                      ? 'border-slate-800 dark:border-white text-slate-900 dark:text-white font-semibold'
+                      : 'border-transparent text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
+                  }`}
+                >
+                  <Archive className="w-4 h-4" />
+                  <span>Архив</span>
+                </button>
+              </nav>
+
+              {/* Ненавязчивые быстрые фильтры справа */}
+              <div className="flex items-center gap-1.5 pb-1.5 overflow-x-auto">
+                <button
+                  onClick={() => setQuickFilter('all')}
+                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-all ${
+                    quickFilter === 'all'
+                      ? 'bg-slate-800 text-white dark:bg-white dark:text-slate-900'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200'
+                  }`}
+                >
+                  Все ({cards.length})
+                </button>
+                <button
+                  onClick={() => setQuickFilter(quickFilter === 'overdue' ? 'all' : 'overdue')}
+                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-all flex items-center gap-1 ${
+                    quickFilter === 'overdue'
+                      ? 'bg-rose-600 text-white'
+                      : 'bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200/70 dark:border-rose-900/60 hover:bg-rose-100'
+                  }`}
+                >
+                  Просрочено: 13 окт ({kpiStats.overdueCount})
+                </button>
+                <button
+                  onClick={() => setQuickFilter(quickFilter === 'comments' ? 'all' : 'comments')}
+                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-all flex items-center gap-1 ${
+                    quickFilter === 'comments'
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200'
+                  }`}
+                >
+                  💬 С комментариями (5)
+                </button>
+              </div>
             </div>
           </div>
-          <div class="card-bottom">
-            <div class="card-price">${Number(item.price).toLocaleString('ru-RU')} ₽ <small>с НДС</small></div>
-            <button class="btn btn-red btn-sm" onclick="addToCart(${item.id})">+ В проект</button>
-          </div>
-        </div>
-      `).join('');
-    }
+        </header>
 
-    // Модальное окно паспорта оборудования
-    function openProductModal(id) {
-      const p = products.find(x => x.id === id);
-      if (!p) return;
+        {/* ПАНЕЛЬ ЖИВОЙ АНАЛИТИКИ И KPI (Показывается в PRO-режиме или по клику) */}
+        {showKpiBar && (
+          <section className="bg-white/60 dark:bg-slate-900/50 border-b border-slate-200/70 dark:border-slate-800/80 px-4 lg:px-8 py-3">
+            <div className="max-w-[1600px] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-3">
+              
+              <div className="bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xs flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">В производстве и сборке</span>
+                  <div className="text-lg font-bold text-slate-900 dark:text-white mt-0.5">
+                    {formatMoney(kpiStats.sumInProgress)}
+                  </div>
+                  <span className="text-[11px] text-rose-600 dark:text-rose-400 font-medium">
+                    {kpiStats.inProgressCount} активных заказов (по доске 10)
+                  </span>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-rose-100/80 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                  <Clock className="w-5 h-5" />
+                </div>
+              </div>
 
-      const content = document.getElementById('product-modal-content');
-      content.innerHTML = `
-        <span style="font-size: 0.75rem; background: #fee2e2; color: var(--accent); padding: 3px 8px; border-radius: 3px; font-weight: 700;">ТЕХНИЧЕСКИЙ ПАСПОРТ</span>
-        <h2 style="margin: 0.5rem 0 1rem; color: var(--primary);">${escapeHtml(p.title)}</h2>
-        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Номенклатурный артикул: <strong>${escapeHtml(p.sku)}</strong></div>
-        <div style="background: #f8fafc; border: 1px solid var(--border); padding: 1rem; border-radius: 6px; font-size: 0.88rem; line-height: 1.6; white-space: pre-line; margin-bottom: 1.2rem;">
-          ${escapeHtml(p.specs)}
-        </div>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
-          Прибор изготовлен в соответствии с требованиями ТР ЕАЭС 043/2017 и ГОСТ Р 53325-2012. Гарантийный срок эксплуатации составляет 36 месяцев с момента ввода в эксплуатацию.
-        </p>
-        <div style="display: flex; gap: 10px;">
-          <button class="btn btn-red" onclick="addToCart(${p.id}); closeProductModal();">Включить в спецификацию</button>
-          <button class="btn btn-outline" onclick="downloadVirtualDoc('${p.sku}_passport.pdf', 'Паспорт изделия ${p.title}')">Скачать паспорт PDF</button>
-        </div>
-      `;
-      document.getElementById('product-modal').style.display = 'flex';
-    }
+              <div className="bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xs flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Грузов в пути (ТК)</span>
+                  <div className="text-lg font-bold text-slate-900 dark:text-white mt-0.5">
+                    {formatMoney(kpiStats.sumInDelivery)}
+                  </div>
+                  <span className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
+                    {kpiStats.inDeliveryCount} партий в доставке
+                  </span>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-amber-100/80 dark:bg-amber-950/70 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                  <Truck className="w-5 h-5" />
+                </div>
+              </div>
 
-    function closeProductModal() {
-      document.getElementById('product-modal').style.display = 'none';
-    }
+              <div className="bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xs flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Завершено и отгружено</span>
+                  <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+                    {formatMoney(kpiStats.sumDone)}
+                  </div>
+                  <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">
+                    {kpiStats.doneCount} видимых • 21 всего за месяц
+                  </span>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-emerald-100/80 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                  <CheckCircle2 className="w-5 h-5" />
+                </div>
+              </div>
 
-    // Виртуальное скачивание документов без 404
-    function downloadVirtualDoc(filename, title) {
-      const content = `ОФИЦИАЛЬНАЯ ДОКУМЕНТАЦИЯ ИНТЕКТРА ВЕКТОР\nДокумент: ${title}\nФайл: ${filename}\nДата формирования: ${new Date().toLocaleDateString('ru-RU')}\nСтатус: Действующий сертификат соответствия ТР ЕАЭС 043/2017.`;
-      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
+              <div
+                onClick={() => setQuickFilter(quickFilter === 'overdue' ? 'all' : 'overdue')}
+                className="cursor-pointer bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-rose-300 dark:hover:border-rose-700 shadow-2xs flex items-center justify-between transition-all"
+              >
+                <div>
+                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Контроль дедлайнов</span>
+                  <div className="text-lg font-bold text-rose-600 dark:text-rose-400 mt-0.5 flex items-center gap-1.5">
+                    {kpiStats.overdueCount > 0 ? `${kpiStats.overdueCount} просрочен` : 'Все в графике'}
+                  </div>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                    СТРОЙПРОМТОРГ (13 окт 2026)
+                  </span>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                  <AlertCircle className="w-5 h-5" />
+                </div>
+              </div>
 
-    // Инженерный калькулятор
-    function runCalculator() {
-      const zones = parseInt(document.getElementById('calc-zones').value) || 1;
-      const count = parseInt(document.getElementById('calc-speakers-count').value) || 1;
-      const power = parseFloat(document.getElementById('calc-speaker-power').value) || 6;
-      const length = parseFloat(document.getElementById('calc-length').value) || 100;
-
-      const nominal = zones * count * power;
-      const withReserve = Math.round(nominal * 1.2); // +20% нормативный запас по СП 3.13130
-
-      document.getElementById('calc-res-nominal').innerText = `${nominal} Вт`;
-      document.getElementById('calc-res-total').innerText = `${withReserve} Вт`;
-
-      let cable = "1.0 мм²";
-      if (length > 300 || withReserve > 400) cable = "1.5 мм²";
-      if (length > 600 || withReserve > 800) cable = "2.5 мм²";
-      document.getElementById('calc-res-cable').innerText = cable;
-
-      let dev = "Моноблок ВЕКТОР-250";
-      if (withReserve > 250 && withReserve <= 500) dev = "Центральный блок ВЕКТОР-ЦБ-500";
-      if (withReserve > 500) dev = "ВЕКТОР-ЦБ-500 + Усилитель ВЕКТОР-УМ-1000";
-      document.getElementById('calc-res-device').innerText = dev;
-    }
-
-    function addCalculatedDeviceToCart() {
-      const devName = document.getElementById('calc-res-device').innerText;
-      const target = products.find(p => devName.includes(p.sku) || devName.includes(p.title.split(' ')[0]));
-      if (target) {
-        addToCart(target.id);
-      } else {
-        addToCart(1); // По умолчанию ВЕКТОР-250
-      }
-      window.location.hash = '#cart';
-    }
-
-    // Загрузка типовых решений в корзину
-    function loadSolutionPreset(type) {
-      if (type === 1) {
-        // Школа: 1 моноблок, 1 пульт, 30 потолочных, 2 рупора, 1 БП
-        addToCartCustom(1, 1);
-        addToCartCustom(9, 1);
-        addToCartCustom(5, 30);
-        addToCartCustom(7, 2);
-        addToCartCustom(11, 1);
-      } else {
-        // Склад: 1 ЦБ, 2 усилителя 1000, 16 уличных рупоров, 2 пульта
-        addToCartCustom(2, 1);
-        addToCartCustom(4, 2);
-        addToCartCustom(8, 16);
-        addToCartCustom(10, 2);
-      }
-      alert('Типовой комплект оборудования добавлен в спецификацию!');
-      window.location.hash = '#cart';
-    }
-
-    function addToCartCustom(prodId, qty) {
-      const p = products.find(x => x.id === prodId);
-      if (!p) return;
-      const exist = cart.find(x => x.id === prodId);
-      if (exist) exist.qty += qty;
-      else cart.push({ ...p, qty: qty });
-      saveCart();
-    }
-
-    // Корзина
-    function addToCart(id) {
-      const p = products.find(x => x.id === id);
-      if (!p) return;
-      const exist = cart.find(x => x.id === id);
-      if (exist) exist.qty++;
-      else cart.push({ ...p, qty: 1 });
-      saveCart();
-      alert(`Позиция «${p.title}» добавлена в спецификацию`);
-    }
-
-    function updateCartBadge() {
-      const total = cart.reduce((s, i) => s + i.qty, 0);
-      document.getElementById('cart-counter').innerText = total;
-    }
-
-    function renderCartTable() {
-      const box = document.getElementById('cart-table-wrapper');
-      if (!box) return;
-
-      if (cart.length === 0) {
-        box.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">Спецификация пуста. Перейдите в каталог или выберите типовое решение.</p>';
-        return;
-      }
-
-      let total = 0;
-      let html = `
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 120px;">Артикул</th>
-              <th>Наименование оборудования</th>
-              <th style="width: 90px;">Кол-во</th>
-              <th style="width: 130px;">Цена с НДС</th>
-              <th style="width: 140px;">Сумма с НДС</th>
-              <th style="width: 50px;"></th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-      cart.forEach(item => {
-        const sum = item.price * item.qty;
-        total += sum;
-        html += `
-          <tr>
-            <td><strong>${escapeHtml(item.sku)}</strong></td>
-            <td>${escapeHtml(item.title)}</td>
-            <td>
-              <input type="number" min="1" value="${item.qty}" style="width: 65px; padding: 4px;" onchange="updateCartQty(${item.id}, this.value)">
-            </td>
-            <td>${Number(item.price).toLocaleString('ru-RU')} ₽</td>
-            <td><strong>${Number(sum).toLocaleString('ru-RU')} ₽</strong></td>
-            <td><button class="btn btn-outline btn-sm" style="color: var(--accent);" onclick="removeFromCart(${item.id})">&times;</button></td>
-          </tr>
-        `;
-      });
-
-      const nds = total * 0.2 / 1.2;
-
-      html += `
-          </tbody>
-        </table>
-        <div style="text-align: right; margin-top: 1.5rem; font-size: 1.15rem;">
-          <div style="color: var(--text-muted); font-size: 0.9rem;">В том числе НДС 20%: <strong>${Number(nds).toLocaleString('ru-RU', {maximumFractionDigits: 2})} ₽</strong></div>
-          <div style="margin-top: 5px; font-size: 1.4rem; color: var(--accent); font-weight: 900;">Итого к оплате: ${Number(total).toLocaleString('ru-RU')} ₽</div>
-        </div>
-      `;
-      box.innerHTML = html;
-    }
-
-    function updateCartQty(id, val) {
-      const item = cart.find(x => x.id === id);
-      if (item) {
-        item.qty = Math.max(1, parseInt(val) || 1);
-        saveCart();
-      }
-    }
-
-    function removeFromCart(id) {
-      cart = cart.filter(x => x.id !== id);
-      saveCart();
-    }
-
-    function clearCart() {
-      if (confirm('Очистить спецификацию проекта?')) {
-        cart = [];
-        saveCart();
-      }
-    }
-
-    function exportCartToCSV() {
-      if (cart.length === 0) return alert('Спецификация пуста');
-      let csv = "Артикул;Наименование;Количество;Цена с НДС;Сумма\n";
-      cart.forEach(i => {
-        csv += `"${i.sku}";"${i.title}";${i.qty};${i.price};${i.price * i.qty}\n`;
-      });
-      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `specification_vector_${Date.now()}.csv`;
-      a.click();
-    }
-
-    function handleSendOrder(e) {
-      e.preventDefault();
-      if (cart.length === 0) return alert('Спецификация пуста!');
-      const org = document.getElementById('order-org').value;
-      const phone = document.getElementById('order-phone').value;
-      alert(`Заявка принята!\nСпецификация на сумму ${cart.reduce((s,i)=>s+i.price*i.qty,0).toLocaleString('ru-RU')} ₽ передана в отдел комплектации ВЕКТОР.\nМенеджер свяжется с представителем ${org} по телефону ${phone}.`);
-      cart = [];
-      saveCart();
-      window.location.hash = '#home';
-    }
-
-    // Панель управления каталогом (Админка)
-    function renderAdminTable() {
-      const tbody = document.getElementById('admin-table-tbody');
-      if (!tbody) return;
-
-      tbody.innerHTML = products.map(item => `
-        <tr>
-          <td><strong>${escapeHtml(item.sku)}</strong></td>
-          <td>
-            <strong>${escapeHtml(item.title)}</strong>
-            <div style="font-size: 0.75rem; color: #666;">${escapeHtml(item.specs.substring(0, 70))}...</div>
-          </td>
-          <td>${escapeHtml(item.category)}</td>
-          <td><strong>${Number(item.price).toLocaleString('ru-RU')} ₽</strong></td>
-          <td>${item.stock} шт</td>
-          <td>
-            <div style="display: flex; gap: 6px;">
-              <button class="btn btn-outline btn-sm" onclick="openEditModal(${item.id})">Изм.</button>
-              <button class="btn btn-outline btn-sm" style="color: var(--accent);" onclick="deleteProduct(${item.id})">&times;</button>
             </div>
-          </td>
-        </tr>
-      `).join('');
-    }
+          </section>
+        )}
 
-    function handleCreateProduct(e) {
-      e.preventDefault();
-      const sku = document.getElementById('admin-add-sku').value.trim();
-      if (products.some(p => p.sku.toLowerCase() === sku.toLowerCase())) {
-        return alert('Изделие с таким артикулом уже есть в базе!');
-      }
+        {/* ОСНОВНОЙ КОНТЕНТ В ЗАВИСИМОСТИ ОТ ВЫБРАННОЙ ВКЛАДКИ */}
+        <main className="flex-1 px-4 lg:px-7 py-6 max-w-[1440px] w-full mx-auto">
+          
+          {/* =================== ВКЛАДКА 1: КАНБАН-ДОСКА =================== */}
+          {activeTab === 'board' && (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+              {COLUMNS.map((col) => {
+                const allColCards = filteredCards.filter((c) => c.columnId === col.id);
+                const isFiltering =
+                  Boolean(searchQuery.trim()) ||
+                  quickFilter !== 'all' ||
+                  managerFilter !== 'all';
 
-      const item = {
-        id: Date.now(),
-        sku: sku,
-        category: document.getElementById('admin-add-cat').value,
-        price: parseFloat(document.getElementById('admin-add-price').value),
-        stock: parseInt(document.getElementById('admin-add-stock').value) || 0,
-        title: document.getElementById('admin-add-title').value.trim(),
-        specs: document.getElementById('admin-add-specs').value.trim()
-      };
+                const isExpanded = expandedCols[col.id] || isFiltering;
+                const visibleColCards = isExpanded
+                  ? allColCards
+                  : allColCards.slice(0, col.initialVisibleCount);
+                const hiddenCount = allColCards.length - visibleColCards.length;
 
-      products.unshift(item);
-      saveDB();
-      e.target.reset();
-      alert(`Карточка «${item.title}» добавлена!`);
-    }
+                const colSum = allColCards.reduce((acc, c) => acc + (c.amount || 0), 0);
+                const isDragTarget = dragOverColId === col.id;
 
-    function openEditModal(id) {
-      const p = products.find(x => x.id === id);
-      if (!p) return;
+                return (
+                  <div
+                    key={col.id}
+                    onDragOver={(e) => handleDragOver(e, col.id)}
+                    onDragLeave={() => setDragOverColId(null)}
+                    onDrop={(e) => handleDrop(e, col.id)}
+                    className={`rounded-[10px] border p-3 transition-all duration-150 flex flex-col ${col.bgLight} ${col.bgDark} ${
+                      isDragTarget ? 'ring-2 ring-indigo-500 scale-[1.005]' : ''
+                    }`}
+                  >
+                    {/* Шапка колонки — точное совпадение с Planno ("В работе 10 ...", "В доставке 5 ...", "Готово 21 ...") */}
+                    <div className="flex items-center justify-between px-1.5 pt-1 pb-3.5">
+                      <div className="flex items-center gap-2">
+                        <h2 className={`text-[18px] font-bold tracking-tight ${col.headerText}`}>
+                          {col.title}
+                        </h2>
+                        {cardMode === 'pro' && (
+                          <span className="text-xs font-semibold opacity-75 text-slate-700 dark:text-slate-300">
+                            • {formatMoney(colSum)}
+                          </span>
+                        )}
+                      </div>
 
-      document.getElementById('edit-id').value = p.id;
-      document.getElementById('edit-sku').value = p.sku;
-      document.getElementById('edit-cat').value = p.category;
-      document.getElementById('edit-price').value = p.price;
-      document.getElementById('edit-stock').value = p.stock;
-      document.getElementById('edit-title').value = p.title;
-      document.getElementById('edit-specs').value = p.specs || '';
+                      <div className="flex items-center gap-2.5">
+                        {/* Честный счетчик карточек в колонке: 10 / 5 / 21 */}
+                        <span className={`text-[13px] font-medium ${col.countText}`}>
+                          {allColCards.length}
+                        </span>
+                        <button
+                          onClick={() => setAddingToCol(addingToCol === col.id ? null : col.id)}
+                          className="p-0.5 rounded hover:bg-black/5 dark:hover:bg-white/10 text-[#5e6368] dark:text-slate-300 transition-colors"
+                          title="Действия с колонкой / Добавить карточку"
+                        >
+                          <MoreHorizontal className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
 
-      document.getElementById('edit-modal').style.display = 'flex';
-    }
+                    {/* Список карточек в колонке */}
+                    <div className="space-y-2.5 flex-1">
+                      {visibleColCards.map((card) => {
+                        const overdue = isCardOverdue(card);
+                        const doneChecklistCount = (card.checklist || []).filter((i) => i.done).length;
+                        const totalChecklistCount = (card.checklist || []).length;
 
-    function closeEditModal() {
-      document.getElementById('edit-modal').style.display = 'none';
-    }
+                        return (
+                          <div
+                            key={card.id}
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, card.id)}
+                            onClick={() => setSelectedCardId(card.id)}
+                            className={`group bg-white dark:bg-slate-900 rounded-[8px] px-3.5 py-3 shadow-[0_1px_2px_rgba(0,0,0,0.06)] hover:shadow-md border border-black/[0.04] dark:border-slate-800 cursor-pointer transition-all duration-150 select-none relative ${
+                              draggedCardId === card.id ? 'opacity-40 scale-95' : ''
+                            }`}
+                          >
+                            {/* Цветные метки-полоски сверху (в точности как в Planno: красная #ef6461 и мятная #8ee3c8) */}
+                            {card.tags && card.tags.length > 0 && (
+                              <div className="flex items-center gap-1.5 mb-2">
+                                {card.tags.map((tagKey) => {
+                                  const t = TAG_DEFS[tagKey];
+                                  if (!t) return null;
+                                  return (
+                                    <span
+                                      key={tagKey}
+                                      className={`h-[8px] w-[42px] rounded-full ${t.barClass}`}
+                                      title={t.name}
+                                    />
+                                  );
+                                })}
+                              </div>
+                            )}
 
-    function handleSaveEditProduct(e) {
-      e.preventDefault();
-      const id = parseInt(document.getElementById('edit-id').value);
-      const index = products.findIndex(x => x.id === id);
+                            {/* Заголовок карточки: КОНТРАГЕНТ | НОМЕР ЗАКАЗА */}
+                            <div className="flex items-start justify-between gap-2">
+                              <h3 className="text-[14px] font-semibold text-[#1f2328] dark:text-slate-100 leading-[1.35] tracking-normal group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                {card.company} | {card.orderNum}
+                              </h3>
 
-      if (index !== -1) {
-        products[index].sku = document.getElementById('edit-sku').value.trim();
-        products[index].category = document.getElementById('edit-cat').value;
-        products[index].price = parseFloat(document.getElementById('edit-price').value);
-        products[index].stock = parseInt(document.getElementById('edit-stock').value) || 0;
-        products[index].title = document.getElementById('edit-title').value.trim();
-        products[index].specs = document.getElementById('edit-specs').value.trim();
+                              {/* Быстрые стрелки перемещения при наведении */}
+                              <div
+                                className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5 shrink-0"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                {col.id !== 'in_progress' && (
+                                  <button
+                                    onClick={() =>
+                                      moveCardToColumn(
+                                        card.id,
+                                        col.id === 'done' ? 'in_delivery' : 'in_progress'
+                                      )
+                                    }
+                                    className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500"
+                                    title="Вернуть на предыдущий этап"
+                                  >
+                                    <ArrowLeft className="w-3.5 h-3.5" />
+                                  </button>
+                                )}
+                                {col.id !== 'done' && (
+                                  <button
+                                    onClick={() =>
+                                      moveCardToColumn(
+                                        card.id,
+                                        col.id === 'in_progress' ? 'in_delivery' : 'done'
+                                      )
+                                    }
+                                    className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500"
+                                    title="Перевести на следующий этап"
+                                  >
+                                    <ArrowRight className="w-3.5 h-3.5" />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
 
-        saveDB();
-        closeEditModal();
-        alert('Данные карточки обновлены!');
-      }
-    }
+                            {/* ДОПОЛНИТЕЛЬНЫЙ БЛОК В PRO-РЕЖИМЕ (сумма, логистика, прогресс) */}
+                            {cardMode === 'pro' && (
+                              <div className="mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800/80 space-y-2">
+                                <div className="flex items-center justify-between text-xs">
+                                  <span className="font-bold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">
+                                    {formatMoney(card.amount)}
+                                  </span>
+                                  <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1 truncate max-w-[160px]">
+                                    <Truck className="w-3.5 h-3.5 shrink-0 text-slate-400" />
+                                    <span className="truncate">{card.carrier}</span>
+                                  </span>
+                                </div>
 
-    function deleteProduct(id) {
-      if (confirm('Удалить эту позицию из номенклатуры?')) {
-        products = products.filter(x => x.id !== id);
-        saveDB();
-      }
-    }
+                                {totalChecklistCount > 0 && (
+                                  <div className="flex items-center gap-2">
+                                    <div className="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                      <div
+                                        className={`h-full rounded-full transition-all ${
+                                          doneChecklistCount === totalChecklistCount
+                                            ? 'bg-emerald-500'
+                                            : 'bg-indigo-500'
+                                        }`}
+                                        style={{
+                                          width: `${Math.round(
+                                            (doneChecklistCount / totalChecklistCount) * 100
+                                          )}%`
+                                        }}
+                                      />
+                                    </div>
+                                    <span className="text-[11px] font-medium text-slate-400">
+                                      {doneChecklistCount}/{totalChecklistCount}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            )}
 
-    function exportDatabaseJSON() {
-      const str = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(products, null, 2));
-      const a = document.createElement('a');
-      a.href = str;
-      a.download = "vector_database.json";
-      a.click();
-    }
+                            {/* Нижняя строка метаданных (иконка описания ≡, комментарии 💬 1 и дата справа) — 1:1 как в Planno */}
+                            <div className="mt-3.5 flex items-center justify-between text-[12px] text-[#656d76] dark:text-slate-400">
+                              <div className="flex items-center gap-3">
+                                {card.hasDescription && (
+                                  <span className="flex items-center text-[#57606a] dark:text-slate-400" title="Есть описание заказа">
+                                    <AlignLeft className="w-3.5 h-3.5 stroke-[2.2]" />
+                                  </span>
+                                )}
+                                {card.comments && card.comments.length > 0 && (
+                                  <span
+                                    className="flex items-center gap-1 text-[#57606a] dark:text-slate-300"
+                                    title="Комментарии по сделке"
+                                  >
+                                    <MessageSquare className="w-3.5 h-3.5 stroke-[1.8]" />
+                                    <span className="text-[12px]">{card.comments.length}</span>
+                                  </span>
+                                )}
+                                {cardMode === 'pro' && card.manager && (
+                                  <span className="text-[11px] text-slate-400 dark:text-slate-500 hidden sm:inline">
+                                    {card.manager}
+                                  </span>
+                                )}
+                              </div>
 
-    function escapeHtml(text) {
-      if (!text) return '';
-      return text.toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-    }
-  </script>
-</body>
-</html>
+                              {/* Дата отгрузки (красная при просрочке, как у СТРОЙПРОМТОРГ 13 окт 2026) */}
+                              {card.dueDate && (
+                                <span
+                                  className={`text-[12px] ${
+                                    overdue
+                                      ? 'text-[#e53935] dark:text-rose-400 font-medium'
+                                      : 'text-[#656d76] dark:text-slate-400'
+                                  }`}
+                                >
+                                  {formatRussianDate(card.dueDate)}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                      {allColCards.length === 0 && (
+                        <div className="text-center py-8 px-4 rounded-xl border border-dashed border-slate-300/80 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs">
+                          Нет карточек по выбранному фильтру
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Кнопка показа остальных карточек колонки (чтобы по умолчанию было ровно 7/5/7 как на скрине, но доступны все 10/5/21) */}
+                    {!isFiltering && allColCards.length > col.initialVisibleCount && (
+                      <button
+                        onClick={() =>
+                          setExpandedCols((prev) => ({
+                            ...prev,
+                            [col.id]: !prev[col.id]
+                          }))
+                        }
+                        className="mt-2.5 w-full py-1.5 px-2.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-300 bg-white/50 dark:bg-slate-900/40 hover:bg-white/80 dark:hover:bg-slate-900/70 transition-colors flex items-center justify-center gap-1"
+                      >
+                        {isExpanded ? (
+                          <span>Свернуть до первых {col.initialVisibleCount} карточек</span>
+                        ) : (
+                          <span>
+                            Показать ещё {hiddenCount} из {allColCards.length} карточек
+                          </span>
+                        )}
+                      </button>
+                    )}
+
+                    {/* Форма добавления новой карточки ИЛИ кнопка "+ Новая карточка" */}
+                    {addingToCol === col.id ? (
+                      <form
+                        onSubmit={(e) => handleCreateCard(e, col.id)}
+                        className="mt-3 bg-white dark:bg-slate-900 p-3 rounded-xl shadow-md border border-slate-200 dark:border-slate-700 space-y-2.5"
+                      >
+                        <input
+                          type="text"
+                          required
+                          autoFocus
+                          value={newCardCompany}
+                          onChange={(e) => setNewCardCompany(e.target.value)}
+                          placeholder="Контрагент (напр. ТЕХНОПРОМ ООО)"
+                          className="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                        <div className="grid grid-cols-2 gap-2">
+                          <input
+                            type="text"
+                            value={newCardOrderNum}
+                            onChange={(e) => setNewCardOrderNum(e.target.value)}
+                            placeholder="№ заказа (11305)"
+                            className="w-full text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none"
+                          />
+                          <input
+                            type="number"
+                            value={newCardAmount}
+                            onChange={(e) => setNewCardAmount(e.target.value)}
+                            placeholder="Сумма, ₽"
+                            className="w-full text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none"
+                          />
+                        </div>
+                        {col.id !== 'done' && (
+                          <div className="flex items-center justify-between text-xs text-slate-500">
+                            <span>Дата отгрузки:</span>
+                            <input
+                              type="date"
+                              value={newCardDate}
+                              onChange={(e) => setNewCardDate(e.target.value)}
+                              className="text-xs px-2 py-1 rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800"
+                            />
+                          </div>
+                        )}
+                        <div className="flex items-center justify-end gap-2 pt-1">
+                          <button
+                            type="button"
+                            onClick={() => setAddingToCol(null)}
+                            className="px-2.5 py-1.5 text-xs text-slate-500 hover:text-slate-800"
+                          >
+                            Отмена
+                          </button>
+                          <button
+                            type="submit"
+                            className="px-3 py-1.5 rounded-lg bg-slate-900 dark:bg-indigo-600 text-white text-xs font-semibold hover:opacity-90"
+                          >
+                            Добавить заказ
+                          </button>
+                        </div>
+                      </form>
+                    ) : (
+                      <button
+                        onClick={() => setAddingToCol(col.id)}
+                        className="mt-2.5 w-full py-1.5 px-1.5 rounded-lg flex items-center gap-1.5 text-[13px] font-normal text-[#57606a] dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Новая карточка</span>
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* =================== ВКЛАДКА 2: СПИСОК (ТАБЛИЦА ERP) =================== */}
+          {activeTab === 'list' && (
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+              <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-base font-bold text-slate-900 dark:text-white">
+                    Единый реестр заказов TRADEATM
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Нажмите на любую строку для открытия паспорта сделки и чек-листа
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      setSortField('amount');
+                      setSortAsc(!sortAsc);
+                    }}
+                    className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-medium hover:bg-slate-50 dark:hover:bg-slate-800"
+                  >
+                    Сортировать по сумме {sortField === 'amount' ? (sortAsc ? '↑' : '↓') : ''}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSortField('orderNum');
+                      setSortAsc(!sortAsc);
+                    }}
+                    className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-medium hover:bg-slate-50 dark:hover:bg-slate-800"
+                  >
+                    По № заказа {sortField === 'orderNum' ? (sortAsc ? '↑' : '↓') : ''}
+                  </button>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 dark:bg-slate-800/60 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
+                      <th className="py-3 px-4">№ Заказа</th>
+                      <th className="py-3 px-4">Контрагент</th>
+                      <th className="py-3 px-4">Этап</th>
+                      <th className="py-3 px-4">Сумма</th>
+                      <th className="py-3 px-4">Срок отгрузки</th>
+                      <th className="py-3 px-4">Логистика / ТК</th>
+                      <th className="py-3 px-4">Ответственный</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200/70 dark:divide-slate-800 text-sm">
+                    {[...filteredCards]
+                      .sort((a, b) => {
+                        const valA = sortField === 'amount' ? a.amount : Number(a.orderNum);
+                        const valB = sortField === 'amount' ? b.amount : Number(b.orderNum);
+                        return sortAsc ? valA - valB : valB - valA;
+                      })
+                      .map((card) => {
+                        const overdue = isCardOverdue(card);
+                        return (
+                          <tr
+                            key={card.id}
+                            onClick={() => setSelectedCardId(card.id)}
+                            className="hover:bg-slate-50/90 dark:hover:bg-slate-800/50 cursor-pointer transition-colors"
+                          >
+                            <td className="py-3 px-4 font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                              #{card.orderNum}
+                            </td>
+                            <td className="py-3 px-4 font-bold text-slate-900 dark:text-white">
+                              {card.company}
+                              <span className="block text-[11px] font-normal text-slate-400">
+                                ИНН {card.inn}
+                              </span>
+                            </td>
+                            <td className="py-3 px-4">
+                              {card.columnId === 'in_progress' && (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">
+                                  В работе
+                                </span>
+                              )}
+                              {card.columnId === 'in_delivery' && (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                                  В доставке
+                                </span>
+                              )}
+                              {card.columnId === 'done' && (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                                  Готово
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-3 px-4 font-semibold text-slate-800 dark:text-slate-200">
+                              {formatMoney(card.amount)}
+                            </td>
+                            <td className="py-3 px-4">
+                              {card.dueDate ? (
+                                <span
+                                  className={`text-xs font-semibold ${
+                                    overdue
+                                      ? 'text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/60 px-2 py-1 rounded-md'
+                                      : 'text-slate-600 dark:text-slate-300'
+                                  }`}
+                                >
+                                  {formatRussianDate(card.dueDate)}
+                                  {overdue && ' (Просрочено)'}
+                                </span>
+                              ) : (
+                                <span className="text-xs text-slate-400">—</span>
+                              )}
+                            </td>
+                            <td className="py-3 px-4 text-xs text-slate-600 dark:text-slate-300">
+                              <div className="font-medium">{card.carrier}</div>
+                              <div className="text-[11px] text-slate-400">{card.tracking}</div>
+                            </td>
+                            <td className="py-3 px-4 text-xs text-slate-600 dark:text-slate-300">
+                              {card.manager}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* =================== ВКЛАДКА 3: КАЛЕНДАРЬ ОТГРУЗОК (ОКТЯБРЬ 2026) =================== */}
+          {activeTab === 'calendar' && (
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-5">
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
+                <div>
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <CalendarIcon className="w-5 h-5 text-indigo-600" />
+                    Календарь плановых отгрузок — Октябрь 2026
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Все даты синхронизированы с карточками вашей доски (13, 16, 20, 21, 22, 27, 29 октября 2026)
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 text-xs">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span> В работе
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span> В доставке
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-indigo-600"></span> Сегодня (14 окт)
+                  </span>
+                </div>
+              </div>
+
+              {/* Сетка дней недели */}
+              <div className="grid grid-cols-7 gap-2 mb-2 text-center text-xs font-bold uppercase text-slate-400">
+                <div>Пн</div>
+                <div>Вт</div>
+                <div>Ср</div>
+                <div>Чт</div>
+                <div>Пт</div>
+                <div>Сб</div>
+                <div>Вс</div>
+              </div>
+
+              {/* Октябрь 2026 начинается в Четверг (3 пустых ячейки Пн-Ср) */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+                {[null, null, null, ...Array.from({ length: 31 }, (_, i) => i + 1)].map(
+                  (day, index) => {
+                    if (!day) {
+                      return (
+                        <div
+                          key={`empty-${index}`}
+                          className="hidden lg:block h-28 rounded-xl bg-slate-50/50 dark:bg-slate-950/30 border border-slate-100 dark:border-slate-800/40"
+                        />
+                      );
+                    }
+
+                    const dateStr = `2026-10-${String(day).padStart(2, '0')}`;
+                    const dayCards = filteredCards.filter((c) => c.dueDate === dateStr);
+                    const isToday = dateStr === CURRENT_DATE;
+
+                    return (
+                      <div
+                        key={dateStr}
+                        className={`min-h-[115px] rounded-xl p-2.5 border transition-all flex flex-col ${
+                          isToday
+                            ? 'bg-indigo-50/60 dark:bg-indigo-950/30 border-indigo-400 dark:border-indigo-600 ring-1 ring-indigo-400/50'
+                            : 'bg-slate-50/70 dark:bg-slate-800/40 border-slate-200/70 dark:border-slate-800'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span
+                            className={`text-xs font-bold px-1.5 py-0.5 rounded-md ${
+                              isToday
+                                ? 'bg-indigo-600 text-white'
+                                : day === 13
+                                ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
+                                : 'text-slate-600 dark:text-slate-400'
+                            }`}
+                          >
+                            {day} окт
+                          </span>
+                          {isToday && (
+                            <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400">
+                              Сегодня
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="space-y-1.5 flex-1">
+                          {dayCards.map((c) => (
+                            <div
+                              key={c.id}
+                              onClick={() => setSelectedCardId(c.id)}
+                              className={`p-1.5 rounded-lg text-[11px] font-semibold cursor-pointer border shadow-2xs transition-transform hover:scale-[1.02] ${
+                                isCardOverdue(c)
+                                  ? 'bg-rose-100/90 border-rose-300 text-rose-900 dark:bg-rose-950/80 dark:border-rose-800 dark:text-rose-200'
+                                  : c.columnId === 'in_delivery'
+                                  ? 'bg-amber-100/90 border-amber-300 text-amber-900 dark:bg-amber-950/80 dark:border-amber-800 dark:text-amber-200'
+                                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200'
+                              }`}
+                            >
+                              <div className="truncate">
+                                {c.company} | {c.orderNum}
+                              </div>
+                              <div className="text-[10px] opacity-75 font-normal">
+                                {formatMoney(c.amount)}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* =================== ВКЛАДКА 4: АРХИВ =================== */}
+          {activeTab === 'archive' && (
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                    Архив закрытых сделок
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Завершенные контракты, переданные в бухгалтерский архив. Любую карточку можно вернуть на доску.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {archivedCards.map((card) => (
+                  <div
+                    key={card.id}
+                    className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800"
+                  >
+                    <div>
+                      <div className="font-bold text-slate-900 dark:text-white">
+                        {card.company} | {card.orderNum}
+                      </div>
+                      <div className="text-xs text-slate-500 mt-0.5">
+                        Сумма: {formatMoney(card.amount)} • ТК: {card.carrier} • Менеджер: {card.manager}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => restoreFromArchive(card.id)}
+                      className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center gap-1.5 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      Вернуть на доску
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </main>
+
+        {/* =================== МОДАЛЬНОЕ ОКНО ДЕТАЛЬНОЙ КАРТОЧКИ ЗАКАЗА =================== */}
+        {selectedCard && (
+          <div
+            className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+            onClick={() => setSelectedCardId(null)}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-150"
+            >
+              {/* Верхняя цветная полоса статуса */}
+              <div
+                className={`px-6 py-4 flex items-start justify-between gap-4 border-b border-slate-200/80 dark:border-slate-800 ${
+                  selectedCard.columnId === 'in_progress'
+                    ? 'bg-[#f4d0d6]/50 dark:bg-rose-950/40'
+                    : selectedCard.columnId === 'in_delivery'
+                    ? 'bg-[#faecc8]/60 dark:bg-amber-950/40'
+                    : 'bg-[#cce3dc]/60 dark:bg-emerald-950/40'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">
+                    <span>КАРТОЧКА ЗАКАЗА #{selectedCard.orderNum}</span>
+                    <span>•</span>
+                    <span>ИНН {selectedCard.inn || '7701984210'}</span>
+                  </div>
+                  <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">
+                    {selectedCard.company} | {selectedCard.orderNum}
+                  </h2>
+                </div>
+
+                <button
+                  onClick={() => setSelectedCardId(null)}
+                  className="p-2 rounded-xl bg-white/80 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-6 max-h-[80vh] overflow-y-auto space-y-6">
+                
+                {/* Переключатель колонки + Метки */}
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase text-slate-400 mb-1.5">
+                      Текущий этап воронки
+                    </label>
+                    <div className="inline-flex rounded-xl bg-slate-100 dark:bg-slate-800 p-1">
+                      {COLUMNS.map((c) => (
+                        <button
+                          key={c.id}
+                          onClick={() => moveCardToColumn(selectedCard.id, c.id)}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                            selectedCard.columnId === c.id
+                              ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-2xs'
+                              : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                          }`}
+                        >
+                          {c.title}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Цветные теги */}
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase text-slate-400 mb-1.5">
+                      Метки заказа
+                    </label>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {Object.values(TAG_DEFS).map((tag) => {
+                        const active = selectedCard.tags.includes(tag.id);
+                        return (
+                          <button
+                            key={tag.id}
+                            onClick={() => toggleCardTag(selectedCard.id, tag.id)}
+                            className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all flex items-center gap-1.5 ${
+                              active
+                                ? tag.badgeClass
+                                : 'bg-slate-50 dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700 opacity-60 hover:opacity-100'
+                            }`}
+                          >
+                            <span className={`w-2.5 h-2.5 rounded-full ${tag.barClass}`} />
+                            {tag.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Ключевые параметры B2B-сделки */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-200/70 dark:border-slate-800">
+                  <div>
+                    <span className="text-[11px] text-slate-400 block">Сумма контракта</span>
+                    <input
+                      type="number"
+                      value={selectedCard.amount || 0}
+                      onChange={(e) =>
+                        updateCardField(selectedCard.id, 'amount', Number(e.target.value))
+                      }
+                      className="mt-0.5 w-full font-bold text-sm bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none text-slate-900 dark:text-white"
+                    />
+                    <span className="text-[11px] text-emerald-600 font-medium">
+                      {formatMoney(selectedCard.amount)}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-[11px] text-slate-400 block">Дедлайн / Отгрузка</span>
+                    <input
+                      type="date"
+                      value={selectedCard.dueDate || ''}
+                      onChange={(e) =>
+                        updateCardField(selectedCard.id, 'dueDate', e.target.value || null)
+                      }
+                      className="mt-0.5 text-xs font-semibold bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none text-slate-900 dark:text-white"
+                    />
+                    {isCardOverdue(selectedCard) && (
+                      <span className="text-[11px] text-rose-600 font-bold block">
+                        Просрочено!
+                      </span>
+                    )}
+                  </div>
+
+                  <div>
+                    <span className="text-[11px] text-slate-400 block">Транспортная компания</span>
+                    <input
+                      type="text"
+                      value={selectedCard.carrier || ''}
+                      onChange={(e) =>
+                        updateCardField(selectedCard.id, 'carrier', e.target.value)
+                      }
+                      className="mt-0.5 w-full text-xs font-semibold bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none text-slate-900 dark:text-white"
+                    />
+                    <span className="text-[11px] text-slate-400 truncate block">
+                      {selectedCard.tracking}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-[11px] text-slate-400 block">Ответственный</span>
+                    <select
+                      value={selectedCard.manager || 'А. Смирнов'}
+                      onChange={(e) =>
+                        updateCardField(selectedCard.id, 'manager', e.target.value)
+                      }
+                      className="mt-0.5 text-xs font-semibold bg-transparent focus:outline-none text-slate-900 dark:text-white"
+                    >
+                      <option value="А. Смирнов">А. Смирнов</option>
+                      <option value="Е. Волкова">Е. Волкова</option>
+                      <option value="Д. Морозов">Д. Морозов</option>
+                    </select>
+                    <span className="text-[11px] text-slate-400 block">Отдел продаж</span>
+                  </div>
+                </div>
+
+                {/* Описание заказа */}
+                <div>
+                  <label className="flex items-center gap-2 text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-2">
+                    <AlignLeft className="w-4 h-4" />
+                    Описание и спецификация поставки
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={selectedCard.description || ''}
+                    onChange={(e) =>
+                      updateCardField(selectedCard.id, 'description', e.target.value)
+                    }
+                    className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                    placeholder="Добавьте детали комплектации, особые требования к упаковке или контакты грузополучателя..."
+                  />
+                </div>
+
+                {/* Чек-лист выполнения заказа */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="flex items-center gap-2 text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+                      <CheckSquare className="w-4 h-4" />
+                      Чек-лист контроля отгрузки
+                    </label>
+                    <span className="text-xs font-semibold text-slate-500">
+                      {(selectedCard.checklist || []).filter((i) => i.done).length} из{' '}
+                      {(selectedCard.checklist || []).length} выполнено
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5 mb-3">
+                    {(selectedCard.checklist || []).map((item) => (
+                      <label
+                        key={item.id}
+                        className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer text-sm"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={item.done}
+                          onChange={() => toggleChecklistItem(selectedCard.id, item.id)}
+                          className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <span
+                          className={
+                            item.done
+                              ? 'line-through text-slate-400 dark:text-slate-500'
+                              : 'text-slate-800 dark:text-slate-200 font-medium'
+                          }
+                        >
+                          {item.text}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+
+                  <form onSubmit={handleAddChecklistItem} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newChecklistText}
+                      onChange={(e) => setNewChecklistText(e.target.value)}
+                      placeholder="Добавить этап проверки (напр. Отправить скан ТТН)..."
+                      className="flex-1 text-xs px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none"
+                    />
+                    <button
+                      type="submit"
+                      className="px-3 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-xs font-semibold"
+                    >
+                      + Этап
+                    </button>
+                  </form>
+                </div>
+
+                {/* Комментарии и история по сделке */}
+                <div>
+                  <label className="flex items-center gap-2 text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-3">
+                    <MessageSquare className="w-4 h-4" />
+                    Комментарии ({selectedCard.comments ? selectedCard.comments.length : 0})
+                  </label>
+
+                  <div className="space-y-2.5 mb-3">
+                    {selectedCard.comments && selectedCard.comments.length > 0 ? (
+                      selectedCard.comments.map((com) => (
+                        <div
+                          key={com.id}
+                          className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700/70 text-xs"
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-bold text-slate-900 dark:text-white">
+                              {com.author}
+                            </span>
+                            <span className="text-slate-400">{com.time}</span>
+                          </div>
+                          <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                            {com.text}
+                          </p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-xs text-slate-400 italic">
+                        Комментариев пока нет. Оставьте заметку для логистов или бухгалтерии.
+                      </p>
+                    )}
+                  </div>
+
+                  <form onSubmit={handleAddComment} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newCommentText}
+                      onChange={(e) => setNewCommentText(e.target.value)}
+                      placeholder="Написать комментарий по заказу..."
+                      className="flex-1 text-sm px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                    />
+                    <button
+                      type="submit"
+                      className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      Отправить
+                    </button>
+                  </form>
+                </div>
+
+                {/* Нижняя панель действий в модальном окне */}
+                <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                  <button
+                    onClick={() => archiveCard(selectedCard.id)}
+                    className="px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 flex items-center gap-1.5 transition-colors"
+                  >
+                    <Archive className="w-4 h-4" />
+                    Отправить в архив
+                  </button>
+
+                  <button
+                    onClick={() => setSelectedCardId(null)}
+                    className="px-5 py-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-bold hover:opacity-90"
+                  >
+                    Готово
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+}
