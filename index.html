@@ -527,3 +527,2510 @@
                   <i data-lucide="paperclip" class="w-4 h-4 text-slate-400"></i>
                   <span>Вложения (счета, УПД, накладные)</span>
                 </div>
+                <button onclick="addAttachmentToCard()" class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white cursor-pointer" title="Прикрепить документ">
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <div id="modalAttachmentsList" class="mt-2 space-y-1.5"></div>
+            </div>
+
+            <!-- Связанные карточки -->
+            <div>
+              <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+                <div class="flex items-center gap-2 text-sm font-semibold text-slate-800 dark:text-slate-200">
+                  <i data-lucide="link-2" class="w-4 h-4 text-slate-400"></i>
+                  <span>Связанные карточки</span>
+                </div>
+                <button onclick="addRelatedCardPrompt()" class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white cursor-pointer" title="Связать с другим заказом">
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <div id="modalRelatedList" class="mt-2 space-y-1.5"></div>
+            </div>
+
+            <!-- Активность (Комментарии / История) -->
+            <div class="pt-2">
+              <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2 mb-3">
+                <div class="flex items-center gap-4">
+                  <div class="flex items-center gap-2 text-sm font-semibold text-slate-800 dark:text-slate-200">
+                    <i data-lucide="message-square" class="w-4 h-4 text-slate-400"></i>
+                    <span>Активность</span>
+                  </div>
+                  <div class="flex items-center gap-3 text-xs">
+                    <button onclick="switchActivityTab('comments')" id="act-tab-comments" class="font-bold text-slate-900 dark:text-white cursor-pointer">Комментарии</button>
+                    <button onclick="switchActivityTab('history')" id="act-tab-history" class="font-medium text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer">История</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Поле добавления комментария -->
+              <div class="flex items-start gap-2.5 mb-4">
+                <div class="w-7 h-7 rounded-full bg-slate-900 dark:bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">L</div>
+                <div class="flex-1">
+                  <div class="flex gap-2">
+                    <input id="newCommentInput" onkeydown="if(event.key==='Enter') addCommentFromModal()" type="text" placeholder="Добавить комментарий (адрес доставки, трек-номер СДЭК/Деловые Линии)..." 
+                      class="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 px-3 py-2 text-xs text-slate-800 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:border-indigo-500 transition-all">
+                    <button onclick="addCommentFromModal()" class="px-3 py-2 rounded-lg bg-slate-900 dark:bg-indigo-600 hover:bg-slate-800 text-white text-xs font-medium shrink-0 cursor-pointer transition-all">
+                      Отправить
+                    </button>
+                  </div>
+                  <!-- Быстрые шаблоны для логиста -->
+                  <div class="flex flex-wrap gap-1.5 mt-1.5">
+                    <button onclick="insertQuickComment('УПД подписан в ЭДО')" class="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer">+ УПД в ЭДО</button>
+                    <button onclick="insertQuickComment('Передано в ТК СДЭК, трек: ')" class="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer">+ Трек СДЭК</button>
+                    <button onclick="insertQuickComment('Счет оплачен по банку')" class="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer">+ Оплата получена</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Список комментариев -->
+              <div id="modalCommentsContainer" class="space-y-3"></div>
+              <!-- Список истории -->
+              <div id="modalHistoryContainer" class="hidden space-y-2 text-xs text-slate-500"></div>
+            </div>
+
+          </div>
+
+          <!-- ПРАВАЯ КОЛОНКА (5 колонок из 12): Блок ИНН + Финансы + Сведения + Действия -->
+          <div class="lg:col-span-5 space-y-5 border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-slate-800 lg:pl-6 pt-4 lg:pt-0">
+            
+            <!-- БЛОК АВТОЗАПОЛНЕНИЯ РЕКВИЗИТОВ ПО ИНН -->
+            <div class="p-3.5 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200/80 dark:border-indigo-800/60">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-1.5 text-xs font-bold text-indigo-950 dark:text-indigo-200">
+                  <i data-lucide="building-2" class="w-4 h-4 text-indigo-600 dark:text-indigo-400"></i>
+                  <span>Организация по ИНН (ЕГРЮЛ)</span>
+                </div>
+                <span id="modalInnStatusBadge" class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300">Готов к поиску</span>
+              </div>
+              
+              <div class="flex gap-1.5">
+                <input id="modalInnInput" type="text" maxlength="12" placeholder="Введите ИНН (10 или 12 цифр)..."
+                  oninput="handleModalInnTyping(this.value)"
+                  class="flex-1 font-mono text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-800 focus:outline-none focus:border-indigo-500 text-slate-800 dark:text-slate-100">
+                <button onclick="lookupInnForExistingCard()" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1 shrink-0 cursor-pointer transition-all">
+                  <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                  <span>Найти</span>
+                </button>
+              </div>
+
+              <!-- Отображение найденных КПП / ОГРН / Юр. адреса -->
+              <div id="modalCompanyRequisites" class="mt-2.5 text-[11px] space-y-1 text-slate-600 dark:text-slate-300 hidden">
+                <div class="flex justify-between">
+                  <span class="text-slate-400">КПП / ОГРН:</span>
+                  <span id="modalReqKppOgrn" class="font-mono font-medium text-slate-800 dark:text-slate-200">-</span>
+                </div>
+                <div class="flex justify-between items-start gap-2">
+                  <span class="text-slate-400 shrink-0">Юр. адрес:</span>
+                  <span id="modalReqAddress" class="text-right text-slate-700 dark:text-slate-300 leading-tight">-</span>
+                </div>
+                <div class="pt-1 flex justify-end">
+                  <button onclick="copyLegalAddressToComment()" class="text-[10px] text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer">
+                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                    <span>Добавить адрес в комментарий доставки</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- БЛОК ФИНАНСОВОГО УЧЕТА СДЕЛКИ -->
+            <div class="p-3.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/25 border border-emerald-200/80 dark:border-emerald-800/50">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-950 dark:text-emerald-200">
+                  <i data-lucide="Russian-ruble" class="w-4 h-4 text-emerald-600 dark:text-emerald-400"></i>
+                  <span>Финансы и учет сделки</span>
+                </div>
+                <select id="modalVatSelect" onchange="saveVatModeFromModal(this.value)" class="text-[10px] font-semibold bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 rounded px-1.5 py-0.5 text-slate-700 dark:text-slate-300">
+                  <option value="vat20">с НДС 20%</option>
+                  <option value="novat">Без НДС</option>
+                  <option value="vat5">НДС 5%</option>
+                </select>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-[10px] text-slate-500 mb-0.5">Сумма заказа (₽)</label>
+                  <input id="modalDealAmountSidebar" type="number" step="100" min="0" onchange="saveDealAmountFromModal(this.value)"
+                    class="w-full font-mono text-xs font-bold px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 focus:outline-none focus:border-emerald-500 text-slate-900 dark:text-white">
+                </div>
+                <div>
+                  <label class="block text-[10px] text-slate-500 mb-0.5">Быстрый шаг</label>
+                  <div class="flex gap-1">
+                    <button onclick="adjustModalDealAmount(10000)" class="flex-1 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] font-mono font-semibold hover:bg-emerald-100 dark:hover:bg-emerald-900/40 cursor-pointer">+10к</button>
+                    <button onclick="adjustModalDealAmount(50000)" class="flex-1 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] font-mono font-semibold hover:bg-emerald-100 dark:hover:bg-emerald-900/40 cursor-pointer">+50к</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Сведения -->
+            <div>
+              <div class="flex items-center gap-2 text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3">
+                <i data-lucide="Sliders-horizontal" class="w-4 h-4 text-slate-400"></i>
+                <span>Сведения</span>
+              </div>
+
+              <div class="space-y-2.5 text-xs">
+                <div class="grid grid-cols-12 items-center">
+                  <span class="col-span-5 text-slate-500 dark:text-slate-400">Решено</span>
+                  <div class="col-span-7">
+                    <button id="modalResolvedBtn" onclick="toggleModalResolved()" class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-indigo-600 cursor-pointer">
+                      <i data-lucide="check-circle" class="w-3.5 h-3.5 text-slate-400"></i>
+                      <span id="modalResolvedText">Нет</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-12 items-center">
+                  <span class="col-span-5 text-slate-500 dark:text-slate-400">Исполнитель</span>
+                  <div class="col-span-7">
+                    <input id="modalAssignee" onchange="updateCardMetaField('assignee', this.value)" type="text" placeholder="-" 
+                      class="w-full bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800 px-1.5 py-0.5 rounded border border-transparent focus:border-indigo-500 focus:outline-none text-slate-800 dark:text-slate-200">
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-12 items-center">
+                  <span class="col-span-5 text-slate-500 dark:text-slate-400">Приоритет</span>
+                  <div class="col-span-7">
+                    <select id="modalPriority" onchange="updateCardMetaField('priority', this.value)" class="bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800 px-1 py-0.5 rounded text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer">
+                      <option value="-">-</option>
+                      <option value="Высокий">Высокий 🔥</option>
+                      <option value="Средний">Средний</option>
+                      <option value="Низкий">Низкий</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-12 items-center">
+                  <span class="col-span-5 text-slate-500 dark:text-slate-400 leading-tight">Срок выполнения</span>
+                  <div class="col-span-7">
+                    <input id="modalDueDate" onchange="updateCardMetaField('dueDate', this.value)" type="text" 
+                      class="w-full font-mono bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800 px-1.5 py-0.5 rounded border border-transparent focus:border-indigo-500 focus:outline-none text-slate-800 dark:text-slate-200"
+                      value="16.10.2026">
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-12 items-center">
+                  <span class="col-span-5 text-slate-500 dark:text-slate-400">Дата начала</span>
+                  <div class="col-span-7">
+                    <input id="modalStartDate" onchange="updateCardMetaField('startDate', this.value)" type="text" 
+                      class="w-full font-mono bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800 px-1.5 py-0.5 rounded border border-transparent focus:border-indigo-500 focus:outline-none text-slate-800 dark:text-slate-200"
+                      value="13.10.2026">
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-12 items-center">
+                  <span class="col-span-5 text-slate-500 dark:text-slate-400">Автор</span>
+                  <div class="col-span-7 flex items-center gap-1.5">
+                    <span class="w-4 h-4 rounded-full bg-slate-900 text-white text-[10px] flex items-center justify-center font-bold">L</span>
+                    <span class="text-slate-800 dark:text-slate-200 font-medium">logist@tradeatm</span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-12 items-center">
+                  <span class="col-span-5 text-slate-500 dark:text-slate-400">Создана</span>
+                  <div id="modalCreatedAt" class="col-span-7 font-mono text-slate-600 dark:text-slate-400">13.10.2026 15:10</div>
+                </div>
+
+                <div class="grid grid-cols-12 items-center">
+                  <span class="col-span-5 text-slate-500 dark:text-slate-400">Обновлена</span>
+                  <div id="modalUpdatedAt" class="col-span-7 font-mono text-slate-600 dark:text-slate-400">13.10.2026 15:11</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Действия -->
+            <div class="pt-2">
+              <div class="flex items-center gap-2 text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2.5">
+                <i data-lucide="zap" class="w-4 h-4 text-slate-400"></i>
+                <span>Действия</span>
+              </div>
+              <div class="space-y-2">
+                <button onclick="archiveCurrentCard()" class="w-full py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 flex items-center justify-center gap-2 transition-all cursor-pointer">
+                  <i data-lucide="archive" class="w-3.5 h-3.5 text-slate-400"></i>
+                  <span id="archiveBtnText">Архивировать</span>
+                </button>
+                <button onclick="deleteCurrentCard()" class="w-full py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:border-rose-200 text-xs font-medium text-slate-400 hover:text-rose-600 flex items-center justify-center gap-2 transition-all cursor-pointer">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  <span>Удалить карточку</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- МОДАЛЬНОЕ ОКНО СОЗДАНИЯ НОВОГО ЗАКАЗА С АВТОПОИСКОМ ПО ИНН И СУММОЙ       -->
+  <!-- ========================================================================= -->
+  <div id="newCardModalBackdrop" class="fixed inset-0 bg-slate-950/60 backdrop-blur-[2px] z-50 hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 p-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
+            <i data-lucide="building-2" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white leading-tight">Новый заказ (автозаполнение по ИНН)</h3>
+            <p class="text-[11px] text-slate-500">Введите ИНН — название организации и адрес подтянутся автоматически</p>
+          </div>
+        </div>
+        <button onclick="closeNewCardModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3.5 my-4">
+        
+        <!-- ПОЛЕ ВВОДА ИНН -->
+        <div class="p-3.5 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/80">
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="text-xs font-bold text-indigo-950 dark:text-indigo-200 flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-600"></i>
+              <span>ИНН организации или ИП</span>
+            </label>
+            <span id="newCardInnStatus" class="text-[10px] font-mono px-2 py-0.5 rounded bg-white dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">Введите 10 или 12 цифр</span>
+          </div>
+
+          <div class="flex gap-2">
+            <div class="relative flex-1">
+              <input id="newCardInn" type="text" maxlength="12" placeholder="Например: 6671092480 или 7707083893" 
+                oninput="onNewCardInnInput(this.value)"
+                class="w-full rounded-lg border border-indigo-300 dark:border-indigo-700 px-3 py-2 text-xs font-mono bg-white dark:bg-slate-900 focus:outline-none focus:border-indigo-600 text-slate-900 dark:text-white">
+            </div>
+            <button type="button" onclick="triggerNewCardInnLookup()" id="newCardInnBtn"
+              class="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shrink-0 cursor-pointer transition-all shadow-2xs">
+              <i data-lucide="search" class="w-3.5 h-3.5"></i>
+              <span>Найти по ИНН</span>
+            </button>
+          </div>
+
+          <!-- Примеры ИНН для теста в 1 клик -->
+          <div class="mt-2 flex flex-wrap items-center gap-1.5 text-[10px]">
+            <span class="text-slate-400">Примеры:</span>
+            <button type="button" onclick="fillSampleInn('6671092480')" class="px-1.5 py-0.5 rounded bg-white/80 dark:bg-slate-800 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 font-mono cursor-pointer border border-indigo-200/50">6671092480 (БИС)</button>
+            <button type="button" onclick="fillSampleInn('7842159919')" class="px-1.5 py-0.5 rounded bg-white/80 dark:bg-slate-800 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 font-mono cursor-pointer border border-indigo-200/50">7842159919 (ГАЗСТРОЙПРОМ)</button>
+            <button type="button" onclick="fillSampleInn('7736207543')" class="px-1.5 py-0.5 rounded bg-white/80 dark:bg-slate-800 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 font-mono cursor-pointer border border-indigo-200/50">7736207543 (ЯНДЕКС)</button>
+            <button type="button" onclick="fillSampleInn('7707083893')" class="px-1.5 py-0.5 rounded bg-white/80 dark:bg-slate-800 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 font-mono cursor-pointer border border-indigo-200/50">7707083893 (СБЕР)</button>
+          </div>
+
+          <!-- Плашка с найденными реквизитами -->
+          <div id="newCardInnFoundBox" class="hidden mt-2.5 p-2.5 rounded-lg bg-emerald-50/90 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/70 text-[11px]">
+            <div class="flex items-center justify-between font-semibold text-emerald-900 dark:text-emerald-200">
+              <span id="newCardFoundFullName">ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "БИС"</span>
+              <span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-200/70 dark:bg-emerald-800 text-emerald-900 dark:text-emerald-100 font-mono">ДЕЙСТВУЮЩАЯ</span>
+            </div>
+            <div id="newCardFoundMeta" class="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 mt-0.5">КПП: 667101001 • ОГРН: 1026605252465</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-3">
+          <div class="col-span-8">
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs font-medium text-slate-600 dark:text-slate-400">Организация (формат TRADEATM) *</label>
+              <button type="button" onclick="swapOrgNameFormat()" title="Поменять местами ООО и Название" class="text-[10px] text-indigo-600 hover:underline cursor-pointer">БИС ООО ↔ ООО БИС</button>
+            </div>
+            <input id="newCardOrg" type="text" placeholder="Например: БИС ООО" 
+              class="w-full rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs font-semibold bg-slate-50 dark:bg-slate-800 focus:bg-white focus:outline-none focus:border-indigo-500">
+          </div>
+          <div class="col-span-4">
+            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Номер заказа *</label>
+            <input id="newCardOrderNum" type="text" placeholder="11520" 
+              class="w-full rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs font-mono bg-slate-50 dark:bg-slate-800 focus:bg-white focus:outline-none focus:border-indigo-500">
+          </div>
+        </div>
+
+        <!-- ПОЛЕ СУММЫ СДЕЛКИ ПРИ СОЗДАНИИ -->
+        <div class="p-3 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60">
+          <div class="grid grid-cols-12 gap-3 items-center">
+            <div class="col-span-7">
+              <label class="block text-xs font-bold text-emerald-950 dark:text-emerald-200 mb-1 flex items-center gap-1">
+                <i data-lucide="wallet" class="w-3.5 h-3.5 text-emerald-600"></i>
+                <span>Сумма сделки (₽)</span>
+              </label>
+              <div class="relative">
+                <input id="newCardAmount" type="number" step="100" min="0" placeholder="Например: 48500" 
+                  class="w-full rounded-lg border border-emerald-300 dark:border-emerald-700 pl-3 pr-7 py-1.5 text-xs font-mono font-bold bg-white dark:bg-slate-900 focus:outline-none focus:border-emerald-600 text-slate-900 dark:text-white">
+                <span class="absolute right-2.5 top-1/2 -translate-y-1/2 font-mono text-xs font-bold text-slate-400">₽</span>
+              </div>
+            </div>
+            <div class="col-span-5">
+              <label class="block text-[11px] font-medium text-slate-500 mb-1">НДС</label>
+              <select id="newCardVat" class="w-full rounded-lg border border-emerald-200 dark:border-emerald-700 px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900">
+                <option value="vat20">с НДС 20%</option>
+                <option value="novat">Без НДС</option>
+                <option value="vat5">НДС 5%</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Колонка</label>
+            <select id="newCardColumn" class="w-full rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800">
+              <option value="work">В работе</option>
+              <option value="delivery">В доставке</option>
+              <option value="done">Готово</option>
+              <option value="refund">ВОЗВРАТ ДС</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Срок выполнения</label>
+            <input id="newCardDate" type="text" value="22.10.2026" class="w-full rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs font-mono bg-slate-50 dark:bg-slate-800">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Описание (оборудование)</label>
+          <input id="newCardDesc" type="text" placeholder="Например: Переключатель 8-port HDMI/USB KVM Switch RackMount 1U 19&quot;" 
+            class="w-full rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Адрес доставки (автозаполняется из ЕГРЮЛ или вручную)</label>
+          <input id="newCardAddress" type="text" placeholder="Например: г.Екатеринбург, Кольцовский тракт 14" 
+            class="w-full rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1.5">Метки</label>
+          <div class="flex items-center gap-3 text-xs">
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input id="newTagUpd" type="checkbox" checked class="rounded text-indigo-600">
+              <span class="px-2 py-0.5 rounded bg-[#f05252] text-white font-semibold text-[11px]">УПД</span>
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input id="newTagUnpaid" type="checkbox" checked class="rounded text-indigo-600">
+              <span class="px-2 py-0.5 rounded bg-[#fbd5d5] text-[#9b1c1c] font-semibold text-[11px]">не оплачен</span>
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input id="newTagPaid" type="checkbox" class="rounded text-indigo-600">
+              <span class="px-2 py-0.5 rounded bg-[#def7ec] text-[#03543f] font-semibold text-[11px]">оплачен</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+        <button onclick="closeNewCardModal()" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 cursor-pointer">Отмена</button>
+        <button onclick="createNewCardSubmit()" class="px-4 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-xs cursor-pointer">Создать заказ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- МОДАЛЬНОЕ ОКНО БЫСТРОГО РЕДАКТИРОВАНИЯ СУММЫ СДЕЛКИ С ДОСКИ               -->
+  <!-- ========================================================================= -->
+  <div id="quickAmountModal" class="fixed inset-0 bg-slate-950/50 backdrop-blur-[1px] z-50 hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-xl shadow-xl border border-slate-200 dark:border-slate-800 p-4">
+      <div class="flex items-center justify-between mb-2">
+        <h4 id="quickAmountTitle" class="font-bold text-sm text-slate-900 dark:text-white">Сумма сделки</h4>
+        <button onclick="closeQuickAmountModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-[11px] text-slate-500 mb-3">Укажите сумму заказа в рублях для финансового учета:</p>
+      <div class="relative mb-3">
+        <input id="quickAmountInput" type="number" step="100" min="0" onkeydown="if(event.key==='Enter') saveQuickAmount()"
+          class="w-full rounded-lg border border-slate-300 dark:border-slate-700 pl-3 pr-8 py-2 text-sm font-mono font-bold bg-slate-50 dark:bg-slate-800 focus:bg-white focus:outline-none focus:border-indigo-500 text-slate-900 dark:text-white">
+        <span class="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-sm font-bold text-slate-400">₽</span>
+      </div>
+      <div class="flex gap-1.5 mb-4">
+        <button onclick="document.getElementById('quickAmountInput').value = Number(document.getElementById('quickAmountInput').value || 0) + 5000" class="flex-1 py-1 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-mono hover:bg-indigo-50 cursor-pointer">+5 000 ₽</button>
+        <button onclick="document.getElementById('quickAmountInput').value = Number(document.getElementById('quickAmountInput').value || 0) + 25000" class="flex-1 py-1 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-mono hover:bg-indigo-50 cursor-pointer">+25 000 ₽</button>
+        <button onclick="document.getElementById('quickAmountInput').value = Number(document.getElementById('quickAmountInput').value || 0) + 100000" class="flex-1 py-1 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-mono hover:bg-indigo-50 cursor-pointer">+100к ₽</button>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button onclick="closeQuickAmountModal()" class="px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:bg-slate-100 cursor-pointer">Отмена</button>
+        <button onclick="saveQuickAmount()" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer">Сохранить сумму</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- МОДАЛЬНОЕ ОКНО НАСТРОЙКИ КЛЮЧА DADATA API (ДЛЯ GITHUB PAGES)              -->
+  <!-- ========================================================================= -->
+  <div id="apiSettingsModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-[2px] z-50 hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 p-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-2">
+          <i data-lucide="key-round" class="w-5 h-5 text-amber-500"></i>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">API Поиска по ИНН (DaData ЕГРЮЛ)</h3>
+        </div>
+        <button onclick="closeApiSettingsModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="my-4 space-y-3 text-xs text-slate-600 dark:text-slate-300">
+        <p>В систему уже встроен демонстрационный ключ DaData и локальная база компаний. Если вы размещаете сайт на GitHub Pages для постоянной работы, вы можете указать свой бесплатный API-ключ с сайта <strong>dadata.ru</strong> (до 10 000 запросов в день бесплатно).</p>
+        <div>
+          <label class="block font-semibold mb-1 text-slate-700 dark:text-slate-200">API-ключ (Token DaData):</label>
+          <input id="dadataTokenInput" type="text" placeholder="Оставьте пустым для встроенного ключа..."
+            class="w-full rounded-lg border border-slate-300 dark:border-slate-700 px-3 py-2 font-mono text-xs bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500">
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <button onclick="closeApiSettingsModal()" class="px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:bg-slate-100 cursor-pointer">Закрыть</button>
+        <button onclick="saveApiSettings()" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white cursor-pointer">Сохранить ключ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Уведомление (Toast) -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <script>
+    // =========================================================================
+    // СПРАВОЧНИК КОМПАНИЙ ЕГРЮЛ + ИНТЕГРАЦИЯ С DADATA API ДЛЯ GITHUB
+    // =========================================================================
+    const BUILTIN_EGRUL_DB = {
+      '6671092480': {
+        inn: '6671092480', kpp: '667101001', ogrn: '1026605252465',
+        tradeatmName: 'БИС ООО', standardName: 'ООО "БИС"',
+        fullName: 'ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "БИС"',
+        address: 'г.Екатеринбург, Кольцовский тракт 14'
+      },
+      '6670187421': {
+        inn: '6670187421', kpp: '667001001', ogrn: '1076670029140',
+        tradeatmName: 'РМК ООО', standardName: 'ООО "РМК"',
+        fullName: 'ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "РУССКАЯ МЕДНАЯ КОМПАНИЯ"',
+        address: 'г. Екатеринбург, ул. Горького, д. 57'
+      },
+      '7714928105': {
+        inn: '7714928105', kpp: '771401001', ogrn: '1147746192840',
+        tradeatmName: 'БД ООО', standardName: 'ООО "БД"',
+        fullName: 'ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "БАЗА ДАННЫХ"',
+        address: 'г. Москва, Ленинградский пр-кт, д. 37, к. 9'
+      },
+      '5260384910': {
+        inn: '5260384910', kpp: '526001001', ogrn: '1125260014820',
+        tradeatmName: 'АВТОСБЫТ ООО', standardName: 'ООО "АВТОСБЫТ"',
+        fullName: 'ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "АВТОСБЫТ"',
+        address: 'г. Нижний Новгород, пр-кт Ленина, д. 88'
+      },
+      '5406781290': {
+        inn: '5406781290', kpp: '540601001', ogrn: '1135476092110',
+        tradeatmName: 'ТД СТРАТЕГ ООО', standardName: 'ООО "ТД СТРАТЕГ"',
+        fullName: 'ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "ТОРГОВЫЙ ДОМ СТРАТЕГ"',
+        address: 'г. Новосибирск, ул. Станционная, д. 30А'
+      },
+      '5504218943': {
+        inn: '5504218943', kpp: '550401001', ogrn: '1105543009123',
+        tradeatmName: 'СИБИРСКОЕ КУПЕЧЕСТВО ООО', standardName: 'ООО "СИБИРСКОЕ КУПЕЧЕСТВО"',
+        fullName: 'ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "СИБИРСКОЕ КУПЕЧЕСТВО"',
+        address: 'г. Омск, ул. 10 лет Октября, д. 182'
+      },
+      '7842159919': {
+        inn: '7842159919', kpp: '784201001', ogrn: '1187847184920',
+        tradeatmName: 'ГАЗСТРОЙПРОМ АО', standardName: 'АО "ГАЗСТРОЙПРОМ"',
+        fullName: 'АКЦИОНЕРНОЕ ОБЩЕСТВО "ГАЗСТРОЙПРОМ"',
+        address: 'г. Санкт-Петербург, Ташкентская ул., д. 3, стр. 1'
+      },
+      '6670201290': {
+        inn: '6670201290', kpp: '667001001', ogrn: '1086670007290',
+        tradeatmName: 'УЦСБ ООО', standardName: 'ООО "УЦСБ"',
+        fullName: 'ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "УРАЛЬСКИЙ ЦЕНТР СИСТЕМ БЕЗОПАСНОСТИ"',
+        address: 'г. Екатеринбург, ул. Малышева, д. 51 (БЦ Высоцкий)'
+      },
+      '7736207543': {
+        inn: '7736207543', kpp: '770401001', ogrn: '1027700229193',
+        tradeatmName: 'ЯНДЕКС ООО', standardName: 'ООО "ЯНДЕКС"',
+        fullName: 'ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "ЯНДЕКС"',
+        address: 'г. Москва, ул. Льва Толстого, д. 16'
+      },
+      '7707083893': {
+        inn: '7707083893', kpp: '773601001', ogrn: '1027700132195',
+        tradeatmName: 'СБЕРБАНК ПАО', standardName: 'ПАО СБЕРБАНК',
+        fullName: 'ПУБЛИЧНОЕ АКЦИОНЕРНОЕ ОБЩЕСТВО "СБЕРБАНК РОССИИ"',
+        address: 'г. Москва, ул. Вавилова, д. 19'
+      }
+    };
+
+    // Форматирование названия в фирменный стиль TRADEATM: ООО "БИС" -> БИС ООО
+    function convertToTradeatmFormat(rawName) {
+      if (!rawName) return '';
+      let clean = rawName.replace(/[«»"']/g, '').trim();
+      const prefixes = [
+        { regex: /^ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ\s+/i, short: 'ООО' },
+        { regex: /^АКЦИОНЕРНОЕ ОБЩЕСТВО\s+/i, short: 'АО' },
+        { regex: /^ПУБЛИЧНОЕ АКЦИОНЕРНОЕ ОБЩЕСТВО\s+/i, short: 'ПАО' },
+        { regex: /^ЗАКРЫТОЕ АКЦИОНЕРНОЕ ОБЩЕСТВО\s+/i, short: 'ЗАО' },
+        { regex: /^ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ\s+/i, short: 'ИП' },
+        { regex: /^(ООО|АО|ПАО|ЗАО|ИП|НПО|ТД)\s+/i, short: null }
+      ];
+      for (const p of prefixes) {
+        const match = clean.match(p.regex);
+        if (match) {
+          const opf = p.short || match[1].toUpperCase();
+          const rest = clean.replace(p.regex, '').trim();
+          return `${rest.toUpperCase()} ${opf}`;
+        }
+      }
+      return clean.toUpperCase();
+    }
+
+    // Поиск организации по ИНН (Локальный кеш + DaData API)
+    async function fetchCompanyByInn(innQuery) {
+      const inn = String(innQuery).replace(/\D/g, '').trim();
+      if (inn.length !== 10 && inn.length !== 12) {
+        throw new Error('ИНН должен содержать 10 (юр. лицо) или 12 (ИП) цифр');
+      }
+
+      // 1. Проверка во встроенной базе
+      if (BUILTIN_EGRUL_DB[inn]) {
+        return BUILTIN_EGRUL_DB[inn];
+      }
+
+      // 2. Прямой запрос в DaData API (ЕГРЮЛ/ЕГРИП в реальном времени)
+      const userToken = localStorage.getItem('tradeatm_dadata_token') || 'c05a170a838b5d2b309612316f10199375a8e589';
+      try {
+        const dadataResp = await fetch('https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party', {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Token ' + userToken
+          },
+          body: JSON.stringify({ query: inn })
+        });
+        if (dadataResp.ok) {
+          const data = await dadataResp.json();
+          if (data.suggestions && data.suggestions.length > 0) {
+            const party = data.suggestions[0];
+            const d = party.data || {};
+            const rawShort = (d.name && d.name.short_with_opf) || party.value || '';
+            const fullName = (d.name && d.name.full_with_opf) || rawShort;
+            const address = (d.address && d.address.value) || '';
+            const resultObj = {
+              inn: inn,
+              kpp: d.kpp || '-',
+              ogrn: d.ogrn || '-',
+              tradeatmName: convertToTradeatmFormat(rawShort),
+              standardName: rawShort,
+              fullName: fullName,
+              address: address
+            };
+            BUILTIN_EGRUL_DB[inn] = resultObj;
+            return resultObj;
+          }
+        }
+      } catch (e) {
+        console.warn('Ошибка подключения к DaData API:', e);
+      }
+
+      throw new Error('Организация с таким ИНН не найдена. Проверьте ИНН или укажите свой ключ DaData в настройках (значок ключа вверху).');
+    }
+
+    // Форматирование суммы в рублях (например: 48 500 ₽)
+    function formatRub(amount) {
+      const num = Number(amount) || 0;
+      return num.toLocaleString('ru-RU') + ' ₽';
+    }
+
+    // =========================================================================
+    // ИСХОДНЫЕ ДАННЫЕ ВСЕХ ЗАКАЗОВ СО СКРИНШОТОВ + СУММЫ СДЕЛОК (₽)
+    // =========================================================================
+    const INITIAL_CARDS = [
+      // КОЛОНКА 1: В РАБОТЕ
+      {
+        id: 'card-11268',
+        zakazCode: 'ZAKAZ-298',
+        shortHash: 'eig8vh8k6',
+        title: 'БИС ООО | 11268',
+        inn: '6671092480',
+        kpp: '667101001',
+        ogrn: '1026605252465',
+        dealAmount: 48500,
+        vatMode: 'vat20',
+        column: 'work',
+        tags: ['upd', 'unpaid'],
+        description: 'Переключатель 8-port HDMI/USB KVM Switch RackMount 1U 19"',
+        dueDate: '16.10.2026',
+        dueShort: '16 окт 2026',
+        startDate: '13.10.2026',
+        createdAt: '13.10.2026 15:10',
+        updatedAt: '13.10.2026 15:11',
+        resolved: false,
+        assignee: '-',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [
+          {
+            id: 'c-1',
+            author: 'logist@tradeatm',
+            isMe: true,
+            date: '13 окт 2026 15:11',
+            text: 'г.Екатеринбург,Кольцовский тракт 14'
+          }
+        ],
+        history: [
+          { date: '13.10.2026 15:10', text: 'logist@tradeatm создал(а) карточку ZAKAZ-298' },
+          { date: '13.10.2026 15:11', text: 'Установлена сумма сделки: 48 500 ₽' }
+        ]
+      },
+      {
+        id: 'card-10817',
+        zakazCode: 'ZAKAZ-294',
+        shortHash: 'rmk9x2a11',
+        title: 'РМК ООО | 10817',
+        inn: '6670187421',
+        kpp: '667001001',
+        ogrn: '1076670029140',
+        dealAmount: 164000,
+        vatMode: 'vat20',
+        column: 'work',
+        tags: ['upd', 'unpaid'],
+        description: 'Комплект серверных блоков питания 800W Redundant PSU (2 шт.)',
+        dueDate: '19.10.2026',
+        dueShort: '19 окт 2026',
+        startDate: '14.10.2026',
+        createdAt: '14.10.2026 10:20',
+        updatedAt: '15.10.2026 11:05',
+        resolved: false,
+        assignee: '-',
+        priority: 'Высокий',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [
+          {
+            id: 'c-2',
+            author: 'logist@tradeatm',
+            isMe: true,
+            date: '14 окт 2026 10:25',
+            text: 'г. Екатеринбург, ул. Горького, 57. Ожидаем оплату счета №10817'
+          }
+        ],
+        history: [{ date: '14.10.2026 10:20', text: 'Карточка создана' }]
+      },
+      {
+        id: 'card-11327',
+        zakazCode: 'ZAKAZ-301',
+        shortHash: 'bd7k19m02',
+        title: 'БД ООО | 11327',
+        inn: '7714928105',
+        kpp: '771401001',
+        ogrn: '1147746192840',
+        dealAmount: 92300,
+        vatMode: 'vat20',
+        column: 'work',
+        tags: ['upd', 'unpaid'],
+        description: 'Коммутатор промышленный управляемый L2+ 24 порта SFP',
+        dueDate: '19.10.2026',
+        dueShort: '19 окт 2026',
+        startDate: '14.10.2026',
+        createdAt: '14.10.2026 12:40',
+        updatedAt: '14.10.2026 12:45',
+        resolved: false,
+        assignee: '-',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: [{ date: '14.10.2026 12:40', text: 'Карточка создана' }]
+      },
+      {
+        id: 'card-11453',
+        zakazCode: 'ZAKAZ-305',
+        shortHash: 'avt4p8z19',
+        title: 'АВТОСБЫТ ООО | 11453',
+        inn: '5260384910',
+        kpp: '526001001',
+        ogrn: '1125260014820',
+        dealAmount: 37800,
+        vatMode: 'vat20',
+        column: 'work',
+        tags: ['upd', 'paid'],
+        description: 'Терминал сбора данных + подставка зарядная USB/RS232',
+        dueDate: '19.10.2026',
+        dueShort: '19 окт 2026',
+        startDate: '15.10.2026',
+        createdAt: '15.10.2026 09:15',
+        updatedAt: '15.10.2026 14:10',
+        resolved: false,
+        assignee: '-',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: [{ date: '15.10.2026 09:15', text: 'Карточка создана' }]
+      },
+      {
+        id: 'card-11452',
+        zakazCode: 'ZAKAZ-304',
+        shortHash: 'rin8w3q55',
+        title: 'РИНОСЕРВИС ООО | 11452',
+        inn: '7728194012',
+        kpp: '772801001',
+        ogrn: '1157746091234',
+        dealAmount: 118000,
+        vatMode: 'vat20',
+        column: 'work',
+        tags: ['upd', 'paid'],
+        description: 'Модуль дисплея банкомата NCR SelfServ 15" LCD High Bright',
+        dueDate: '19.10.2026',
+        dueShort: '19 окт 2026',
+        startDate: '15.10.2026',
+        createdAt: '15.10.2026 09:12',
+        updatedAt: '15.10.2026 16:00',
+        resolved: false,
+        assignee: '-',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: [{ date: '15.10.2026 09:12', text: 'Карточка создана' }]
+      },
+      {
+        id: 'card-11038',
+        zakazCode: 'ZAKAZ-291',
+        shortHash: 'spt2n7v44',
+        title: 'СТРОЙПРОМТОРГ ООО | 11038',
+        inn: '7719402811',
+        kpp: '771901001',
+        ogrn: '1117746281900',
+        dealAmount: 76400,
+        vatMode: 'vat20',
+        column: 'work',
+        tags: ['upd', 'paid'],
+        description: 'Источники бесперебойного питания ИБП 3000VA Rack 2U',
+        dueDate: '20.10.2026',
+        dueShort: '',
+        startDate: '12.10.2026',
+        createdAt: '12.10.2026 14:00',
+        updatedAt: '15.10.2026 17:30',
+        resolved: false,
+        assignee: '-',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [
+          {
+            id: 'c-3',
+            author: 'logist@tradeatm',
+            isMe: true,
+            date: '15 окт 2026 17:30',
+            text: 'г. Москва, Варшавское шоссе, 125. Готовим к отгрузке со склада'
+          }
+        ],
+        history: [{ date: '12.10.2026 14:00', text: 'Карточка создана' }]
+      },
+      {
+        id: 'card-9557',
+        zakazCode: 'ZAKAZ-260',
+        shortHash: 'atr5m9c12',
+        title: 'АТРИКС ООО | 9557',
+        inn: '7810492815',
+        kpp: '781001001',
+        ogrn: '1167847192011',
+        dealAmount: 54900,
+        vatMode: 'vat20',
+        column: 'work',
+        tags: ['paid'],
+        description: 'Считыватель смарт-карт моторизованный CRT-310 RS232',
+        dueDate: '20.10.2026',
+        dueShort: '20 окт 2026',
+        startDate: '10.10.2026',
+        createdAt: '10.10.2026 11:20',
+        updatedAt: '14.10.2026 15:00',
+        resolved: false,
+        assignee: '-',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: [{ date: '10.10.2026 11:20', text: 'Карточка создана' }]
+      },
+
+      // КОЛОНКА 2: В ДОСТАВКЕ
+      {
+        id: 'card-9819',
+        zakazCode: 'ZAKAZ-271',
+        shortHash: 'str7b2k81',
+        title: 'ТД СТРАТЕГ ООО | 9819',
+        inn: '5406781290',
+        kpp: '540601001',
+        ogrn: '1135476092110',
+        dealAmount: 215000,
+        vatMode: 'vat20',
+        column: 'delivery',
+        tags: ['upd', 'paid'],
+        description: 'Промышленный контроллер автоматизации + панель оператора 10"',
+        dueDate: '18.10.2026',
+        dueShort: '',
+        startDate: '11.10.2026',
+        createdAt: '11.10.2026 10:00',
+        updatedAt: '15.10.2026 12:00',
+        resolved: false,
+        assignee: 'СДЭК Логистика',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: [{ date: '15.10.2026 12:00', text: 'Перемещено в колонку В доставке' }]
+      },
+      {
+        id: 'card-9777',
+        zakazCode: 'ZAKAZ-268',
+        shortHash: 'sib3x8n40',
+        title: 'СИБИРСКОЕ КУПЕЧЕСТВО ООО | 9777',
+        inn: '5504218943',
+        kpp: '550401001',
+        ogrn: '1105543009123',
+        dealAmount: 142500,
+        vatMode: 'vat20',
+        column: 'delivery',
+        tags: ['upd', 'paid'],
+        description: 'Чековый термопринтер Custom VKP80II SX USB+RS232 (3 шт.)',
+        dueDate: '18.10.2026',
+        dueShort: '',
+        startDate: '10.10.2026',
+        createdAt: '10.10.2026 16:40',
+        updatedAt: '14.10.2026 18:10',
+        resolved: false,
+        assignee: 'Деловые Линии',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: []
+      },
+      {
+        id: 'card-8902',
+        zakazCode: 'ZAKAZ-242',
+        shortHash: 'gaz9h4p22',
+        title: 'ГАЗСТРОЙПРОМ АО | 8902',
+        inn: '7842159919',
+        kpp: '784201001',
+        ogrn: '1187847184920',
+        dealAmount: 490000,
+        vatMode: 'vat20',
+        column: 'delivery',
+        tags: ['upd', 'paid'],
+        description: 'Серверный шкаф 42U 800x1000 + блок розеток PDU 19" 16A',
+        dueDate: '17.10.2026',
+        dueShort: '',
+        startDate: '08.10.2026',
+        createdAt: '08.10.2026 09:30',
+        updatedAt: '14.10.2026 11:20',
+        resolved: false,
+        assignee: 'Деловые Линии',
+        priority: 'Высокий',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: []
+      },
+      {
+        id: 'card-8605',
+        zakazCode: 'ZAKAZ-230',
+        shortHash: 'for1d6s99',
+        title: 'ФОРТУНА-ПЛЮС ООО | 8605',
+        inn: '2310948120',
+        kpp: '231001001',
+        ogrn: '1092310004912',
+        dealAmount: 63200,
+        vatMode: 'vat20',
+        column: 'delivery',
+        tags: ['upd', 'paid'],
+        description: 'Купюроприемник CashCode SM вертикальный с кассетой 1500 купюр',
+        dueDate: '16.10.2026',
+        dueShort: '16 окт 2026',
+        startDate: '07.10.2026',
+        createdAt: '07.10.2026 13:15',
+        updatedAt: '15.10.2026 09:40',
+        resolved: false,
+        assignee: 'СДЭК',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: []
+      },
+      {
+        id: 'card-11133',
+        zakazCode: 'ZAKAZ-295',
+        shortHash: 'ucs6t1w73',
+        title: 'УЦСБ ООО | 11133',
+        inn: '6670201290',
+        kpp: '667001001',
+        ogrn: '1086670007290',
+        dealAmount: 310000,
+        vatMode: 'vat20',
+        column: 'delivery',
+        tags: ['upd', 'paid'],
+        description: 'Аппаратный межсетевой экран / криптошлюз промышленного исполнения',
+        dueDate: '21.10.2026',
+        dueShort: '21 окт 2026',
+        startDate: '13.10.2026',
+        createdAt: '13.10.2026 11:00',
+        updatedAt: '16.10.2026 10:15',
+        resolved: false,
+        assignee: 'СДЭК Экспресс',
+        priority: 'Высокий',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: []
+      },
+
+      // КОЛОНКА 3: ГОТОВО
+      {
+        id: 'card-8832',
+        zakazCode: 'ZAKAZ-238',
+        shortHash: 'prm4k8y10',
+        title: 'ПРОМСТРОЙ ООО | 8832',
+        inn: '7705918230',
+        kpp: '770501001',
+        ogrn: '1107746918230',
+        dealAmount: 185000,
+        vatMode: 'vat20',
+        column: 'done',
+        tags: ['paid'],
+        description: 'Комплект оптических трансиверов SFP+ 10G LR 1310nm (10 шт.)',
+        dueDate: '12.10.2026',
+        dueShort: '',
+        startDate: '05.10.2026',
+        createdAt: '05.10.2026 14:20',
+        updatedAt: '12.10.2026 16:00',
+        resolved: true,
+        assignee: 'logist@tradeatm',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [
+          {
+            id: 'c-4',
+            author: 'logist@tradeatm',
+            isMe: true,
+            date: '12 окт 2026 16:00',
+            text: 'Груз получен клиентом, закрывающие документы проведены по ЭДО'
+          }
+        ],
+        history: []
+      },
+      {
+        id: 'card-10761',
+        zakazCode: 'ZAKAZ-282',
+        shortHash: 'asc2m5r88',
+        title: 'АСЦВ ЗАО | 10761',
+        inn: '7802194810',
+        kpp: '780201001',
+        ogrn: '1037804019280',
+        dealAmount: 84000,
+        vatMode: 'vat20',
+        column: 'done',
+        tags: ['paid'],
+        description: 'Плата управления диспенсером купюр NCR S2 Pick Module PCB',
+        dueDate: '14.10.2026',
+        dueShort: '',
+        startDate: '09.10.2026',
+        createdAt: '09.10.2026 11:10',
+        updatedAt: '14.10.2026 15:40',
+        resolved: true,
+        assignee: 'logist@tradeatm',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: []
+      },
+      {
+        id: 'card-10950',
+        zakazCode: 'ZAKAZ-289',
+        shortHash: 'esb9v3l61',
+        title: 'ЭСБ-КОНТАКТ ООО | 10950',
+        inn: '6658419203',
+        kpp: '665801001',
+        ogrn: '1126658019203',
+        dealAmount: 129500,
+        vatMode: 'vat20',
+        column: 'done',
+        tags: ['paid'],
+        description: 'Сенсорный экран 19" ПАВ (SAW Touch Screen) антивандальный 6мм',
+        dueDate: '14.10.2026',
+        dueShort: '',
+        startDate: '10.10.2026',
+        createdAt: '10.10.2026 10:05',
+        updatedAt: '14.10.2026 17:20',
+        resolved: true,
+        assignee: 'logist@tradeatm',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [
+          {
+            id: 'c-5',
+            author: 'logist@tradeatm',
+            isMe: true,
+            date: '14 окт 2026 17:20',
+            text: 'Доставлено в г. Тюмень, накладная подписана'
+          }
+        ],
+        history: []
+      },
+      {
+        id: 'card-10329',
+        zakazCode: 'ZAKAZ-276',
+        shortHash: 'kae7p1x34',
+        title: 'КАЭМ ООО | 10329',
+        inn: '7724819205',
+        kpp: '772401001',
+        ogrn: '1117746819205',
+        dealAmount: 45000,
+        vatMode: 'vat20',
+        column: 'done',
+        tags: ['paid'],
+        description: 'Кассета реджекта / сброса купюр для банкомата Diebold Nixdorf',
+        dueDate: '13.10.2026',
+        dueShort: '',
+        startDate: '08.10.2026',
+        createdAt: '08.10.2026 15:00',
+        updatedAt: '13.10.2026 12:10',
+        resolved: true,
+        assignee: '-',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: []
+      },
+      {
+        id: 'card-10990',
+        zakazCode: 'ZAKAZ-290',
+        shortHash: 'gel5w9t42',
+        title: 'ГЕЛИОС ООО | 10990',
+        inn: '5024189201',
+        kpp: '502401001',
+        ogrn: '1145024008921',
+        dealAmount: 67800,
+        vatMode: 'vat20',
+        column: 'done',
+        tags: ['paid'],
+        description: 'Пин-пад криптографический клавиатура EPP V6 PCI 3.0',
+        dueDate: '15.10.2026',
+        dueShort: '',
+        startDate: '11.10.2026',
+        createdAt: '11.10.2026 13:30',
+        updatedAt: '15.10.2026 14:45',
+        resolved: true,
+        assignee: '-',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [
+          {
+            id: 'c-6',
+            author: 'logist@tradeatm',
+            isMe: true,
+            date: '15 окт 2026 14:45',
+            text: 'Самовывоз со склада завершен'
+          }
+        ],
+        history: []
+      },
+      {
+        id: 'card-10728',
+        zakazCode: 'ZAKAZ-280',
+        shortHash: 'kmz8r4b19',
+        title: 'КМЗ ООО | 10728',
+        inn: '4401129480',
+        kpp: '440101001',
+        ogrn: '1084401009480',
+        dealAmount: 98000,
+        vatMode: 'vat20',
+        column: 'done',
+        tags: ['paid'],
+        description: 'Комплект ремней и роликов тракта подачи купюр (ЗИП пакет)',
+        dueDate: '13.10.2026',
+        dueShort: '',
+        startDate: '07.10.2026',
+        createdAt: '07.10.2026 16:10',
+        updatedAt: '13.10.2026 11:00',
+        resolved: true,
+        assignee: '-',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: []
+      },
+      {
+        id: 'card-9780',
+        zakazCode: 'ZAKAZ-269',
+        shortHash: 'eto3n6m77',
+        title: 'ЭТО ООО | 9780',
+        inn: '7813491022',
+        kpp: '781301001',
+        ogrn: '1107847192010',
+        dealAmount: 53400,
+        vatMode: 'vat20',
+        column: 'done',
+        tags: ['paid'],
+        description: 'Промышленный блок питания MeanWell 24V 10A на DIN-рейку (4 шт.)',
+        dueDate: '12.10.2026',
+        dueShort: '',
+        startDate: '06.10.2026',
+        createdAt: '06.10.2026 10:15',
+        updatedAt: '12.10.2026 18:00',
+        resolved: true,
+        assignee: '-',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: [],
+        history: []
+      }
+    ];
+
+    // Глобальное состояние
+    let cards = [];
+    let currentView = 'board';
+    let currentTagFilter = 'all';
+    let searchQuery = '';
+    let showDetailsOnBoard = false;
+    let activeModalCardId = null;
+    let quickAmountCardId = null;
+    let draggedCardId = null;
+    let lastFoundNewCardParty = null;
+
+    // Конфигурация меток
+    const TAG_CONFIG = {
+      upd: {
+        label: 'УПД',
+        pillColor: '#e05252',
+        badgeBg: 'bg-[#e05252] text-white',
+        border: 'border-[#e05252]'
+      },
+      unpaid: {
+        label: 'не оплачен',
+        pillColor: '#f3b7b7',
+        badgeBg: 'bg-[#f8d7da] text-[#842029] dark:bg-rose-950/90 dark:text-rose-200',
+        border: 'border-[#f1aeb5]'
+      },
+      paid: {
+        label: 'оплачен',
+        pillColor: '#84d9b3',
+        badgeBg: 'bg-[#d1e7dd] text-[#0f5132] dark:bg-emerald-950/90 dark:text-emerald-200',
+        border: 'border-[#a3cfbb]'
+      },
+      urgent: {
+        label: 'срочно',
+        pillColor: '#f59e0b',
+        badgeBg: 'bg-amber-500 text-white',
+        border: 'border-amber-500'
+      }
+    };
+
+    const COLUMN_NAMES = {
+      work: 'В работе',
+      delivery: 'В доставке',
+      done: 'Готово',
+      refund: 'ВОЗВРАТ ДС'
+    };
+
+    // Инициализация
+    function initApp() {
+      const saved = localStorage.getItem('tradeatm_cards_2026_v3');
+      if (saved) {
+        try {
+          cards = JSON.parse(saved);
+        } catch (e) {
+          cards = JSON.parse(JSON.stringify(INITIAL_CARDS));
+        }
+      } else {
+        cards = JSON.parse(JSON.stringify(INITIAL_CARDS));
+      }
+      renderAll();
+    }
+
+    function saveState() {
+      localStorage.setItem('tradeatm_cards_2026_v3', JSON.stringify(cards));
+    }
+
+    function resetDemoData() {
+      cards = JSON.parse(JSON.stringify(INITIAL_CARDS));
+      saveState();
+      renderAll();
+      showToast('Демо-данные и суммы сделок восстановлены');
+    }
+
+    // Фильтрация карточек
+    function getFilteredCards(includeArchived = false) {
+      return cards.filter(c => {
+        if (!includeArchived && c.archived) return false;
+        if (includeArchived && !c.archived) return false;
+
+        if (currentTagFilter !== 'all') {
+          if (!c.tags.includes(currentTagFilter)) return false;
+        }
+
+        if (searchQuery.trim() !== '') {
+          const q = searchQuery.toLowerCase().trim();
+          const inTitle = c.title.toLowerCase().includes(q);
+          const inCode = (c.zakazCode || '').toLowerCase().includes(q);
+          const inInn = (c.inn || '').toLowerCase().includes(q);
+          const inAmount = String(c.dealAmount || '').includes(q);
+          const inDesc = (c.description || '').toLowerCase().includes(q);
+          const inComments = (c.comments || []).some(cm => cm.text.toLowerCase().includes(q));
+          if (!inTitle && !inCode && !inInn && !inAmount && !inDesc && !inComments) return false;
+        }
+        return true;
+      });
+    }
+
+    function renderAll() {
+      renderBoard();
+      renderListView();
+      renderCalendarView();
+      renderArchiveView();
+      updateTopStats();
+      lucide.createIcons();
+    }
+
+    // 1. Отрисовка Канбан-доски
+    function renderBoard() {
+      const activeCards = getFilteredCards(false);
+      const cols = ['work', 'delivery', 'done', 'refund'];
+
+      cols.forEach(colKey => {
+        const container = document.getElementById(`list-${colKey}`);
+        const countEl = document.getElementById(`count-${colKey}`);
+        const sumEl = document.getElementById(`sum-${colKey}`);
+        const colCards = activeCards.filter(c => c.column === colKey);
+        
+        countEl.textContent = colCards.length;
+        const colTotalRub = colCards.reduce((acc, c) => acc + (Number(c.dealAmount) || 0), 0);
+        if (sumEl) {
+          sumEl.textContent = formatRub(colTotalRub);
+        }
+
+        if (colCards.length === 0) {
+          container.innerHTML = `
+            <div class="py-6 px-3 text-center rounded-lg border border-dashed border-black/10 dark:border-white/10 text-[11px] text-slate-500 dark:text-slate-400">
+              Перетащите карточку сюда или нажмите «+ Новая карточка»
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = colCards.map(card => createCardHtml(card)).join('');
+      });
+    }
+
+    // Генерация HTML одной карточки Канбана
+    function createCardHtml(card) {
+      const pillsHtml = card.tags.map(tKey => {
+        const cfg = TAG_CONFIG[tKey];
+        if (!cfg) return '';
+        const clickAction = (tKey === 'unpaid' || tKey === 'paid')
+          ? `onclick="event.stopPropagation(); quickTogglePaid('${card.id}')" title="Кликните для быстрой смены статуса оплаты (${cfg.label})"`
+          : `title="${cfg.label}"`;
+
+        if (showDetailsOnBoard) {
+          return `<span ${clickAction} class="px-2 py-0.5 rounded text-[10px] font-semibold ${cfg.badgeBg} cursor-pointer hover:opacity-85 transition-opacity">${cfg.label}</span>`;
+        }
+        return `<span ${clickAction} style="background-color:${cfg.pillColor}" class="h-[7px] w-9 rounded-full inline-block cursor-pointer hover:scale-105 transition-transform"></span>`;
+      }).join('');
+
+      const commentsCount = (card.comments || []).length;
+      const firstComment = commentsCount > 0 ? card.comments[0].text : '';
+      const hasDesc = Boolean(card.description && card.description.trim());
+      const amountVal = Number(card.dealAmount) || 0;
+      const isPaid = card.tags.includes('paid');
+
+      const amountBadgeClass = isPaid
+        ? 'bg-emerald-50/90 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60'
+        : 'bg-rose-50/80 dark:bg-rose-950/50 text-rose-800 dark:text-rose-300 border-rose-200/70 dark:border-rose-800/50';
+
+      return `
+        <div id="dom-${card.id}"
+             draggable="true"
+             ondragstart="handleDragStart(event, '${card.id}')"
+             ondragend="handleDragEnd(event)"
+             onclick="openCardModal('${card.id}')"
+             class="kanban-card bg-white dark:bg-slate-900 rounded-lg p-3 shadow-2xs border border-slate-200/80 dark:border-slate-800 cursor-pointer select-none group relative">
+          
+          <!-- Верхняя строка: полоски меток + Бейдж суммы сделки -->
+          <div class="flex items-center justify-between gap-1.5 mb-1.5">
+            <div class="flex items-center flex-wrap gap-1.5">
+              ${pillsHtml}
+            </div>
+            <button onclick="event.stopPropagation(); openQuickAmountModal('${card.id}')" 
+              title="Нажмите, чтобы быстро изменить сумму сделки"
+              class="px-1.5 py-0.5 rounded text-[11px] font-mono font-bold border ${amountBadgeClass} hover:scale-105 transition-transform flex items-center gap-1 shrink-0 cursor-pointer">
+              <span>${amountVal > 0 ? formatRub(amountVal) : '+ Сумма ₽'}</span>
+            </button>
+          </div>
+
+          <!-- Название компании и номер заказа -->
+          <div class="font-bold text-[13px] text-slate-900 dark:text-slate-100 leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+            ${escapeHtml(card.title)}
+          </div>
+
+          <!-- ИНН на карточке (если заполнен) -->
+          ${card.inn ? `
+            <div class="mt-0.5 text-[10px] font-mono text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
+              <span>ИНН: ${escapeHtml(card.inn)}</span>
+              ${card.kpp && card.kpp !== '-' ? `<span>• КПП: ${escapeHtml(card.kpp)}</span>` : ''}
+            </div>
+          ` : ''}
+
+          <!-- Если включен режим «Детали» -->
+          ${showDetailsOnBoard ? `
+            <div class="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 space-y-1 text-[11px]">
+              ${hasDesc ? `<div class="text-slate-600 dark:text-slate-300 line-clamp-2">${escapeHtml(card.description)}</div>` : ''}
+              ${firstComment ? `
+                <div class="flex items-center gap-1 text-indigo-600 dark:text-indigo-400 font-medium truncate">
+                  <i data-lucide="map-pin" class="w-3 h-3 shrink-0"></i>
+                  <span class="truncate">${escapeHtml(firstComment)}</span>
+                </div>
+              ` : ''}
+            </div>
+          ` : ''}
+
+          <!-- Нижняя строка иконок и даты -->
+          <div class="mt-2.5 flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
+            <div class="flex items-center gap-2.5">
+              ${hasDesc ? `
+                <span class="flex items-center text-slate-500 dark:text-slate-400" title="${escapeHtml(card.description)}">
+                  <i data-lucide="align-left" class="w-3.5 h-3.5"></i>
+                </span>
+              ` : ''}
+              ${commentsCount > 0 ? `
+                <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400" title="${escapeHtml(firstComment)}">
+                  <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                  <span class="font-medium">${commentsCount}</span>
+                </span>
+              ` : ''}
+            </div>
+
+            ${card.dueShort ? `
+              <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">${escapeHtml(card.dueShort)}</span>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    // Быстрое редактирование суммы сделки с доски
+    function openQuickAmountModal(cardId) {
+      const card = cards.find(c => c.id === cardId);
+      if (!card) return;
+      quickAmountCardId = cardId;
+      document.getElementById('quickAmountTitle').textContent = card.title;
+      const input = document.getElementById('quickAmountInput');
+      input.value = card.dealAmount || 0;
+      const modal = document.getElementById('quickAmountModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      setTimeout(() => input.focus(), 50);
+    }
+
+    function closeQuickAmountModal() {
+      quickAmountCardId = null;
+      const modal = document.getElementById('quickAmountModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function saveQuickAmount() {
+      if (!quickAmountCardId) return;
+      const card = cards.find(c => c.id === quickAmountCardId);
+      if (!card) return;
+      const val = Math.max(0, Number(document.getElementById('quickAmountInput').value) || 0);
+      card.dealAmount = val;
+      card.updatedAt = getCurrentDateTimeStr();
+      card.history.unshift({
+        date: card.updatedAt,
+        text: `Изменена сумма сделки: ${formatRub(val)}`
+      });
+      saveState();
+      renderAll();
+      closeQuickAmountModal();
+      showToast(`${card.title}: сумма ${formatRub(val)}`);
+    }
+
+    // Быстрое переключение статуса оплаты («не оплачен» <-> «оплачен»)
+    function quickTogglePaid(cardId) {
+      const card = cards.find(c => c.id === cardId);
+      if (!card) return;
+
+      if (card.tags.includes('unpaid')) {
+        card.tags = card.tags.filter(t => t !== 'unpaid');
+        if (!card.tags.includes('paid')) card.tags.push('paid');
+        showToast(`${card.title}: отмечен как «оплачен» (${formatRub(card.dealAmount)})`);
+      } else if (card.tags.includes('paid')) {
+        card.tags = card.tags.filter(t => t !== 'paid');
+        if (!card.tags.includes('unpaid')) card.tags.push('unpaid');
+        showToast(`${card.title}: отмечен как «не оплачен»`);
+      } else {
+        card.tags.push('paid');
+      }
+
+      card.updatedAt = getCurrentDateTimeStr();
+      saveState();
+      renderAll();
+    }
+
+    // 2. Отрисовка вида «Список»
+    function renderListView() {
+      const tbody = document.getElementById('tableListBody');
+      const activeCards = getFilteredCards(false);
+      const totalListRub = activeCards.reduce((acc, c) => acc + (Number(c.dealAmount) || 0), 0);
+      const listSumEl = document.getElementById('listTotalSum');
+      if (listSumEl) listSumEl.textContent = formatRub(totalListRub);
+
+      tbody.innerHTML = activeCards.map(card => {
+        const address = (card.comments && card.comments.length > 0) ? card.comments[0].text : '—';
+        const tagsHtml = card.tags.map(t => {
+          const cfg = TAG_CONFIG[t];
+          return cfg ? `<span onclick="event.stopPropagation(); quickTogglePaid('${card.id}')" class="px-2 py-0.5 rounded text-[10px] font-semibold ${cfg.badgeBg} cursor-pointer">${cfg.label}</span>` : '';
+        }).join(' ');
+
+        return `
+          <tr onclick="openCardModal('${card.id}')" class="hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer transition-colors">
+            <td class="py-3 px-4 font-mono text-slate-500">${escapeHtml(card.zakazCode)}</td>
+            <td class="py-3 px-4 font-bold text-slate-900 dark:text-white">${escapeHtml(card.title)}</td>
+            <td class="py-3 px-4 font-mono font-bold text-slate-900 dark:text-emerald-400">${formatRub(card.dealAmount || 0)}</td>
+            <td class="py-3 px-4 font-mono text-[11px] text-slate-600 dark:text-slate-300">${escapeHtml(card.inn || '—')}</td>
+            <td class="py-3 px-4">
+              <span class="px-2 py-1 rounded-md text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                ${COLUMN_NAMES[card.column]}
+              </span>
+            </td>
+            <td class="py-3 px-4 space-x-1">${tagsHtml}</td>
+            <td class="py-3 px-4 text-slate-600 dark:text-slate-300 max-w-xs truncate">${escapeHtml(card.description || '—')}</td>
+            <td class="py-3 px-4 text-slate-600 dark:text-slate-300 max-w-xs truncate">${escapeHtml(address)}</td>
+            <td class="py-3 px-4 font-mono text-slate-500">${escapeHtml(card.dueDate || '—')}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // 3. Отрисовка вида «Календарь»
+    function renderCalendarView() {
+      const grid = document.getElementById('calendarGrid');
+      const activeCards = getFilteredCards(false);
+      const dates = ['16.10.2026', '17.10.2026', '18.10.2026', '19.10.2026', '20.10.2026', '21.10.2026', '22.10.2026', 'Без даты'];
+
+      grid.innerHTML = dates.map(dateStr => {
+        const dayCards = activeCards.filter(c => {
+          if (dateStr === 'Без даты') return !c.dueDate || !dates.includes(c.dueDate);
+          return c.dueDate === dateStr;
+        });
+        const daySum = dayCards.reduce((acc, c) => acc + (Number(c.dealAmount) || 0), 0);
+
+        return `
+          <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 p-3 flex flex-col">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-200/70 dark:border-slate-700">
+              <div>
+                <span class="font-mono font-bold text-xs text-slate-800 dark:text-slate-200">${dateStr}</span>
+                <div class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">${formatRub(daySum)}</div>
+              </div>
+              <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold">${dayCards.length}</span>
+            </div>
+            <div class="space-y-2 flex-1">
+              ${dayCards.length === 0 ? `<div class="text-[11px] text-slate-400 py-4 text-center">Нет отгрузок</div>` : dayCards.map(c => `
+                <div onclick="openCardModal('${c.id}')" class="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs hover:border-indigo-400 cursor-pointer transition-all">
+                  <div class="flex items-center justify-between gap-1">
+                    <div class="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">${escapeHtml(c.title)}</div>
+                    <span class="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 shrink-0">${formatRub(c.dealAmount || 0)}</span>
+                  </div>
+                  <div class="text-[10px] text-slate-500 mt-0.5 flex items-center justify-between">
+                    <span>${COLUMN_NAMES[c.column]}</span>
+                    <span class="font-mono">${c.zakazCode}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 4. Отрисовка вида «Архив»
+    function renderArchiveView() {
+      const container = document.getElementById('archiveListContainer');
+      const archivedCards = cards.filter(c => c.archived);
+      document.getElementById('archiveCountBadge').textContent = archivedCards.length;
+
+      if (archivedCards.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10 text-slate-400 text-xs">
+            В архиве пока нет карточек. Вы можете архивировать любую карточку внутри окна заказа.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = archivedCards.map(c => `
+        <div class="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
+          <div>
+            <div class="font-bold text-xs text-slate-800 dark:text-white">${escapeHtml(c.title)} <span class="ml-2 font-mono text-emerald-600">${formatRub(c.dealAmount || 0)}</span></div>
+            <div class="text-[11px] text-slate-500">${escapeHtml(c.description || '')}</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="restoreFromArchive('${c.id}')" class="px-3 py-1 rounded-md bg-indigo-600 text-white text-xs font-medium hover:bg-indigo-500 cursor-pointer">Вернуть на доску</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Обновление статистики и финансовых KPI вверху экрана
+    function updateTopStats() {
+      const active = cards.filter(c => !c.archived);
+      const totalAmount = active.reduce((acc, c) => acc + (Number(c.dealAmount) || 0), 0);
+      
+      const paidCards = active.filter(c => c.tags.includes('paid'));
+      const paidAmount = paidCards.reduce((acc, c) => acc + (Number(c.dealAmount) || 0), 0);
+
+      const unpaidCards = active.filter(c => c.tags.includes('unpaid'));
+      const unpaidAmount = unpaidCards.reduce((acc, c) => acc + (Number(c.dealAmount) || 0), 0);
+
+      document.getElementById('statTotalActive').textContent = active.length;
+      document.getElementById('statTotalAmount').textContent = formatRub(totalAmount);
+      document.getElementById('statPaidAmount').textContent = formatRub(paidAmount);
+      document.getElementById('statPaidCount').textContent = paidCards.length;
+      document.getElementById('statUnpaidAmount').textContent = formatRub(unpaidAmount);
+      document.getElementById('statUnpaidCount').textContent = unpaidCards.length;
+    }
+
+    // =========================================================================
+    // DRAG AND DROP (ПЕРЕТАСКИВАНИЕ МЕЖДУ КОЛОНКАМИ)
+    // =========================================================================
+    function handleDragStart(event, cardId) {
+      draggedCardId = cardId;
+      event.dataTransfer.setData('text/plain', cardId);
+      setTimeout(() => {
+        const el = document.getElementById(`dom-${cardId}`);
+        if (el) el.classList.add('dragging');
+      }, 10);
+    }
+
+    function handleDragEnd(event) {
+      if (draggedCardId) {
+        const el = document.getElementById(`dom-${draggedCardId}`);
+        if (el) el.classList.remove('dragging');
+      }
+      document.querySelectorAll('.column-drop-active').forEach(el => el.classList.remove('column-drop-active'));
+      draggedCardId = null;
+    }
+
+    function handleDragOver(event, colKey) {
+      event.preventDefault();
+      const colEl = document.getElementById(`col-${colKey}`);
+      if (colEl && !colEl.classList.contains('column-drop-active')) {
+        colEl.classList.add('column-drop-active');
+      }
+    }
+
+    function handleDragLeave(event, colKey) {
+      const colEl = document.getElementById(`col-${colKey}`);
+      if (colEl) colEl.classList.remove('column-drop-active');
+    }
+
+    function handleDrop(event, targetColKey) {
+      event.preventDefault();
+      const colEl = document.getElementById(`col-${targetColKey}`);
+      if (colEl) colEl.classList.remove('column-drop-active');
+
+      const cardId = event.dataTransfer.getData('text/plain') || draggedCardId;
+      if (!cardId) return;
+
+      const card = cards.find(c => c.id === cardId);
+      if (card && card.column !== targetColKey) {
+        const oldColName = COLUMN_NAMES[card.column];
+        const newColName = COLUMN_NAMES[targetColKey];
+        card.column = targetColKey;
+        card.updatedAt = getCurrentDateTimeStr();
+        if (targetColKey === 'done') card.resolved = true;
+
+        card.history = card.history || [];
+        card.history.unshift({
+          date: card.updatedAt,
+          text: `Перемещено из «${oldColName}» в «${newColName}»`
+        });
+
+        saveState();
+        renderAll();
+        showToast(`${card.title} → «${newColName}»`);
+      }
+    }
+
+    // =========================================================================
+    // ДЕТАЛЬНОЕ МОДАЛЬНОЕ ОКНО КАРТОЧКИ + РАБОТА С СУММОЙ И ИНН
+    // =========================================================================
+    function openCardModal(cardId) {
+      const card = cards.find(c => c.id === cardId);
+      if (!card) return;
+      activeModalCardId = cardId;
+
+      document.getElementById('modalColBreadcrumb').textContent = COLUMN_NAMES[card.column];
+      document.getElementById('modalZakazCode').textContent = card.zakazCode || 'ZAKAZ-000';
+      document.getElementById('modalShortHash').textContent = card.shortHash || 'trade2026';
+      document.getElementById('modalCardTitle').value = card.title;
+      document.getElementById('modalStatusSelect').value = card.column;
+      document.getElementById('modalDescription').value = card.description || '';
+
+      // Заполнение поля ИНН и реквизитов
+      document.getElementById('modalInnInput').value = card.inn || '';
+      const reqBox = document.getElementById('modalCompanyRequisites');
+      if (card.inn) {
+        reqBox.classList.remove('hidden');
+        document.getElementById('modalReqKppOgrn').textContent = `${card.kpp || '-'} / ${card.ogrn || '-'}`;
+        const cached = BUILTIN_EGRUL_DB[card.inn];
+        document.getElementById('modalReqAddress').textContent = (cached && cached.address) ? cached.address : (card.comments[0]?.text || 'Адрес в комментарии');
+        document.getElementById('modalInnStatusBadge').textContent = `ИНН ${card.inn}`;
+      } else {
+        reqBox.classList.add('hidden');
+        document.getElementById('modalInnStatusBadge').textContent = 'Не указан';
+      }
+
+      // Заполнение финансовых полей
+      renderModalFinancials(card);
+
+      // Сведения
+      document.getElementById('modalAssignee').value = card.assignee || '-';
+      document.getElementById('modalPriority').value = card.priority || '-';
+      document.getElementById('modalDueDate').value = card.dueDate || '';
+      document.getElementById('modalStartDate').value = card.startDate || '';
+      document.getElementById('modalCreatedAt').textContent = card.createdAt || '';
+      document.getElementById('modalUpdatedAt').textContent = card.updatedAt || '';
+
+      document.getElementById('archiveBtnText').textContent = card.archived ? 'Вернуть из архива' : 'Архивировать';
+
+      renderModalResolved(card);
+      renderModalTags(card);
+      renderModalAttachments(card);
+      renderModalRelated(card);
+      renderModalComments(card);
+      renderModalHistory(card);
+
+      const backdrop = document.getElementById('cardModalBackdrop');
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function renderModalFinancials(card) {
+      const amount = Number(card.dealAmount) || 0;
+      const vatMode = card.vatMode || 'vat20';
+      document.getElementById('modalDealAmountTop').value = amount;
+      document.getElementById('modalDealAmountSidebar').value = amount;
+      document.getElementById('modalVatSelect').value = vatMode;
+
+      const vatEl = document.getElementById('modalVatCalculated');
+      if (vatMode === 'vat20') {
+        const vatSum = Math.round((amount * 20) / 120);
+        vatEl.textContent = `В т.ч. НДС 20%: ${formatRub(vatSum)}`;
+      } else if (vatMode === 'vat5') {
+        const vatSum = Math.round((amount * 5) / 105);
+        vatEl.textContent = `В т.ч. НДС 5%: ${formatRub(vatSum)}`;
+      } else {
+        vatEl.textContent = 'Без НДС';
+      }
+
+      const badge = document.getElementById('modalHeaderPaymentBadge');
+      if (card.tags.includes('paid')) {
+        badge.textContent = 'оплачен';
+        badge.className = 'px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#d1e7dd] text-[#0f5132]';
+      } else {
+        badge.textContent = 'не оплачен';
+        badge.className = 'px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#f8d7da] text-[#842029]';
+      }
+    }
+
+    function saveDealAmountFromModal(val) {
+      const card = getActiveModalCard();
+      if (!card) return;
+      const num = Math.max(0, Number(val) || 0);
+      card.dealAmount = num;
+      card.updatedAt = getCurrentDateTimeStr();
+      card.history.unshift({
+        date: card.updatedAt,
+        text: `Обновлена сумма сделки: ${formatRub(num)}`
+      });
+      renderModalFinancials(card);
+      renderModalHistory(card);
+      saveState();
+      renderAll();
+      showToast(`Сумма сделки сохранена: ${formatRub(num)}`);
+    }
+
+    function adjustModalDealAmount(delta) {
+      const card = getActiveModalCard();
+      if (!card) return;
+      const nextVal = Math.max(0, (Number(card.dealAmount) || 0) + delta);
+      saveDealAmountFromModal(nextVal);
+    }
+
+    function saveVatModeFromModal(mode) {
+      const card = getActiveModalCard();
+      if (!card) return;
+      card.vatMode = mode;
+      renderModalFinancials(card);
+      saveState();
+    }
+
+    function togglePaymentStatusQuick() {
+      if (!activeModalCardId) return;
+      quickTogglePaid(activeModalCardId);
+      const card = getActiveModalCard();
+      if (card) {
+        renderModalTags(card);
+        renderModalFinancials(card);
+      }
+    }
+
+    // Автопоиск по ИНН внутри открытой карточки
+    function handleModalInnTyping(val) {
+      const clean = val.replace(/\D/g, '');
+      if (clean.length === 10 || clean.length === 12) {
+        lookupInnForExistingCard();
+      }
+    }
+
+    async function lookupInnForExistingCard() {
+      const card = getActiveModalCard();
+      if (!card) return;
+      const innInput = document.getElementById('modalInnInput').value.replace(/\D/g, '').trim();
+      const badge = document.getElementById('modalInnStatusBadge');
+
+      if (innInput.length !== 10 && innInput.length !== 12) {
+        showToast('Введите корректный ИНН (10 или 12 цифр)');
+        return;
+      }
+
+      badge.textContent = 'Поиск в ЕГРЮЛ...';
+      try {
+        const company = await fetchCompanyByInn(innInput);
+        card.inn = company.inn;
+        card.kpp = company.kpp;
+        card.ogrn = company.ogrn;
+
+        const parts = card.title.split('|');
+        const orderSuffix = parts.length > 1 ? parts[1].trim() : '11500';
+        card.title = `${company.tradeatmName} | ${orderSuffix}`;
+        document.getElementById('modalCardTitle').value = card.title;
+
+        document.getElementById('modalCompanyRequisites').classList.remove('hidden');
+        document.getElementById('modalReqKppOgrn').textContent = `${company.kpp} / ${company.ogrn}`;
+        document.getElementById('modalReqAddress').textContent = company.address || '—';
+        badge.textContent = 'Найдено в ЕГРЮЛ ✓';
+
+        card.updatedAt = getCurrentDateTimeStr();
+        card.history.unshift({
+          date: card.updatedAt,
+          text: `По ИНН ${company.inn} подставлена организация «${company.tradeatmName}»`
+        });
+
+        saveState();
+        renderAll();
+        showToast(`Найдено: ${company.tradeatmName}`);
+      } catch (err) {
+        badge.textContent = 'Не найден';
+        showToast(err.message);
+      }
+    }
+
+    function copyLegalAddressToComment() {
+      const card = getActiveModalCard();
+      if (!card) return;
+      const addr = document.getElementById('modalReqAddress').textContent;
+      if (!addr || addr === '-') return;
+
+      card.comments.push({
+        id: 'c-' + Date.now(),
+        author: 'logist@tradeatm',
+        isMe: true,
+        date: getCurrentDateTimeStr(),
+        text: addr
+      });
+      saveState();
+      renderModalComments(card);
+      renderAll();
+      showToast('Адрес доставки добавлен в комментарии');
+    }
+
+    function closeCardModal() {
+      activeModalCardId = null;
+      document.getElementById('tagSelectorPopup').classList.add('hidden');
+      const backdrop = document.getElementById('cardModalBackdrop');
+      backdrop.classList.add('hidden');
+      backdrop.classList.remove('flex');
+    }
+
+    function closeCardModalOnBackdrop(event) {
+      if (event.target.id === 'cardModalBackdrop') {
+        closeCardModal();
+      }
+    }
+
+    function getActiveModalCard() {
+      return cards.find(c => c.id === activeModalCardId);
+    }
+
+    function renderModalTags(card) {
+      const container = document.getElementById('modalTagsContainer');
+      container.innerHTML = card.tags.map(tKey => {
+        const cfg = TAG_CONFIG[tKey];
+        if (!cfg) return '';
+        return `
+          <span onclick="toggleCardTag('${tKey}')" title="Нажмите, чтобы снять метку"
+            class="px-2.5 py-1 rounded-md text-xs font-semibold ${cfg.badgeBg} cursor-pointer hover:opacity-85 transition-opacity">
+            ${cfg.label}
+          </span>
+        `;
+      }).join('');
+    }
+
+    function renderModalResolved(card) {
+      const txt = document.getElementById('modalResolvedText');
+      const btn = document.getElementById('modalResolvedBtn');
+      if (card.resolved) {
+        txt.textContent = 'Да (Выполнено)';
+        btn.className = 'flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold cursor-pointer';
+      } else {
+        txt.textContent = 'Нет';
+        btn.className = 'flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-indigo-600 cursor-pointer';
+      }
+    }
+
+    function renderModalAttachments(card) {
+      const list = document.getElementById('modalAttachmentsList');
+      const items = card.attachments || [];
+      if (items.length === 0) {
+        list.innerHTML = '';
+        return;
+      }
+      list.innerHTML = items.map((att, idx) => `
+        <div class="flex items-center justify-between px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700 text-xs">
+          <div class="flex items-center gap-2">
+            <i data-lucide="file-text" class="w-3.5 h-3.5 text-indigo-500"></i>
+            <span class="font-medium text-slate-700 dark:text-slate-200">${escapeHtml(att.name)}</span>
+          </div>
+          <button onclick="removeAttachment(${idx})" class="text-slate-400 hover:text-rose-500 cursor-pointer">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderModalRelated(card) {
+      const list = document.getElementById('modalRelatedList');
+      const items = card.relatedCards || [];
+      if (items.length === 0) {
+        list.innerHTML = '';
+        return;
+      }
+      list.innerHTML = items.map((rel, idx) => `
+        <div class="flex items-center justify-between px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700 text-xs">
+          <span class="font-medium text-indigo-600 dark:text-indigo-400">${escapeHtml(rel)}</span>
+          <button onclick="removeRelatedCard(${idx})" class="text-slate-400 hover:text-rose-500 cursor-pointer">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderModalComments(card) {
+      const container = document.getElementById('modalCommentsContainer');
+      const comments = card.comments || [];
+      if (comments.length === 0) {
+        container.innerHTML = `<div class="text-xs text-slate-400 italic py-2">Комментариев пока нет</div>`;
+        return;
+      }
+
+      container.innerHTML = comments.map(cm => `
+        <div class="flex items-start gap-2.5">
+          <div class="w-7 h-7 rounded-full bg-slate-900 dark:bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">L</div>
+          <div class="flex-1">
+            <div class="flex items-center gap-2 text-xs mb-1">
+              <span class="font-bold text-slate-900 dark:text-white">${escapeHtml(cm.author)}</span>
+              ${cm.isMe ? `<span class="text-slate-400 text-[11px]">(Вы)</span>` : ''}
+              <span class="text-slate-400 text-[11px]">${escapeHtml(cm.date)}</span>
+            </div>
+            <div class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/90 text-xs text-slate-800 dark:text-slate-100">
+              ${escapeHtml(cm.text)}
+            </div>
+            <div class="mt-1">
+              <button onclick="deleteCommentFromModal('${cm.id}')" class="text-[11px] text-slate-400 hover:text-rose-600 cursor-pointer transition-colors">Удалить</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderModalHistory(card) {
+      const container = document.getElementById('modalHistoryContainer');
+      const hist = card.history || [];
+      if (hist.length === 0) {
+        container.innerHTML = `<div class="text-xs text-slate-400 py-2">История пуста</div>`;
+        return;
+      }
+      container.innerHTML = hist.map(h => `
+        <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+          <span>${escapeHtml(h.text)}</span>
+          <span class="font-mono text-[11px] text-slate-400">${escapeHtml(h.date)}</span>
+        </div>
+      `).join('');
+    }
+
+    // Сохранение изменений из модального окна
+    function saveCardTitleFromModal(val) {
+      const card = getActiveModalCard();
+      if (!card || !val.trim()) return;
+      card.title = val.trim();
+      card.updatedAt = getCurrentDateTimeStr();
+      saveState();
+      renderAll();
+    }
+
+    function saveCardDescriptionFromModal(val) {
+      const card = getActiveModalCard();
+      if (!card) return;
+      card.description = val;
+      card.updatedAt = getCurrentDateTimeStr();
+      saveState();
+      renderAll();
+      showToast('Описание сохранено');
+    }
+
+    function changeCardColumnFromModal(newCol) {
+      const card = getActiveModalCard();
+      if (!card) return;
+      card.column = newCol;
+      card.updatedAt = getCurrentDateTimeStr();
+      document.getElementById('modalColBreadcrumb').textContent = COLUMN_NAMES[newCol];
+      saveState();
+      renderAll();
+      showToast(`Статус изменен на «${COLUMN_NAMES[newCol]}»`);
+    }
+
+    function toggleTagSelectorPopup() {
+      document.getElementById('tagSelectorPopup').classList.toggle('hidden');
+    }
+
+    function toggleCardTag(tagKey) {
+      const card = getActiveModalCard();
+      if (!card) return;
+
+      if (card.tags.includes(tagKey)) {
+        card.tags = card.tags.filter(t => t !== tagKey);
+      } else {
+        if (tagKey === 'paid') card.tags = card.tags.filter(t => t !== 'unpaid');
+        if (tagKey === 'unpaid') card.tags = card.tags.filter(t => t !== 'paid');
+        card.tags.push(tagKey);
+      }
+
+      card.updatedAt = getCurrentDateTimeStr();
+      renderModalTags(card);
+      renderModalFinancials(card);
+      saveState();
+      renderAll();
+    }
+
+    function addCommentFromModal() {
+      const input = document.getElementById('newCommentInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const card = getActiveModalCard();
+      if (!card) return;
+
+      card.comments = card.comments || [];
+      card.comments.push({
+        id: 'c-' + Date.now(),
+        author: 'logist@tradeatm',
+        isMe: true,
+        date: getCurrentDateTimeStr(),
+        text
+      });
+
+      card.updatedAt = getCurrentDateTimeStr();
+      input.value = '';
+      saveState();
+      renderModalComments(card);
+      renderAll();
+    }
+
+    function insertQuickComment(templateText) {
+      const input = document.getElementById('newCommentInput');
+      input.value = templateText;
+      input.focus();
+    }
+
+    function deleteCommentFromModal(commentId) {
+      const card = getActiveModalCard();
+      if (!card) return;
+      card.comments = (card.comments || []).filter(c => c.id !== commentId);
+      saveState();
+      renderModalComments(card);
+      renderAll();
+    }
+
+    function switchActivityTab(tab) {
+      const btnComments = document.getElementById('act-tab-comments');
+      const btnHistory = document.getElementById('act-tab-history');
+      const commentsBox = document.getElementById('modalCommentsContainer');
+      const historyBox = document.getElementById('modalHistoryContainer');
+
+      if (tab === 'comments') {
+        btnComments.className = 'font-bold text-slate-900 dark:text-white cursor-pointer';
+        btnHistory.className = 'font-medium text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer';
+        commentsBox.classList.remove('hidden');
+        historyBox.classList.add('hidden');
+      } else {
+        btnHistory.className = 'font-bold text-slate-900 dark:text-white cursor-pointer';
+        btnComments.className = 'font-medium text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer';
+        historyBox.classList.remove('hidden');
+        commentsBox.classList.add('hidden');
+      }
+    }
+
+    function toggleModalResolved() {
+      const card = getActiveModalCard();
+      if (!card) return;
+      card.resolved = !card.resolved;
+      renderModalResolved(card);
+      saveState();
+      renderAll();
+    }
+
+    function updateCardMetaField(field, value) {
+      const card = getActiveModalCard();
+      if (!card) return;
+      card[field] = value;
+      if (field === 'dueDate') {
+        card.dueShort = formatShortRuDate(value);
+      }
+      card.updatedAt = getCurrentDateTimeStr();
+      saveState();
+      renderAll();
+    }
+
+    function addAttachmentToCard() {
+      const card = getActiveModalCard();
+      if (!card) return;
+      const docName = `УПД_${card.title.split('|')[0].trim()}_${Math.floor(100 + Math.random() * 899)}.pdf`;
+      card.attachments = card.attachments || [];
+      card.attachments.push({ name: docName });
+      saveState();
+      renderModalAttachments(card);
+      showToast(`Прикреплен файл: ${docName}`);
+    }
+
+    function removeAttachment(idx) {
+      const card = getActiveModalCard();
+      if (!card) return;
+      card.attachments.splice(idx, 1);
+      saveState();
+      renderModalAttachments(card);
+    }
+
+    function addRelatedCardPrompt() {
+      const card = getActiveModalCard();
+      if (!card) return;
+      const other = cards.find(c => c.id !== card.id);
+      if (other) {
+        card.relatedCards = card.relatedCards || [];
+        const label = `${other.zakazCode} — ${other.title}`;
+        if (!card.relatedCards.includes(label)) {
+          card.relatedCards.push(label);
+          saveState();
+          renderModalRelated(card);
+          showToast('Связанная карточка добавлена');
+        }
+      }
+    }
+
+    function removeRelatedCard(idx) {
+      const card = getActiveModalCard();
+      if (!card) return;
+      card.relatedCards.splice(idx, 1);
+      saveState();
+      renderModalRelated(card);
+    }
+
+    function archiveCurrentCard() {
+      const card = getActiveModalCard();
+      if (!card) return;
+      card.archived = !card.archived;
+      saveState();
+      closeCardModal();
+      renderAll();
+      showToast(card.archived ? 'Карточка перемещена в архив' : 'Карточка возвращена на доску');
+    }
+
+    function restoreFromArchive(cardId) {
+      const card = cards.find(c => c.id === cardId);
+      if (!card) return;
+      card.archived = false;
+      saveState();
+      renderAll();
+      showToast(`${card.title} возвращена на доску`);
+    }
+
+    function deleteCurrentCard() {
+      const card = getActiveModalCard();
+      if (!card) return;
+      cards = cards.filter(c => c.id !== card.id);
+      saveState();
+      closeCardModal();
+      renderAll();
+      showToast('Карточка удалена');
+    }
+
+    function copyCardLink() {
+      const card = getActiveModalCard();
+      if (!card) return;
+      navigator.clipboard?.writeText(`https://tradeatm.local/board/${card.zakazCode}/${card.shortHash}`);
+      showToast(`Ссылка скопирована (${card.shortHash})`);
+    }
+
+    // =========================================================================
+    // СОЗДАНИЕ НОВОЙ КАРТОЧКИ С АВТООПРЕДЕЛЕНИЕМ ПО ИНН И СУММОЙ СДЕЛКИ
+    // =========================================================================
+    function openNewCardModal(defaultColumn = 'work') {
+      lastFoundNewCardParty = null;
+      document.getElementById('newCardColumn').value = defaultColumn;
+      document.getElementById('newCardInn').value = '';
+      document.getElementById('newCardOrg').value = '';
+      document.getElementById('newCardOrderNum').value = String(Math.floor(11460 + Math.random() * 400));
+      document.getElementById('newCardAmount').value = '';
+      document.getElementById('newCardDesc').value = '';
+      document.getElementById('newCardAddress').value = '';
+      document.getElementById('newCardInnFoundBox').classList.add('hidden');
+      document.getElementById('newCardInnStatus').textContent = 'Введите 10 или 12 цифр';
+      document.getElementById('newCardInnStatus').className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-white dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700';
+
+      const backdrop = document.getElementById('newCardModalBackdrop');
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+      lucide.createIcons();
+      setTimeout(() => document.getElementById('newCardInn').focus(), 60);
+    }
+
+    function closeNewCardModal() {
+      const backdrop = document.getElementById('newCardModalBackdrop');
+      backdrop.classList.add('hidden');
+      backdrop.classList.remove('flex');
+    }
+
+    function fillSampleInn(sampleInn) {
+      const input = document.getElementById('newCardInn');
+      input.value = sampleInn;
+      triggerNewCardInnLookup();
+    }
+
+    function onNewCardInnInput(val) {
+      const digits = val.replace(/\D/g, '');
+      const statusEl = document.getElementById('newCardInnStatus');
+      if (digits.length === 10 || digits.length === 12) {
+        triggerNewCardInnLookup();
+      } else {
+        statusEl.textContent = `Введено цифр: ${digits.length} (нужно 10 или 12)`;
+      }
+    }
+
+    async function triggerNewCardInnLookup() {
+      const rawInn = document.getElementById('newCardInn').value.replace(/\D/g, '').trim();
+      const statusEl = document.getElementById('newCardInnStatus');
+      const foundBox = document.getElementById('newCardInnFoundBox');
+
+      if (rawInn.length !== 10 && rawInn.length !== 12) {
+        showToast('ИНН должен состоять из 10 или 12 цифр');
+        return;
+      }
+
+      statusEl.textContent = 'Поиск в ЕГРЮЛ...';
+      statusEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold';
+
+      try {
+        const company = await fetchCompanyByInn(rawInn);
+        lastFoundNewCardParty = company;
+
+        document.getElementById('newCardOrg').value = company.tradeatmName;
+        if (company.address && !document.getElementById('newCardAddress').value.trim()) {
+          document.getElementById('newCardAddress').value = company.address;
+        }
+
+        document.getElementById('newCardFoundFullName').textContent = company.fullName;
+        document.getElementById('newCardFoundMeta').textContent = `ИНН: ${company.inn} • КПП: ${company.kpp} • ОГРН: ${company.ogrn}`;
+        foundBox.classList.remove('hidden');
+
+        statusEl.textContent = 'Найдено в ЕГРЮЛ ✓';
+        statusEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold inn-found-badge';
+        showToast(`Найдена организация: ${company.tradeatmName}`);
+      } catch (err) {
+        statusEl.textContent = 'Не найдено';
+        statusEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-100 text-rose-800';
+        foundBox.classList.add('hidden');
+        showToast(err.message);
+      }
+    }
+
+    function swapOrgNameFormat() {
+      const orgInput = document.getElementById('newCardOrg');
+      if (!lastFoundNewCardParty) return;
+      if (orgInput.value === lastFoundNewCardParty.tradeatmName) {
+        orgInput.value = lastFoundNewCardParty.standardName;
+      } else {
+        orgInput.value = lastFoundNewCardParty.tradeatmName;
+      }
+    }
+
+    function createNewCardSubmit() {
+      const org = document.getElementById('newCardOrg').value.trim();
+      const orderNum = document.getElementById('newCardOrderNum').value.trim() || '11500';
+      if (!org) {
+        showToast('Введите ИНН или название организации');
+        return;
+      }
+
+      const fullTitle = org.includes('|') ? org : `${org.toUpperCase()} | ${orderNum}`;
+      const col = document.getElementById('newCardColumn').value;
+      const dueDate = document.getElementById('newCardDate').value.trim();
+      const desc = document.getElementById('newCardDesc').value.trim();
+      const addr = document.getElementById('newCardAddress').value.trim();
+      const innVal = document.getElementById('newCardInn').value.replace(/\D/g, '').trim();
+      const dealAmount = Math.max(0, Number(document.getElementById('newCardAmount').value) || 0);
+      const vatMode = document.getElementById('newCardVat').value || 'vat20';
+
+      const tags = [];
+      if (document.getElementById('newTagUpd').checked) tags.push('upd');
+      if (document.getElementById('newTagPaid').checked) {
+        tags.push('paid');
+      } else if (document.getElementById('newTagUnpaid').checked) {
+        tags.push('unpaid');
+      }
+
+      const nowStr = getCurrentDateTimeStr();
+      const newCard = {
+        id: 'card-' + Date.now(),
+        zakazCode: 'ZAKAZ-' + Math.floor(306 + Math.random() * 90),
+        shortHash: Math.random().toString(36).substring(2, 11),
+        title: fullTitle,
+        inn: innVal || (lastFoundNewCardParty ? lastFoundNewCardParty.inn : ''),
+        kpp: lastFoundNewCardParty ? lastFoundNewCardParty.kpp : '-',
+        ogrn: lastFoundNewCardParty ? lastFoundNewCardParty.ogrn : '-',
+        dealAmount: dealAmount,
+        vatMode: vatMode,
+        column: col,
+        tags,
+        description: desc,
+        dueDate: dueDate,
+        dueShort: formatShortRuDate(dueDate),
+        startDate: '16.10.2026',
+        createdAt: nowStr,
+        updatedAt: nowStr,
+        resolved: col === 'done',
+        assignee: '-',
+        priority: '-',
+        archived: false,
+        attachments: [],
+        relatedCards: [],
+        comments: addr ? [{
+          id: 'c-' + Date.now(),
+          author: 'logist@tradeatm',
+          isMe: true,
+          date: nowStr,
+          text: addr
+        }] : [],
+        history: [{
+          date: nowStr,
+          text: `Создан заказ ${fullTitle} на сумму ${formatRub(dealAmount)}`
+        }]
+      };
+
+      cards.unshift(newCard);
+      saveState();
+      closeNewCardModal();
+      renderAll();
+      showToast(`Добавлен заказ: ${fullTitle} (${formatRub(dealAmount)})`);
+    }
+
+    // =========================================================================
+    // НАСТРОЙКИ API DADATA И ЭКСПОРТ JSON
+    // =========================================================================
+    function openApiSettingsModal() {
+      document.getElementById('dadataTokenInput').value = localStorage.getItem('tradeatm_dadata_token') || '';
+      const m = document.getElementById('apiSettingsModal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+
+    function closeApiSettingsModal() {
+      const m = document.getElementById('apiSettingsModal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    function saveApiSettings() {
+      const token = document.getElementById('dadataTokenInput').value.trim();
+      if (token) {
+        localStorage.setItem('tradeatm_dadata_token', token);
+        showToast('Персональный API-ключ DaData сохранен');
+      } else {
+        localStorage.removeItem('tradeatm_dadata_token');
+        showToast('Используется стандартный ключ DaData');
+      }
+      closeApiSettingsModal();
+    }
+
+    function exportDataJson() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cards, null, 2));
+      const dlAnchor = document.createElement('a');
+      dlAnchor.setAttribute("href", dataStr);
+      dlAnchor.setAttribute("download", `tradeatm_orders_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(dlAnchor);
+      dlAnchor.click();
+      dlAnchor.remove();
+      showToast('База заказов выгружена в JSON');
+    }
+
+    // =========================================================================
+    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК, ПОИСК, ФИЛЬТРЫ И УТИЛИТЫ
+    // =========================================================================
+    function switchView(viewName) {
+      currentView = viewName;
+      ['board', 'list', 'calendar', 'archive'].forEach(v => {
+        const sec = document.getElementById(`view-${v}`);
+        const tab = document.getElementById(`tab-${v}`);
+        if (v === viewName) {
+          sec.classList.remove('hidden');
+          tab.className = 'view-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs';
+        } else {
+          sec.classList.add('hidden');
+          tab.className = 'view-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all';
+        }
+      });
+      renderAll();
+    }
+
+    function setTagFilter(filterKey) {
+      currentTagFilter = filterKey;
+      ['all', 'unpaid', 'paid', 'upd'].forEach(k => {
+        const btn = document.getElementById(`filter-${k}`);
+        if (!btn) return;
+        if (k === filterKey) {
+          btn.classList.add('bg-white', 'dark:bg-slate-900', 'shadow-2xs', 'font-semibold');
+        } else {
+          btn.classList.remove('bg-white', 'dark:bg-slate-900', 'shadow-2xs', 'font-semibold');
+        }
+      });
+      renderAll();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val;
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (val.trim() !== '') {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+      renderAll();
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      handleSearch('');
+    }
+
+    function toggleCardDetailsView() {
+      showDetailsOnBoard = !showDetailsOnBoard;
+      const btn = document.getElementById('toggleDetailsBtn');
+      if (showDetailsOnBoard) {
+        btn.classList.add('bg-indigo-50', 'border-indigo-300', 'text-indigo-700', 'dark:bg-indigo-950', 'dark:border-indigo-700', 'dark:text-indigo-300');
+      } else {
+        btn.classList.remove('bg-indigo-50', 'border-indigo-300', 'text-indigo-700', 'dark:bg-indigo-950', 'dark:border-indigo-700', 'dark:text-indigo-300');
+      }
+      renderBoard();
+      lucide.createIcons();
+    }
+
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+    }
+
+    function getCurrentDateTimeStr() {
+      const now = new Date();
+      const dd = String(now.getDate()).padStart(2, '0');
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const yyyy = now.getFullYear();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const min = String(now.getMinutes()).padStart(2, '0');
+      return `${dd}.${mm}.${yyyy} ${hh}:${min}`;
+    }
+
+    function formatShortRuDate(dateStr) {
+      if (!dateStr) return '';
+      const parts = dateStr.split('.');
+      if (parts.length !== 3) return dateStr;
+      const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+      const mIdx = parseInt(parts[1], 10) - 1;
+      return `${parseInt(parts[0], 10)} ${months[mIdx] || 'окт'} ${parts[2]}`;
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'px-3.5 py-2 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-medium shadow-lg flex items-center gap-2 transition-all duration-200';
+      toast.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400 dark:text-emerald-600 shrink-0"></i><span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(6px)';
+        setTimeout(() => toast.remove(), 200);
+      }, 2400);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeCardModal();
+        closeNewCardModal();
+        closeQuickAmountModal();
+        closeApiSettingsModal();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
